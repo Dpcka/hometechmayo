@@ -164,7 +164,7 @@ nav a:hover{
 
     position:relative;
     padding-top:90px;
-    height:100vh;
+    min-height:100vh;
     background:url("../assets/hero/desktop.webp") center center / cover no-repeat;
     display:flex;
     align-items:center;
@@ -218,8 +218,8 @@ nav a:hover{
 
     color:#fff;
     font-family:'Poppins',sans-serif;
-    font-size:64px;
-    line-height:1.05;
+    font-size:2rem;
+    line-height:1.15;
     max-width:900px;
     margin:0 auto 30px;
     text-align:center;
@@ -228,7 +228,7 @@ nav a:hover{
 
 .hero p{
 
-    font-size:22px;
+    font-size:18px;
 
     line-height:1.7;
 
@@ -395,5 +395,94 @@ nav a:hover{
     border-radius:16px;
 
     box-shadow:0 10px 30px rgba(0,0,0,.05);
+
+}
+/* ======================================
+   MOBILE
+====================================== */
+
+@media (max-width:768px){
+
+    header .container{
+        padding:15px 0;
+    }
+
+    .logo img{
+        height:50px;
+    }
+
+    .quote-button{
+        padding:10px 15px;
+        font-size:14px;
+    }
+
+    nav{
+        display:none;
+    }
+
+    .hero{
+        min-height:100vh;
+        height:auto;
+        padding:120px 0 60px;
+    }
+
+    .hero h1{
+        font-size:2.8rem;
+        line-height:1.1;
+        margin-bottom:20px;
+    }
+
+    .hero p{
+        font-size:18px;
+        line-height:1.6;
+    }
+
+    .hero-buttons{
+        flex-direction:column;
+        width:100%;
+        max-width:300px;
+    }
+
+    .hero-buttons .btn{
+        width:100%;
+        text-align:center;
+    }
+
+    .hero-features{
+        gap:15px;
+        font-size:14px;
+    }
+
+    .about{
+        padding:70px 0;
+    }
+
+    .about-grid{
+        grid-template-columns:1fr;
+        gap:40px;
+    }
+
+    .about-content h2{
+        font-size:2.2rem;
+        line-height:1.2;
+    }
+
+    .about-content p{
+        font-size:18px;
+    }
+
+    .services{
+        padding:70px 0;
+    }
+
+    .services h2{
+        font-size:2.2rem;
+        margin-bottom:40px;
+    }
+
+    .services-grid{
+        grid-template-columns:1fr;
+        gap:20px;
+    }
 
 }
