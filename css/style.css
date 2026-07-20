@@ -403,6 +403,8 @@ nav a:hover{
 
 @media (max-width:768px){
 
+    /* HEADER */
+
     header .container{
         padding:15px 0;
     }
@@ -411,23 +413,30 @@ nav a:hover{
         height:50px;
     }
 
+    nav{
+        display:none !important;
+    }
+
     .quote-button{
-        padding:10px 15px;
+        padding:10px 16px;
         font-size:14px;
     }
 
-    nav{
-        display:none;
-    }
+    /* HERO */
 
     .hero{
         min-height:100vh;
         height:auto;
-        padding:120px 0 60px;
+        padding:130px 0 80px;
+        background-position:center center;
+    }
+
+    .hero-content{
+        max-width:100%;
     }
 
     .hero h1{
-        font-size:2.8rem;
+        font-size:clamp(2.5rem,10vw,4rem);
         line-height:1.1;
         margin-bottom:20px;
     }
@@ -440,7 +449,8 @@ nav a:hover{
     .hero-buttons{
         flex-direction:column;
         width:100%;
-        max-width:300px;
+        max-width:320px;
+        margin-top:30px;
     }
 
     .hero-buttons .btn{
@@ -449,9 +459,12 @@ nav a:hover{
     }
 
     .hero-features{
-        gap:15px;
+        gap:12px;
         font-size:14px;
+        margin-top:25px;
     }
+
+    /* ABOUT */
 
     .about{
         padding:70px 0;
@@ -459,17 +472,21 @@ nav a:hover{
 
     .about-grid{
         grid-template-columns:1fr;
-        gap:40px;
+        gap:35px;
     }
 
     .about-content h2{
         font-size:2.2rem;
-        line-height:1.2;
+        line-height:1.15;
+        margin-bottom:20px;
     }
 
     .about-content p{
         font-size:18px;
+        line-height:1.7;
     }
+
+    /* SERVICES */
 
     .services{
         padding:70px 0;
@@ -483,6 +500,10 @@ nav a:hover{
     .services-grid{
         grid-template-columns:1fr;
         gap:20px;
+    }
+
+    .service-card{
+        padding:25px;
     }
 
 }
