@@ -1,319 +1,241 @@
-/* ======================================
-   Home Tech Solutions & Services
-   Version 0.1
-====================================== */
+<!-- ================= ABOUT ================= -->
 
-/* ---------- RESET ---------- */
+<section id="about" class="about">
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
+    <div class="container about-grid">
 
-/* ---------- VARIABLES ---------- */
+        <div class="about-image">
 
-:root{
+            <img src="assets/projects/about.jpg"
+                 alt="Home Tech Solutions & Services"
+                 loading="lazy">
 
-    --primary:#111111;
-    --accent:#C9A227;
+        </div>
 
-    --white:#ffffff;
+        <div class="about-content">
 
-    --light:#f5f5f5;
+            <h2>About Home Tech Solutions & Services</h2>
 
-    --text:#444444;
+            <p>
 
-    --max-width:1200px;
+                Home Tech Solutions & Services provides reliable handyman and
+                home improvement services across County Mayo.
 
-    --radius:12px;
+            </p>
 
-    --transition:.3s ease;
+            <p>
 
-}
+                We specialise in furniture assembly, TV wall mounting,
+                ventilation systems, CCTV installation, Wi-Fi optimisation
+                and smart home solutions.
 
-/* ---------- GLOBAL ---------- */
+            </p>
 
-html{
+            <p>
 
-    scroll-behavior:smooth;
+                Every project is completed with attention to detail,
+                professional workmanship and honest pricing.
 
-}
+            </p>
 
-body{
+            <a href="#contact"
+               class="btn btn-primary">
 
-    font-family:'Inter',sans-serif;
+                Request a Free Quote
 
-    color:var(--text);
+            </a>
 
-    background:var(--white);
+        </div>
 
-}
+    </div>
 
-img{
+</section>
 
-    max-width:100%;
+<!-- ================= SERVICES ================= -->
 
-    display:block;
+<section id="services"
+         class="services">
 
-}
+    <div class="container">
 
-a{
+        <h2>Our Services</h2>
 
-    text-decoration:none;
+        <p class="section-intro">
 
-    color:inherit;
+            Professional home improvement services tailored to your needs.
 
-}
+        </p>
 
-ul{
+        <div class="services-grid">
 
-    list-style:none;
+            <article class="service-card">
 
-}
+                <h3>Furniture Assembly</h3>
 
-.container{
+                <p>
 
-    width:min(90%,var(--max-width));
+                    IKEA, JYSK and all flat-pack furniture assembled quickly,
+                    safely and professionally.
 
-    margin:auto;
+                </p>
 
-}
+            </article>
 
-/* ---------- HEADER ---------- */
+            <article class="service-card">
 
-header{
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    z-index:1000;
-    color:white;
+                <h3>TV Wall Mounting</h3>
 
-    background:rgba(15,15,15,0.65);
-    backdrop-filter:blur(10px);
-}
+                <p>
 
-header .container{
+                    Secure TV installation with neat cable management and
+                    professional finishing.
 
-    display:flex;
+                </p>
 
-    justify-content:space-between;
+            </article>
 
-    align-items:center;
+            <article class="service-card">
 
-    padding:25px 0;
+                <h3>Bathroom Ventilation</h3>
 
-}
+                <p>
 
-.logo img{
-    height:70px;
-    width:auto;
-    filter: brightness(0) invert(1);
-}
+                    Installation and replacement of extractor fans,
+                    rigid ducting and external vents.
 
-nav ul{
+                </p>
 
-    display:flex;
+            </article>
 
-    gap:35px;
+            <article class="service-card">
 
-}
+                <h3>CCTV Installation</h3>
 
-nav a{
+                <p>
 
-    color:white;
+                    Home security camera installation and configuration for
+                    complete peace of mind.
 
-    font-weight:600;
+                </p>
 
-    transition:var(--transition);
+            </article>
 
-}
+            <article class="service-card">
 
-nav a:hover{
+                <h3>Wi-Fi & Networking</h3>
 
-    color:var(--accent);
+                <p>
 
-}
+                    Improve Wi-Fi coverage, home networking and internet
+                    performance.
 
-.quote-button{
+                </p>
 
-    background:var(--accent);
+            </article>
 
-    color:white;
+            <article class="service-card">
 
-    padding:12px 22px;
+                <h3>General Handyman</h3>
 
-    border-radius:var(--radius);
+                <p>
 
-    font-weight:600;
+                    Repairs, installations, shelving, curtain rails,
+                    fittings and general home maintenance.
 
-    transition:var(--transition);
+                </p>
 
-}
+            </article>
 
-.quote-button:hover{
+        </div>
 
-    transform:translateY(-2px);
+    </div>
 
-}
+</section>
 
-/* ---------- HERO ---------- */
+<!-- ================= PROJECTS ================= -->
 
-.hero{
+<section id="projects"
+         class="projects">
 
-    position:relative;
-    padding-top:90px;
-    min-height:100vh;
-    background:url("../assets/hero/desktop.webp") center center / cover no-repeat;
-    display:flex;
-    align-items:center;
+    <div class="container">
 
-}
+        <h2>Recent Projects</h2>
 
-.overlay{
+        <p class="section-intro">
 
-    position:absolute;
+            A selection of recent work completed across County Mayo.
 
-    inset:0;
+        </p>
 
-    background:rgba(0,0,0,.55);
+        <div class="projects-grid">
 
-}
-.hero .container{
-    position:relative;
-    z-index:2;
+            <article class="project-card">
 
-    width:100%;
-    display:flex;
-    justify-content:center;
-}
+                <img src="assets/projects/PXL_20260713_151848763.jpg"
+                     alt="Bathroom Ventilation Upgrade"
+                     loading="lazy">
 
-.hero-content{
-    width:100%;
-    max-width:1000px;
-    margin:0 auto;
-    text-align:center;
+                <div class="project-content">
 
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-}
-.hero-content h1{
-    font-size:clamp(2.8rem,5vw,4.8rem);
-    line-height:1.05;
-    max-width:900px;
-    margin-bottom:25px;
-}
-.hero-content p{
+                    <h3>Bathroom Ventilation Upgrade</h3>
 
-    color:#fff;
-    max-width:900px;
-    margin:0 auto;
-    text-align:center;
+                    <p>
 
-}
-.hero h1{
+                        Complete installation of a rigid duct ventilation
+                        system with external vent and professional finishing.
 
-    color:#fff;
-    font-family:'Poppins',sans-serif;
-    font-size:2rem;
-    line-height:1.15;
-    max-width:900px;
-    margin:0 auto 30px;
-    text-align:center;
+                    </p>
 
-}
+                </div>
 
-.hero p{
+            </article>
 
-    font-size:18px;
+            <article class="project-card">
 
-    line-height:1.7;
+                <img src="assets/projects/about.jpg"
+                     alt="Furniture Assembly"
+                     loading="lazy">
 
-    margin-bottom:40px;
+                <div class="project-content">
 
-}
+                    <h3>Furniture Assembly</h3>
 
-.hero-buttons{
+                    <p>
 
-    display:flex;
-    justify-content:center;
-    gap:20px;
-    margin-top:40px;
-    flex-wrap:wrap;
+                        Professional flat-pack furniture assembly completed
+                        efficiently with great attention to detail.
 
-}
-.hero-features{
-    justify-content: center;
-}
+                    </p>
 
-/* ---------- BUTTONS ---------- */
+                </div>
 
-.btn{
+            </article>
 
-    padding:16px 32px;
+        </div>
 
-    border-radius:var(--radius);
+        <div class="projects-button">
 
-    font-weight:600;
+            <a href="#contact"
+               class="btn btn-primary">
 
-    transition:var(--transition);
+                Request a Free Quote
 
-}
+            </a>
 
-.btn-primary{
+        </div>
 
-    background:#d4af37;
+    </div>
 
-    color:white;
-
-}
-
-.btn-primary:hover{
-
-    transform:translateY(-3px);
-
-}
-
-.btn-secondary{
-
-    border:2px solid white;
-
-    color:white;
-
-}
-
-.btn-secondary:hover{
-
-    background:white;
-
-    color:black;
-
-}
-.hero-features{
-
-    display:flex;
-    justify-content:center;
-    gap:30px;
-    margin-top:30px;
-    flex-wrap:wrap;
-
-}
-
-.hero-features span{
-
-    opacity:.9;
-
-}
-/* ---------- ABOUT ---------- */
+</section>
+/*================================================
+ABOUT
+================================================*/
 
 .about{
 
-    background:white;
-
     padding:100px 0;
+
+    background:var(--white);
 
 }
 
@@ -323,9 +245,17 @@ nav a:hover{
 
     grid-template-columns:1fr 1fr;
 
-    gap:60px;
+    gap:70px;
 
     align-items:center;
+
+}
+
+.about-image{
+
+    overflow:hidden;
+
+    border-radius:18px;
 
 }
 
@@ -333,17 +263,19 @@ nav a:hover{
 
     width:100%;
 
-    border-radius:16px;
+    transition:.5s;
+
+}
+
+.about-image:hover img{
+
+    transform:scale(1.04);
 
 }
 
 .about-content h2{
 
-    font-family:'Poppins',sans-serif;
-
-    font-size:42px;
-
-    color:var(--primary);
+    font-size:clamp(2.2rem,4vw,3rem);
 
     margin-bottom:25px;
 
@@ -351,18 +283,26 @@ nav a:hover{
 
 .about-content p{
 
-    font-size:20px;
+    font-size:19px;
 
-    line-height:1.8;
+    line-height:1.9;
 
-    margin-bottom:20px;
+    margin-bottom:22px;
+
+    color:#555;
 
 }
+
+
+/*================================================
+SERVICES
+================================================*/
+
 .services{
 
     padding:100px 0;
 
-    background:#f5f5f5;
+    background:var(--light);
 
 }
 
@@ -370,9 +310,7 @@ nav a:hover{
 
     text-align:center;
 
-    margin-bottom:60px;
-
-    font-size:48px;
+    font-size:clamp(2.3rem,4vw,3rem);
 
 }
 
@@ -380,7 +318,7 @@ nav a:hover{
 
     display:grid;
 
-    grid-template-columns:repeat(3,1fr);
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
 
     gap:30px;
 
@@ -388,23 +326,54 @@ nav a:hover{
 
 .service-card{
 
-    background:white;
+    background:#fff;
 
-    padding:30px;
+    padding:35px;
 
     border-radius:16px;
 
-    box-shadow:0 10px 30px rgba(0,0,0,.05);
+    box-shadow:var(--shadow);
+
+    transition:var(--transition);
+
+    border-top:4px solid transparent;
 
 }
 
-/* ---------- PROJECTS ---------- */
+.service-card:hover{
+
+    transform:translateY(-8px);
+
+    border-top-color:var(--accent);
+
+}
+
+.service-card h3{
+
+    margin-bottom:18px;
+
+    font-size:24px;
+
+}
+
+.service-card p{
+
+    color:#666;
+
+    line-height:1.8;
+
+}
+
+
+/*================================================
+PROJECTS
+================================================*/
 
 .projects{
 
     padding:100px 0;
 
-    background:white;
+    background:#fff;
 
 }
 
@@ -412,11 +381,7 @@ nav a:hover{
 
     text-align:center;
 
-    font-size:48px;
-
-    margin-bottom:60px;
-
-    color:var(--primary);
+    font-size:clamp(2.3rem,4vw,3rem);
 
 }
 
@@ -424,29 +389,29 @@ nav a:hover{
 
     display:grid;
 
-    grid-template-columns:repeat(2,1fr);
+    grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
 
-    gap:30px;
+    gap:35px;
 
 }
 
 .project-card{
 
-    background:white;
+    background:#fff;
 
-    border-radius:16px;
+    border-radius:18px;
 
     overflow:hidden;
 
-    box-shadow:0 10px 30px rgba(0,0,0,.08);
+    box-shadow:var(--shadow);
 
-    transition:var(--transition);
+    transition:.35s;
 
 }
 
 .project-card:hover{
 
-    transform:translateY(-5px);
+    transform:translateY(-8px);
 
 }
 
@@ -458,11 +423,19 @@ nav a:hover{
 
     object-fit:cover;
 
+    transition:.5s;
+
+}
+
+.project-card:hover img{
+
+    transform:scale(1.05);
+
 }
 
 .project-content{
 
-    padding:25px;
+    padding:28px;
 
 }
 
@@ -470,137 +443,540 @@ nav a:hover{
 
     margin-bottom:15px;
 
-    color:var(--primary);
+    font-size:24px;
 
 }
 
 .project-content p{
 
-    line-height:1.7;
+    color:#666;
+
+    line-height:1.8;
 
 }
 
-/* ======================================
-   MOBILE
-====================================== */
+.projects-button{
+
+    margin-top:50px;
+
+    text-align:center;
+
+}
+
+
+/*================================================
+TABLET & MOBILE
+================================================*/
 
 @media (max-width:768px){
 
-    /* HEADER */
-
-    header .container{
-        padding:15px 0;
-    }
-
-    .logo img{
-        height:50px;
-    }
-
-    nav{
-        display:none !important;
-    }
-
-    .quote-button{
-        padding:10px 16px;
-        font-size:14px;
-    }
-
-    /* HERO */
-
-    .hero{
-        min-height:100vh;
-        height:auto;
-        padding:130px 0 80px;
-        background-position:center center;
-    }
-
-    .hero-content{
-        max-width:100%;
-    }
-
-    .hero h1{
-        font-size:clamp(2.5rem,10vw,4rem);
-        line-height:1.1;
-        margin-bottom:20px;
-    }
-
-    .hero p{
-        font-size:18px;
-        line-height:1.6;
-    }
-
-    .hero-buttons{
-        flex-direction:column;
-        width:100%;
-        max-width:320px;
-        margin-top:30px;
-    }
-
-    .hero-buttons .btn{
-        width:100%;
-        text-align:center;
-    }
-
-    .hero-features{
-        gap:12px;
-        font-size:14px;
-        margin-top:25px;
-    }
-
-    /* ABOUT */
-
     .about{
+
         padding:70px 0;
+
     }
 
     .about-grid{
+
         grid-template-columns:1fr;
+
         gap:35px;
+
     }
 
     .about-content h2{
+
         font-size:2.2rem;
-        line-height:1.15;
-        margin-bottom:20px;
+
     }
 
     .about-content p{
-        font-size:18px;
-        line-height:1.7;
-    }
 
-    /* SERVICES */
+        font-size:18px;
+
+    }
 
     .services{
-        padding:70px 0;
-    }
 
-    .services h2{
-        font-size:2.2rem;
-        margin-bottom:40px;
+        padding:70px 0;
+
     }
 
     .services-grid{
+
         grid-template-columns:1fr;
-        gap:20px;
+
     }
 
     .service-card{
-        padding:25px;
-    }
-    
-    .projects{
-    padding:100px 0;
-    background:white;
-    scroll-margin-top:120px;
-}
 
-    .projects h2{
-    font-size:2.2rem;
-    margin-bottom:40px;
+        padding:28px;
+
+    }
+
+    .projects{
+
+        padding:70px 0;
+
     }
 
     .projects-grid{
-    grid-template-columns:1fr;
+
+        grid-template-columns:1fr;
+
     }
+
+    .project-card img{
+
+        height:240px;
+
+    }
+
+    .section-intro{
+
+        font-size:18px;
+
+        margin-bottom:40px;
+
+    }
+
+}
+/*================================================
+CONTACT
+================================================*/
+
+.contact{
+
+    padding:100px 0;
+
+    background:var(--light);
+
+}
+
+.contact h2{
+
+    text-align:center;
+
+    font-size:clamp(2.3rem,4vw,3rem);
+
+}
+
+.contact-intro{
+
+    max-width:650px;
+
+    margin:20px auto 60px;
+
+    text-align:center;
+
+    font-size:20px;
+
+    color:#666;
+
+}
+
+.contact-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+
+    gap:30px;
+
+    margin-bottom:50px;
+
+}
+
+.contact-card{
+
+    background:#fff;
+
+    padding:35px;
+
+    border-radius:16px;
+
+    text-align:center;
+
+    box-shadow:var(--shadow);
+
+    transition:var(--transition);
+
+}
+
+.contact-card:hover{
+
+    transform:translateY(-6px);
+
+}
+
+.contact-card h3{
+
+    margin-bottom:18px;
+
+}
+
+.contact-card a{
+
+    color:var(--accent);
+
+    font-weight:600;
+
+}
+
+.contact-buttons{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:20px;
+
+    flex-wrap:wrap;
+
+}
+
+
+/*================================================
+FOOTER
+================================================*/
+
+.footer{
+
+    background:#111;
+
+    color:#ddd;
+
+    padding-top:70px;
+
+}
+
+.footer-grid{
+
+    display:grid;
+
+    grid-template-columns:2fr 1fr 1fr;
+
+    gap:50px;
+
+}
+
+.footer h3,
+.footer h4{
+
+    color:#fff;
+
+    margin-bottom:18px;
+
+}
+
+.footer p,
+.footer li{
+
+    line-height:1.9;
+
+    color:#bbb;
+
+}
+
+.footer ul li{
+
+    margin-bottom:10px;
+
+}
+
+.footer a{
+
+    transition:var(--transition);
+
+}
+
+.footer a:hover{
+
+    color:var(--accent);
+
+}
+
+.footer-bottom{
+
+    margin-top:60px;
+
+    padding:25px 0;
+
+    border-top:1px solid rgba(255,255,255,.08);
+
+    text-align:center;
+
+    font-size:14px;
+
+    color:#888;
+
+}
+
+
+/*================================================
+WHATSAPP FLOAT
+================================================*/
+
+.whatsapp-float{
+
+    position:fixed;
+
+    right:25px;
+
+    bottom:25px;
+
+    width:64px;
+
+    height:64px;
+
+    border-radius:50%;
+
+    background:#25D366;
+
+    color:#fff;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    box-shadow:0 15px 35px rgba(0,0,0,.25);
+
+    z-index:999;
+
+    transition:.3s;
+
+}
+
+.whatsapp-float:hover{
+
+    transform:scale(1.08);
+
+}
+
+
+/*================================================
+WHATSAPP WIDGET
+================================================*/
+
+.whatsapp-widget{
+
+    position:fixed;
+
+    right:25px;
+
+    bottom:105px;
+
+    width:320px;
+
+    background:#fff;
+
+    border-radius:18px;
+
+    padding:25px;
+
+    box-shadow:0 20px 50px rgba(0,0,0,.18);
+
+    z-index:998;
+
+    animation:fadeUp .4s ease;
+
+}
+
+.whatsapp-widget h3{
+
+    margin-bottom:10px;
+
+}
+
+.whatsapp-widget p{
+
+    margin-bottom:20px;
+
+    color:#666;
+
+}
+
+.close-widget{
+
+    position:absolute;
+
+    top:12px;
+
+    right:14px;
+
+    background:none;
+
+    border:none;
+
+    font-size:22px;
+
+    cursor:pointer;
+
+    color:#777;
+
+}
+
+
+/*================================================
+BACK TO TOP
+================================================*/
+
+.back-to-top{
+
+    position:fixed;
+
+    right:25px;
+
+    bottom:190px;
+
+    width:50px;
+
+    height:50px;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:var(--accent);
+
+    color:#fff;
+
+    cursor:pointer;
+
+    font-size:20px;
+
+    display:none;
+
+    z-index:997;
+
+    transition:.3s;
+
+}
+
+.back-to-top:hover{
+
+    transform:translateY(-4px);
+
+}
+
+
+/*================================================
+ANIMATIONS
+================================================*/
+
+@keyframes fadeUp{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(20px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+.fade-up{
+
+    animation:fadeUp .6s ease both;
+
+}
+
+
+/*================================================
+MOBILE
+================================================*/
+
+@media (max-width:768px){
+
+    .contact{
+
+        padding:70px 0;
+
+    }
+
+    .contact-intro{
+
+        font-size:18px;
+
+        margin-bottom:40px;
+
+    }
+
+    .contact-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .contact-buttons{
+
+        flex-direction:column;
+
+    }
+
+    .contact-buttons .btn{
+
+        width:100%;
+
+        text-align:center;
+
+    }
+
+    .footer{
+
+        text-align:center;
+
+    }
+
+    .footer-grid{
+
+        grid-template-columns:1fr;
+
+        gap:35px;
+
+    }
+
+    .whatsapp-widget{
+
+        width:calc(100% - 30px);
+
+        right:15px;
+
+        left:15px;
+
+        bottom:95px;
+
+    }
+
+    .whatsapp-float{
+
+        right:15px;
+
+        bottom:15px;
+
+        width:58px;
+
+        height:58px;
+
+    }
+
+    .back-to-top{
+
+        right:15px;
+
+        bottom:90px;
+
+    }
+
 }
