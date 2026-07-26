@@ -41,11 +41,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (window.scrollY > 500) {
 
-            backToTop.style.display = "flex";
+            backToTop.classList.add("show");
 
         } else {
 
-            backToTop.style.display = "none";
+            backToTop.classList.remove("show");
 
         }
 
