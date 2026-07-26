@@ -1,232 +1,409 @@
-<!-- ================= ABOUT ================= -->
+/*================================================
 
-<section id="about" class="about">
+Home Tech Solutions & Services
+Version 1.0
 
-    <div class="container about-grid">
+Author: Taras Kostariev
+https://hometechmayo.ie
 
-        <div class="about-image">
+================================================*/
 
-            <img src="assets/projects/about.jpg"
-                 alt="Home Tech Solutions & Services"
-                 loading="lazy">
 
-        </div>
+/*================================================
+RESET
+================================================*/
 
-        <div class="about-content">
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 
-            <h2>About Home Tech Solutions & Services</h2>
+html{
+    scroll-behavior:smooth;
+}
 
-            <p>
+body{
 
-                Home Tech Solutions & Services provides reliable handyman and
-                home improvement services across County Mayo.
+    font-family:'Inter',sans-serif;
+    background:#fff;
+    color:#444;
+    line-height:1.6;
+    overflow-x:hidden;
 
-            </p>
+}
 
-            <p>
+img{
 
-                We specialise in furniture assembly, TV wall mounting,
-                ventilation systems, CCTV installation, Wi-Fi optimisation
-                and smart home solutions.
+    display:block;
+    max-width:100%;
+    height:auto;
 
-            </p>
+}
 
-            <p>
+a{
 
-                Every project is completed with attention to detail,
-                professional workmanship and honest pricing.
+    color:inherit;
+    text-decoration:none;
 
-            </p>
+}
 
-            <a href="#contact"
-               class="btn btn-primary">
+ul{
 
-                Request a Free Quote
+    list-style:none;
 
-            </a>
+}
 
-        </div>
 
-    </div>
+/*================================================
+VARIABLES
+================================================*/
 
-</section>
+:root{
 
-<!-- ================= SERVICES ================= -->
+    --primary:#111111;
+    --accent:#C9A227;
 
-<section id="services"
-         class="services">
+    --white:#ffffff;
+    --light:#f5f5f5;
 
-    <div class="container">
+    --text:#444444;
 
-        <h2>Our Services</h2>
+    --radius:12px;
 
-        <p class="section-intro">
+    --shadow:0 12px 35px rgba(0,0,0,.08);
 
-            Professional home improvement services tailored to your needs.
+    --transition:.3s ease;
 
-        </p>
+    --max-width:1200px;
 
-        <div class="services-grid">
+}
 
-            <article class="service-card">
 
-                <h3>Furniture Assembly</h3>
+/*================================================
+GLOBAL
+================================================*/
 
-                <p>
+.container{
 
-                    IKEA, JYSK and all flat-pack furniture assembled quickly,
-                    safely and professionally.
+    width:min(90%,var(--max-width));
+    margin:auto;
 
-                </p>
+}
 
-            </article>
+section{
 
-            <article class="service-card">
+    scroll-margin-top:110px;
 
-                <h3>TV Wall Mounting</h3>
+}
 
-                <p>
+h1,
+h2,
+h3,
+h4{
 
-                    Secure TV installation with neat cable management and
-                    professional finishing.
+    font-family:'Poppins',sans-serif;
+    color:var(--primary);
 
-                </p>
+}
 
-            </article>
+.section-intro{
 
-            <article class="service-card">
+    max-width:700px;
 
-                <h3>Bathroom Ventilation</h3>
+    margin:20px auto 60px;
 
-                <p>
+    text-align:center;
 
-                    Installation and replacement of extractor fans,
-                    rigid ducting and external vents.
+    font-size:20px;
 
-                </p>
+    color:#666;
 
-            </article>
+}
 
-            <article class="service-card">
 
-                <h3>CCTV Installation</h3>
+/*================================================
+HEADER
+================================================*/
 
-                <p>
+header{
 
-                    Home security camera installation and configuration for
-                    complete peace of mind.
+    position:fixed;
 
-                </p>
+    top:0;
+    left:0;
 
-            </article>
+    width:100%;
 
-            <article class="service-card">
+    z-index:1000;
 
-                <h3>Wi-Fi & Networking</h3>
+    background:rgba(15,15,15,.68);
 
-                <p>
+    backdrop-filter:blur(10px);
 
-                    Improve Wi-Fi coverage, home networking and internet
-                    performance.
+    transition:var(--transition);
 
-                </p>
+}
 
-            </article>
+header.scrolled{
 
-            <article class="service-card">
+    background:rgba(10,10,10,.94);
 
-                <h3>General Handyman</h3>
+    box-shadow:0 5px 20px rgba(0,0,0,.25);
 
-                <p>
+}
 
-                    Repairs, installations, shelving, curtain rails,
-                    fittings and general home maintenance.
+header .container{
 
-                </p>
+    display:flex;
 
-            </article>
+    justify-content:space-between;
 
-        </div>
+    align-items:center;
 
-    </div>
+    padding:22px 0;
 
-</section>
+}
 
-<!-- ================= PROJECTS ================= -->
+.logo img{
 
-<section id="projects"
-         class="projects">
+    height:68px;
 
-    <div class="container">
+    width:auto;
 
-        <h2>Recent Projects</h2>
+    filter:brightness(0) invert(1);
 
-        <p class="section-intro">
+}
 
-            A selection of recent work completed across County Mayo.
+nav ul{
 
-        </p>
+    display:flex;
 
-        <div class="projects-grid">
+    gap:34px;
 
-            <article class="project-card">
+}
 
-                <img src="assets/projects/PXL_20260713_151848763.jpg"
-                     alt="Bathroom Ventilation Upgrade"
-                     loading="lazy">
+nav a{
 
-                <div class="project-content">
+    color:#fff;
 
-                    <h3>Bathroom Ventilation Upgrade</h3>
+    font-weight:600;
 
-                    <p>
+    position:relative;
 
-                        Complete installation of a rigid duct ventilation
-                        system with external vent and professional finishing.
+    transition:var(--transition);
 
-                    </p>
+}
 
-                </div>
+nav a::after{
 
-            </article>
+    content:"";
 
-            <article class="project-card">
+    position:absolute;
 
-                <img src="assets/projects/about.jpg"
-                     alt="Furniture Assembly"
-                     loading="lazy">
+    left:0;
 
-                <div class="project-content">
+    bottom:-6px;
 
-                    <h3>Furniture Assembly</h3>
+    width:0;
 
-                    <p>
+    height:2px;
 
-                        Professional flat-pack furniture assembly completed
-                        efficiently with great attention to detail.
+    background:var(--accent);
 
-                    </p>
+    transition:.3s;
 
-                </div>
+}
 
-            </article>
+nav a:hover{
 
-        </div>
+    color:var(--accent);
 
-        <div class="projects-button">
+}
 
-            <a href="#contact"
-               class="btn btn-primary">
+nav a:hover::after{
 
-                Request a Free Quote
+    width:100%;
 
-            </a>
+}
 
-        </div>
+.quote-button{
 
-    </div>
+    background:var(--accent);
 
-</section>
+    color:#fff;
+
+    padding:13px 24px;
+
+    border-radius:var(--radius);
+
+    font-weight:600;
+
+    transition:var(--transition);
+
+}
+
+.quote-button:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:0 10px 20px rgba(0,0,0,.15);
+
+}
+
+
+/*================================================
+HERO
+================================================*/
+
+.hero{
+
+    position:relative;
+
+    min-height:100vh;
+
+    padding-top:90px;
+
+    display:flex;
+
+    align-items:center;
+
+    background:url("../assets/hero/desktop.webp") center center/cover no-repeat;
+
+}
+
+.overlay{
+
+    position:absolute;
+
+    inset:0;
+
+    background:rgba(0,0,0,.55);
+
+}
+
+.hero .container{
+
+    position:relative;
+
+    z-index:2;
+
+}
+
+.hero-content{
+
+    max-width:950px;
+
+    margin:auto;
+
+    text-align:center;
+
+}
+
+.hero-content h1{
+
+    color:#fff;
+
+    font-size:clamp(2.8rem,5vw,4.8rem);
+
+    line-height:1.08;
+
+    margin-bottom:28px;
+
+}
+
+.hero-content p{
+
+    color:#fff;
+
+    font-size:20px;
+
+    line-height:1.8;
+
+    margin-bottom:42px;
+
+}
+
+.hero-buttons{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:20px;
+
+    flex-wrap:wrap;
+
+}
+
+.hero-features{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:28px;
+
+    flex-wrap:wrap;
+
+    margin-top:35px;
+
+    color:#fff;
+
+    opacity:.92;
+
+}
+
+
+/*================================================
+BUTTONS
+================================================*/
+
+.btn{
+
+    display:inline-block;
+
+    padding:16px 34px;
+
+    border-radius:var(--radius);
+
+    font-weight:600;
+
+    transition:var(--transition);
+
+}
+
+.btn-primary{
+
+    background:var(--accent);
+
+    color:#fff;
+
+}
+
+.btn-primary:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:var(--shadow);
+
+}
+
+.btn-secondary{
+
+    border:2px solid #fff;
+
+    color:#fff;
+
+}
+
+.btn-secondary:hover{
+
+    background:#fff;
+
+    color:#111;
+
+}
 /*================================================
 ABOUT
 ================================================*/
