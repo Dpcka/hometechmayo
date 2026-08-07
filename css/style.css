@@ -167,7 +167,7 @@ header .container{
 
 .logo img{
 
-    height:68px;
+    height:62px;
 
     width:auto;
 
@@ -296,7 +296,7 @@ HERO
 
     margin:auto;
 
-    padding-top:60px;
+    padding-top:100px;
 
     text-align:center;
 
@@ -814,6 +814,211 @@ CONTACT
 
 }
 
+/* ======================================
+   REVIEWS
+====================================== */
+
+.reviews{
+
+    padding:100px 0;
+
+    background:#f7f7f7;
+
+}
+
+.reviews-header{
+
+    text-align:center;
+
+    max-width:800px;
+
+    margin:0 auto 60px;
+
+}
+
+.reviews-header h2{
+
+    font-size:48px;
+
+    color:#111;
+
+    margin-bottom:20px;
+
+}
+
+.reviews-header p{
+
+    font-size:20px;
+
+    color:#555;
+
+    margin-bottom:30px;
+
+}
+
+.google-rating{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:15px;
+
+    flex-wrap:wrap;
+
+}
+
+.stars{
+
+    color:#d4af37;
+
+    font-size:32px;
+
+    letter-spacing:4px;
+
+}
+
+.rating-number{
+
+    font-size:32px;
+
+    font-weight:700;
+
+    color:#111;
+
+}
+
+.rating-text{
+
+    color:#666;
+
+}
+
+.reviews-grid{
+
+    display:grid;
+
+    grid-template-columns:1fr;
+
+    max-width:850px;
+
+    margin:auto;
+
+}
+
+.review-card{
+
+    background:#fff;
+
+    padding:40px;
+
+    border-radius:18px;
+
+    box-shadow:0 15px 40px rgba(0,0,0,.08);
+
+}
+
+.review-stars{
+
+    color:#d4af37;
+
+    font-size:28px;
+
+    margin-bottom:20px;
+
+}
+
+.review-text{
+
+    font-size:20px;
+
+    line-height:1.8;
+
+    font-style:italic;
+
+    color:#444;
+
+}
+
+.review-author{
+
+    margin-top:30px;
+
+}
+
+.review-author strong{
+
+    display:block;
+
+    color:#111;
+
+    font-size:18px;
+
+}
+
+.review-author span{
+
+    color:#888;
+
+    font-size:14px;
+
+}
+
+.reviews-buttons{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:20px;
+
+    flex-wrap:wrap;
+
+    margin-top:50px;
+
+}
+
+@media(max-width:768px){
+
+    .reviews{
+
+        padding:70px 0;
+
+    }
+
+    .reviews-header h2{
+
+        font-size:2.2rem;
+
+    }
+
+    .reviews-header p{
+
+        font-size:18px;
+
+    }
+
+    .review-card{
+
+        padding:28px;
+
+    }
+
+    .review-text{
+
+        font-size:18px;
+
+    }
+    .whatsapp-float i{
+
+        font-size:32px;
+
+    } 
+
+
+}
 
 /*================================================
 FOOTER
@@ -888,6 +1093,15 @@ FOOTER
     font-size:14px;
 
     color:#888;
+
+}
+.footer-logo{
+
+    width:180px;
+
+    filter:brightness(0) invert(1);
+
+    margin-bottom:20px;
 
 }
 
@@ -1169,5 +1383,43 @@ MOBILE
         bottom:90px;
 
     }
+
+}
+.btn-light{
+
+    display:inline-block;
+
+    background:#ffffff;
+
+    color:#111111 !important;
+
+    border:2px solid var(--accent);
+
+    padding:16px 34px;
+
+    border-radius:var(--radius);
+
+    font-weight:600;
+
+    transition:var(--transition);
+
+}
+
+.btn-light:hover{
+
+    background:var(--accent);
+
+    color:#fff !important;
+
+    transform:translateY(-3px);
+
+    box-shadow:var(--shadow);
+
+}
+
+}
+.whatsapp-float i{
+
+    font-size:36px;
 
 }

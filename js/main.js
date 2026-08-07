@@ -207,3 +207,20 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 });
+const reviews = [
+
+{
+    stars:5,
+    author:"Michael van der Klei",
+    source:"Google Review",
+    text:"Taras made mechanical ventilation in our shower. Great job done, reliable, swift and reasonably priced. Highly recommended."
+},
+
+{
+    stars:5,
+    author:"John Smith",
+    source:"Google Review",
+    text:"Excellent TV mounting service."
+}
+
+];
