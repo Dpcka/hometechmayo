@@ -1297,7 +1297,51 @@ ANIMATIONS
 
 }
 
+/* ======================================
+   FOOTER LOGOS
+====================================== */
 
+.footer-logo{
+
+    filter:brightness(0) invert(1);
+
+    margin-bottom:20px;
+
+}
+
+.footer-logo-desktop{
+
+    display:block;
+
+    width:220px;
+
+}
+
+.footer-logo-mobile{
+
+    display:none;
+
+}
+
+@media (max-width:768px){
+
+    .footer-logo-desktop{
+
+        display:none;
+
+    }
+
+    .footer-logo-mobile{
+
+        display:block;
+
+        width:150px;
+
+        margin:0 auto 20px;
+
+    }
+
+}
 /*================================================
 MOBILE
 ================================================*/
