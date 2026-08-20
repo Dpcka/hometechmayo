@@ -195,6 +195,90 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /*==========================================
+      FAQ ACCORDION
+    ==========================================*/
+
+    const faq = document.getElementById("faq");
+
+    if (faq) {
+
+        const faqItems = Array.from(faq.querySelectorAll(".faq-item"));
+
+        function closeFaqItem(item) {
+
+            const button = item.querySelector(".faq-question");
+            const answer = item.querySelector(".faq-answer");
+
+            if (!button || !answer) return;
+
+            item.classList.remove("is-open");
+            button.setAttribute("aria-expanded", "false");
+
+            window.setTimeout(() => {
+
+                if (!item.classList.contains("is-open")) {
+
+                    answer.hidden = true;
+
+                }
+
+            }, 320);
+
+        }
+
+        function openFaqItem(item) {
+
+            const button = item.querySelector(".faq-question");
+            const answer = item.querySelector(".faq-answer");
+
+            if (!button || !answer) return;
+
+            answer.hidden = false;
+            button.setAttribute("aria-expanded", "true");
+
+            window.requestAnimationFrame(() => {
+
+                item.classList.add("is-open");
+
+            });
+
+        }
+
+        faqItems.forEach(item => {
+
+            const button = item.querySelector(".faq-question");
+
+            if (!button) return;
+
+            button.addEventListener("click", () => {
+
+                if (item.classList.contains("is-open")) {
+
+                    closeFaqItem(item);
+                    return;
+
+                }
+
+                faqItems.forEach(otherItem => {
+
+                    if (otherItem !== item) {
+
+                        closeFaqItem(otherItem);
+
+                    }
+
+                });
+
+                openFaqItem(item);
+
+            });
+
+        });
+
+    }
+
+
+    /*==========================================
       YEAR
     ==========================================*/
 

@@ -199,6 +199,10 @@ Inter
 - Smart Home added as a core service across the website
 - CCTV Installation removed from the current service offer
 
+## v0.5
+
+- Homepage FAQ section added with an accessible accordion
+
 ---
 
 # Current Sprint
@@ -215,6 +219,8 @@ Inter
 
 ☑ Smart Home Service Alignment — Completed
 
+☑ FAQ Section — Completed
+
 ☐ Footer
 
 ☑ Pricing Page
@@ -226,7 +232,6 @@ Inter
 - Quote request form
 - Google Reviews
 - Project Gallery
-- FAQ
 - Blog
 - Before / After Gallery
 - Service Pages
