@@ -48,7 +48,7 @@ Professional Home Improvement
 Reliable handyman services across County Mayo.
 
 From furniture assembly and TV mounting to ventilation,
-Wi-Fi networking, CCTV and smart home installations,
+Wi-Fi networking and practical smart home setup,
 we deliver quality workmanship with attention to detail.
 
 ---
@@ -80,8 +80,8 @@ professional and affordable home improvement services
 throughout County Mayo.
 
 We specialise in furniture assembly, TV wall mounting,
-ventilation systems, CCTV installation, Wi-Fi networking,
-smart home solutions and general handyman work.
+ventilation systems, Wi-Fi networking, practical smart home
+setup and general handyman work.
 
 Our goal is simple:
 
@@ -155,12 +155,6 @@ Bathroom and utility room ventilation systems.
 
 ---
 
-## CCTV Installation
-
-Supply and installation of modern CCTV systems.
-
----
-
 ## Wi-Fi & Networking
 
 Home networking, Wi-Fi optimisation and internet setup.
@@ -169,7 +163,8 @@ Home networking, Wi-Fi optimisation and internet setup.
 
 ## Smart Home
 
-Smart switches, cameras, lighting and automation.
+Practical smart home setup, device pairing, app configuration,
+Wi-Fi integration and simple automations.
 
 ---
 
@@ -289,8 +284,6 @@ TV Mounting
 
 Ventilation
 
-CCTV
-
 Wi-Fi Networking
 
 Smart Home
@@ -311,8 +304,8 @@ Home Tech Solutions & Services | Handyman & Smart Home Services in County Mayo
 
 Professional handyman, furniture assembly,
 TV mounting, ventilation installation,
-CCTV, Wi-Fi networking and smart home
-services across County Mayo.
+Wi-Fi networking, smart home setup and general
+handyman services across County Mayo.
 
 ---
 
@@ -327,8 +320,6 @@ TV mounting mayo
 ventilation installation mayo
 
 smart home mayo
-
-CCTV installation mayo
 
 Wi-Fi setup mayo
 

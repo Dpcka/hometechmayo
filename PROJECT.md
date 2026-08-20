@@ -74,7 +74,6 @@ County Mayo
 - Furniture Assembly
 - TV Mounting
 - Ventilation
-- CCTV Installation
 - Wi-Fi & Networking
 - Smart Home
 - General Handyman
@@ -118,6 +117,8 @@ Privacy Policy
 hometechmayo/
 
 index.html
+
+services.html
 
 pricing.html
 
@@ -189,6 +190,15 @@ Inter
 
 - Pricing page added with transparent starting prices and quote guidance
 
+## v0.3
+
+- Services page added with detailed service information and enquiry calls to action
+
+## v0.4
+
+- Smart Home added as a core service across the website
+- CCTV Installation removed from the current service offer
+
 ---
 
 # Current Sprint
@@ -201,7 +211,9 @@ Inter
 
 ☐ About
 
-☐ Services
+☑ Services Page — Completed
+
+☑ Smart Home Service Alignment — Completed
 
 ☐ Footer
 

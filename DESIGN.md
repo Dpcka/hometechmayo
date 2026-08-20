@@ -246,8 +246,8 @@ Across County Mayo
 Subtitle
 
 Reliable handyman, furniture assembly,
-TV mounting, ventilation, CCTV,
-Wi-Fi & smart home services.
+TV mounting, ventilation, Wi-Fi
+& smart home services.
 
 Buttons
 
