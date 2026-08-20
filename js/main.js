@@ -207,20 +207,313 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 });
-const reviews = [
 
-{
-    stars:5,
-    author:"Michael van der Klei",
-    source:"Google Review",
-    text:"Taras made mechanical ventilation in our shower. Great job done, reliable, swift and reasonably priced. Highly recommended."
-},
+(() => {
 
-{
-    stars:5,
-    author:"John Smith",
-    source:"Google Review",
-    text:"Excellent TV mounting service."
-}
+    function initialiseReviewsCarousel() {
 
-];
+        const carousel = document.querySelector("[data-reviews-carousel]");
+
+        if (!carousel) return;
+
+        const viewport = carousel.querySelector(".reviews-viewport");
+        const track = carousel.querySelector(".reviews-track");
+        const previousButton = carousel.querySelector("[data-review-prev]");
+        const nextButton = carousel.querySelector("[data-review-next]");
+        const dotsContainer = carousel.querySelector("[data-review-dots]");
+
+        if (!viewport || !track || !previousButton || !nextButton || !dotsContainer) {
+
+            return;
+
+        }
+
+        const slides = Array.from(track.querySelectorAll(".review-slide"));
+
+        if (slides.length < 2) {
+
+            return;
+
+        }
+
+        const slideCount = slides.length;
+        const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        let currentIndex = 1;
+        let autoplayTimer;
+        let isHovered = false;
+        let isFocused = false;
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        slides.forEach((slide, index) => {
+
+            slide.setAttribute("role", "group");
+            slide.setAttribute("aria-roledescription", "slide");
+            slide.setAttribute("aria-label", `Review ${index + 1} of ${slideCount}`);
+
+        });
+
+        const firstClone = slides[0].cloneNode(true);
+        const lastClone = slides[slideCount - 1].cloneNode(true);
+
+        firstClone.setAttribute("aria-hidden", "true");
+        lastClone.setAttribute("aria-hidden", "true");
+
+        track.append(firstClone);
+        track.prepend(lastClone);
+
+        const dots = slides.map((slide, index) => {
+
+            const dot = document.createElement("button");
+
+            dot.className = "reviews-dot";
+            dot.type = "button";
+            dot.setAttribute("aria-label", `Show review ${index + 1}`);
+
+            dot.addEventListener("click", () => {
+
+                moveTo(index + 1);
+                syncAutoplay();
+
+            });
+
+            dotsContainer.append(dot);
+
+            return dot;
+
+        });
+
+        function getActiveIndex() {
+
+            return ((currentIndex - 1) % slideCount + slideCount) % slideCount;
+
+        }
+
+        function updateDots() {
+
+            const activeIndex = getActiveIndex();
+
+            dots.forEach((dot, index) => {
+
+                if (index === activeIndex) {
+
+                    dot.setAttribute("aria-current", "true");
+
+                } else {
+
+                    dot.removeAttribute("aria-current");
+
+                }
+
+            });
+
+        }
+
+        function moveTo(index, instant = false) {
+
+            currentIndex = index;
+            track.style.transition = instant ? "none" : "";
+            track.style.transform = `translateX(-${currentIndex * 100}%)`;
+            updateDots();
+
+            if (instant) {
+
+                requestAnimationFrame(() => {
+
+                    track.style.transition = "";
+
+                });
+
+            }
+
+            if (reduceMotion && !instant) {
+
+                requestAnimationFrame(() => {
+
+                    if (currentIndex === 0) {
+
+                        moveTo(slideCount, true);
+
+                    }
+
+                    if (currentIndex === slideCount + 1) {
+
+                        moveTo(1, true);
+
+                    }
+
+                });
+
+            }
+
+        }
+
+        function showNext() {
+
+            moveTo(currentIndex + 1);
+
+        }
+
+        function showPrevious() {
+
+            moveTo(currentIndex - 1);
+
+        }
+
+        function stopAutoplay() {
+
+            window.clearInterval(autoplayTimer);
+
+        }
+
+        function startAutoplay() {
+
+            if (reduceMotion || isHovered || isFocused || document.hidden) return;
+
+            stopAutoplay();
+            autoplayTimer = window.setInterval(showNext, 6000);
+
+        }
+
+        function syncAutoplay() {
+
+            stopAutoplay();
+            startAutoplay();
+
+        }
+
+        previousButton.addEventListener("click", () => {
+
+            showPrevious();
+            syncAutoplay();
+
+        });
+
+        nextButton.addEventListener("click", () => {
+
+            showNext();
+            syncAutoplay();
+
+        });
+
+        track.addEventListener("transitionend", event => {
+
+            if (event.target !== track || event.propertyName !== "transform") return;
+
+            if (currentIndex === 0) {
+
+                moveTo(slideCount, true);
+
+            }
+
+            if (currentIndex === slideCount + 1) {
+
+                moveTo(1, true);
+
+            }
+
+        });
+
+        carousel.addEventListener("mouseenter", () => {
+
+            isHovered = true;
+            stopAutoplay();
+
+        });
+
+        carousel.addEventListener("mouseleave", () => {
+
+            isHovered = false;
+            syncAutoplay();
+
+        });
+
+        carousel.addEventListener("focusin", () => {
+
+            isFocused = true;
+            stopAutoplay();
+
+        });
+
+        carousel.addEventListener("focusout", event => {
+
+            if (!carousel.contains(event.relatedTarget)) {
+
+                isFocused = false;
+                syncAutoplay();
+
+            }
+
+        });
+
+        carousel.addEventListener("keydown", event => {
+
+            if (event.key === "ArrowLeft") {
+
+                event.preventDefault();
+                showPrevious();
+                syncAutoplay();
+
+            }
+
+            if (event.key === "ArrowRight") {
+
+                event.preventDefault();
+                showNext();
+                syncAutoplay();
+
+            }
+
+        });
+
+        viewport.addEventListener("touchstart", event => {
+
+            touchStartX = event.changedTouches[0].screenX;
+            touchEndX = touchStartX;
+
+        }, { passive:true });
+
+        viewport.addEventListener("touchmove", event => {
+
+            touchEndX = event.changedTouches[0].screenX;
+
+        }, { passive:true });
+
+        viewport.addEventListener("touchend", () => {
+
+            const swipeDistance = touchEndX - touchStartX;
+
+            if (Math.abs(swipeDistance) < 50) return;
+
+            if (swipeDistance < 0) {
+
+                showNext();
+
+            } else {
+
+                showPrevious();
+
+            }
+
+            syncAutoplay();
+
+        }, { passive:true });
+
+        document.addEventListener("visibilitychange", syncAutoplay);
+
+        moveTo(1, true);
+        startAutoplay();
+
+    }
+
+    if (document.readyState === "loading") {
+
+        document.addEventListener("DOMContentLoaded", initialiseReviewsCarousel);
+
+    } else {
+
+        initialiseReviewsCarousel();
+
+    }
+
+})();
