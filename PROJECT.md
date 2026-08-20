@@ -89,6 +89,8 @@ Services
 
 Projects
 
+Pricing
+
 About
 
 Contact
@@ -116,6 +118,8 @@ Privacy Policy
 hometechmayo/
 
 index.html
+
+pricing.html
 
 about.html
 
@@ -181,6 +185,10 @@ Inter
 - VS Code
 - Git installed
 
+## v0.2
+
+- Pricing page added with transparent starting prices and quote guidance
+
 ---
 
 # Current Sprint
@@ -196,6 +204,8 @@ Inter
 ☐ Services
 
 ☐ Footer
+
+☑ Pricing Page
 
 ---
 
