@@ -55,7 +55,7 @@
     <link rel="stylesheet" href="css/style.css" />
   </head>
 
-  <body>
+  <body class="pricing-page">
     <header>
       <div class="container">
         <a href="index.html#home" class="logo">
@@ -65,7 +65,7 @@
           />
         </a>
 
-        <nav aria-label="Main navigation">
+        <nav id="pricingNavigation" aria-label="Main navigation">
           <ul>
             <li><a href="index.html#home">Home</a></li>
 
@@ -80,6 +80,16 @@
             <li><a href="index.html#contact">Contact</a></li>
           </ul>
         </nav>
+
+        <button
+          class="mobile-menu-toggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="pricingNavigation"
+          aria-label="Open navigation menu"
+        >
+          <i class="fa-solid fa-bars" aria-hidden="true"></i>
+        </button>
 
         <a href="index.html#contact" class="quote-button">
           Request a Free Quote
@@ -119,9 +129,23 @@
 
           <div class="pricing-grid">
             <article class="pricing-card">
-              <h3>Furniture Assembly</h3>
+              <h3 class="pricing-card-title">Furniture Assembly</h3>
 
-              <ul class="pricing-list">
+              <button
+                class="pricing-card-toggle"
+                type="button"
+                data-pricing-toggle
+                aria-expanded="false"
+                aria-controls="pricing-furniture-panel"
+              >
+                <span>Furniture Assembly</span>
+                <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+              </button>
+
+              <div class="pricing-card-panel" id="pricing-furniture-panel">
+                <div class="pricing-card-panel-content">
+
+                  <ul class="pricing-list">
                 <li class="pricing-row">
                   <span class="pricing-service">Small furniture item</span>
                   <strong class="pricing-price">From €50</strong>
@@ -148,18 +172,32 @@
                 </li>
 
                 <li class="pricing-row">
-                  <span class="pricing-service"
-                    >Large or complex furniture</span
-                  >
+                  <span class="pricing-service">Large or complex furniture</span>
                   <strong class="pricing-price">Quote required</strong>
                 </li>
-              </ul>
+                  </ul>
+                </div>
+              </div>
             </article>
 
             <article class="pricing-card">
-              <h3>TV Wall Mounting</h3>
+              <h3 class="pricing-card-title">TV Wall Mounting</h3>
 
-              <ul class="pricing-list">
+              <button
+                class="pricing-card-toggle"
+                type="button"
+                data-pricing-toggle
+                aria-expanded="false"
+                aria-controls="pricing-tv-panel"
+              >
+                <span>TV Wall Mounting</span>
+                <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+              </button>
+
+              <div class="pricing-card-panel" id="pricing-tv-panel">
+                <div class="pricing-card-panel-content">
+
+                  <ul class="pricing-list">
                 <li class="pricing-row">
                   <span class="pricing-service">TV up to 55&quot;</span>
                   <strong class="pricing-price">From €80</strong>
@@ -181,9 +219,7 @@
                 </li>
 
                 <li class="pricing-row">
-                  <span class="pricing-service"
-                    >Cable management / trunking</span
-                  >
+                  <span class="pricing-service">Cable management / trunking</span>
                   <strong class="pricing-price">From €20</strong>
                 </li>
 
@@ -191,29 +227,41 @@
                   <span class="pricing-service">Bracket supply</span>
                   <strong class="pricing-price">Priced separately</strong>
                 </li>
-              </ul>
+                  </ul>
+                </div>
+              </div>
             </article>
 
             <article class="pricing-card">
-              <h3>General Handyman</h3>
+              <h3 class="pricing-card-title">General Handyman</h3>
 
-              <ul class="pricing-list">
+              <button
+                class="pricing-card-toggle"
+                type="button"
+                data-pricing-toggle
+                aria-expanded="false"
+                aria-controls="pricing-handyman-panel"
+              >
+                <span>General Handyman</span>
+                <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+              </button>
+
+              <div class="pricing-card-panel" id="pricing-handyman-panel">
+                <div class="pricing-card-panel-content">
+
+                  <ul class="pricing-list">
                 <li class="pricing-row">
                   <span class="pricing-service">General handyman work</span>
-                  <strong class="pricing-price">From €30/hour</strong>
+                  <strong class="pricing-price">From €40/hour</strong>
                 </li>
 
                 <li class="pricing-row">
-                  <span class="pricing-service"
-                    >Minimum visit / small job charge</span
-                  >
-                  <strong class="pricing-price">From €40</strong>
+                  <span class="pricing-service">Minimum visit / small job charge</span>
+                  <strong class="pricing-price">From €60</strong>
                 </li>
 
                 <li class="pricing-row">
-                  <span class="pricing-service"
-                    >Shelving / curtain rails / fittings</span
-                  >
+                  <span class="pricing-service">Shelving / curtain rails / fittings</span>
                   <strong class="pricing-price">From €50</strong>
                 </li>
 
@@ -223,22 +271,34 @@
                 </li>
 
                 <li class="pricing-row">
-                  <span class="pricing-service"
-                    >Complex or multi-job visits</span
-                  >
+                  <span class="pricing-service">Complex or multi-job visits</span>
                   <strong class="pricing-price">Quote required</strong>
                 </li>
-              </ul>
+                  </ul>
+                </div>
+              </div>
             </article>
 
             <article class="pricing-card">
-              <h3>Wi-Fi &amp; Home Tech</h3>
+              <h3 class="pricing-card-title">Wi-Fi &amp; Home Tech</h3>
 
-              <ul class="pricing-list">
+              <button
+                class="pricing-card-toggle"
+                type="button"
+                data-pricing-toggle
+                aria-expanded="false"
+                aria-controls="pricing-home-tech-panel"
+              >
+                <span>Wi-Fi &amp; Home Tech</span>
+                <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+              </button>
+
+              <div class="pricing-card-panel" id="pricing-home-tech-panel">
+                <div class="pricing-card-panel-content">
+
+                  <ul class="pricing-list">
                 <li class="pricing-row">
-                  <span class="pricing-service"
-                    >Wi-Fi setup / optimisation</span
-                  >
+                  <span class="pricing-service">Wi-Fi setup / optimisation</span>
                   <strong class="pricing-price">From €60</strong>
                 </li>
 
@@ -266,22 +326,36 @@
                   <span class="pricing-service">Home network setup</span>
                   <strong class="pricing-price">Quote required</strong>
                 </li>
-              </ul>
+                  </ul>
+                </div>
+              </div>
             </article>
 
             <article class="pricing-card">
-              <h3>Ventilation</h3>
+              <h3 class="pricing-card-title">Ventilation</h3>
 
-              <ul class="pricing-list">
+              <button
+                class="pricing-card-toggle"
+                type="button"
+                data-pricing-toggle
+                aria-expanded="false"
+                aria-controls="pricing-ventilation-panel"
+              >
+                <span>Ventilation</span>
+                <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+              </button>
+
+              <div class="pricing-card-panel" id="pricing-ventilation-panel">
+                <div class="pricing-card-panel-content">
+
+                  <ul class="pricing-list">
                 <li class="pricing-row">
                   <span class="pricing-service">Extractor fan replacement</span>
                   <strong class="pricing-price">From €80 labour</strong>
                 </li>
 
                 <li class="pricing-row">
-                  <span class="pricing-service"
-                    >Bathroom ventilation upgrade</span
-                  >
+                  <span class="pricing-service">Bathroom ventilation upgrade</span>
                   <strong class="pricing-price">Quote required</strong>
                 </li>
 
@@ -291,18 +365,19 @@
                 </li>
 
                 <li class="pricing-row">
-                  <span class="pricing-service"
-                    >External vent installation</span
-                  >
+                  <span class="pricing-service">External vent installation</span>
                   <strong class="pricing-price">Quote required</strong>
                 </li>
-              </ul>
+                  </ul>
 
-              <p class="pricing-note">
-                Ventilation pricing depends heavily on access, wall
-                construction, duct length and materials.
-              </p>
+                  <p class="pricing-note">
+                    Ventilation pricing depends heavily on access, wall construction,
+                    duct length and materials.
+                  </p>
+                </div>
+              </div>
             </article>
+
           </div>
         </div>
       </section>
@@ -317,9 +392,7 @@
             <div>
               <p class="pricing-eyebrow">Good to know</p>
 
-              <h2 id="pricing-information-title">
-                Important Pricing Information
-              </h2>
+              <h2 id="pricing-information-title">Important Pricing Information</h2>
             </div>
 
             <ul class="pricing-info-list">
@@ -385,9 +458,7 @@
             />
           </h3>
 
-          <p>
-            Professional Handyman &amp; Smart Home Services across County Mayo.
-          </p>
+          <p>Professional Handyman &amp; Smart Home Services across County Mayo.</p>
         </div>
 
         <div>
