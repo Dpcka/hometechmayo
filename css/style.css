@@ -2226,134 +2226,7 @@ PRICING PAGE
 MOBILE PRICING PAGE
 ================================================*/
 
-.pricing-page .mobile-menu-toggle,
-.pricing-card-toggle{
-
-    display:none;
-
-}
-
 @media(max-width:768px){
-
-    .pricing-page header .container{
-
-        position:relative;
-
-        gap:10px;
-
-        padding:12px 0;
-
-    }
-
-    .pricing-page .logo img{
-
-        height:42px;
-
-    }
-
-    .pricing-page header nav{
-
-        position:absolute;
-
-        top:100%;
-
-        right:0;
-
-        left:0;
-
-        max-height:0;
-
-        overflow:hidden;
-
-        opacity:0;
-
-        pointer-events:none;
-
-        background:rgba(10,10,10,.98);
-
-        box-shadow:0 16px 30px rgba(0,0,0,.2);
-
-        transition:max-height .3s ease,opacity .3s ease;
-
-    }
-
-    .pricing-page header nav.open{
-
-        max-height:400px;
-
-        opacity:1;
-
-        pointer-events:auto;
-
-    }
-
-    .pricing-page header nav ul{
-
-        display:flex;
-
-        flex-direction:column;
-
-        gap:0;
-
-        padding:8px 0;
-
-    }
-
-    .pricing-page header nav a{
-
-        display:block;
-
-        padding:12px 20px;
-
-    }
-
-    .pricing-page header nav a::after{
-
-        display:none;
-
-    }
-
-    .pricing-page .mobile-menu-toggle{
-
-        display:flex;
-
-        width:40px;
-
-        height:40px;
-
-        align-items:center;
-
-        justify-content:center;
-
-        border:1px solid rgba(255,255,255,.3);
-
-        border-radius:9px;
-
-        background:transparent;
-
-        color:#fff;
-
-        cursor:pointer;
-
-    }
-
-    .pricing-page .mobile-menu-toggle:focus-visible{
-
-        outline:3px solid rgba(201,162,39,.65);
-
-        outline-offset:3px;
-
-    }
-
-    .pricing-page .quote-button{
-
-        padding:10px 12px;
-
-        font-size:12px;
-
-        white-space:nowrap;
-
-    }
 
     .pricing-page .pricing-hero{
 
@@ -2419,9 +2292,7 @@ MOBILE PRICING PAGE
 
     .pricing-page .pricing-card{
 
-        padding:0;
-
-        overflow:hidden;
+        padding:26px 24px;
 
         border-top-width:3px;
 
@@ -2439,89 +2310,11 @@ MOBILE PRICING PAGE
 
     .pricing-page .pricing-card-title{
 
-        display:none;
+        display:block;
 
-    }
+        margin-bottom:18px;
 
-    .pricing-page .pricing-card-toggle{
-
-        display:flex;
-
-        width:100%;
-
-        align-items:center;
-
-        justify-content:space-between;
-
-        gap:16px;
-
-        padding:21px 20px;
-
-        border:0;
-
-        background:#fff;
-
-        color:var(--primary);
-
-        font:600 1.3rem/1.35 'Poppins',sans-serif;
-
-        text-align:left;
-
-        cursor:pointer;
-
-    }
-
-    .pricing-page .pricing-card-toggle i{
-
-        color:var(--accent);
-
-        font-size:15px;
-
-        transition:transform var(--transition);
-
-    }
-
-    .pricing-page .pricing-card-toggle:focus-visible{
-
-        outline:3px solid rgba(201,162,39,.65);
-
-        outline-offset:-3px;
-
-    }
-
-    .pricing-page.pricing-accordion-ready .pricing-card-panel{
-
-        display:grid;
-
-        grid-template-rows:0fr;
-
-        transition:grid-template-rows .35s ease;
-
-    }
-
-    .pricing-page.pricing-accordion-ready .pricing-card-panel-content{
-
-        min-height:0;
-
-        overflow:hidden;
-
-    }
-
-    .pricing-page.pricing-accordion-ready .pricing-card.is-open .pricing-card-panel{
-
-        grid-template-rows:1fr;
-
-    }
-
-    .pricing-page.pricing-accordion-ready .pricing-card.is-open .pricing-card-panel-content{
-
-        padding:0 20px 20px;
-
-    }
-
-    .pricing-page .pricing-card.is-open .pricing-card-toggle i{
-
-        transform:rotate(180deg);
+        font-size:1.4rem;
 
     }
 
@@ -2621,19 +2414,23 @@ MOBILE PRICING PAGE
 
         border-radius:16px;
 
-        background:var(--primary);
+        background:#fff;
 
-        box-shadow:0 14px 34px rgba(17,17,17,.16);
+        box-shadow:var(--shadow);
 
     }
 
     .pricing-page .pricing-cta h2{
+
+        color:var(--primary);
 
         font-size:clamp(1.7rem,6vw,2rem);
 
     }
 
     .pricing-page .pricing-cta p{
+
+        color:#666;
 
         font-size:16px;
 
@@ -2661,6 +2458,14 @@ MOBILE PRICING PAGE
 
     }
 
+    .pricing-page .pricing-cta-buttons .btn-secondary{
+
+        border-color:var(--primary);
+
+        color:var(--primary);
+
+    }
+
     .pricing-page .whatsapp-float{
 
         right:12px;
@@ -2684,18 +2489,6 @@ MOBILE PRICING PAGE
         height:46px;
 
         font-size:20px;
-
-    }
-
-}
-
-@media(prefers-reduced-motion:reduce){
-
-    .pricing-page header nav,
-    .pricing-page .pricing-card-panel,
-    .pricing-page .pricing-card-toggle i{
-
-        transition:none;
 
     }
 
