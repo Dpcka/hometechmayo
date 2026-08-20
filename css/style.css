@@ -1001,6 +1001,12 @@ SERVICES PAGE
 
 }
 
+.service-detail-wifi-image img{
+
+    object-position:55% center;
+
+}
+
 .service-detail:hover .service-detail-image img{
 
     transform:scale(1.03);

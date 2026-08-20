@@ -65,7 +65,8 @@ async function findSourceImages(directory) {
 
 async function optimiseImage(sourcePath) {
   const parsedPath = path.parse(sourcePath);
-  const outputPath = path.join(parsedPath.dir, `${parsedPath.name}.webp`);
+  const outputName = parsedPath.name.replace(/\.webp$/i, "");
+  const outputPath = path.join(parsedPath.dir, `${outputName}.webp`);
   const sourceStats = await fs.stat(sourcePath);
 
   try {
