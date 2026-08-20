@@ -1,0 +1,11 @@
+{
+  "name": "hometechmayo",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "images": "node scripts/optimize-images.js"
+  },
+  "devDependencies": {
+    "sharp": "^0.35.3"
+  }
+}
