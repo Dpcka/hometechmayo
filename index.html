@@ -20,22 +20,60 @@
 
     <meta name="author" content="Home Tech Solutions & Services" />
 
-    <meta property="og:title" content="Home Tech Solutions & Services" />
+    <meta
+      property="og:title"
+      content="Home Tech Solutions &amp; Services | Professional Handyman in County Mayo"
+    />
 
     <meta
       property="og:description"
-      content="Professional Handyman & Smart Home Services across County Mayo."
+      content="Professional handyman services including furniture assembly, TV mounting, ventilation, Wi-Fi and smart home setup across County Mayo."
     />
 
     <meta property="og:type" content="website" />
 
-    <meta property="og:image" content="assets/logo/Logo.png" />
+    <meta property="og:url" content="https://hometechmayo.ie/" />
+
+    <meta property="og:site_name" content="Home Tech Solutions &amp; Services" />
+
+    <meta
+      property="og:image"
+      content="https://hometechmayo.ie/assets/hero/hero.jpg"
+    />
+
+    <meta property="og:image:width" content="2048" />
+
+    <meta property="og:image:height" content="1365" />
+
+    <meta
+      property="og:image:alt"
+      content="Modern home technology setup"
+    />
 
     <meta property="og:locale" content="en_IE" />
 
-    <link rel="canonical" href="https://hometechmayo.ie" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <meta
+      name="twitter:title"
+      content="Home Tech Solutions &amp; Services | Professional Handyman in County Mayo"
+    />
+
+    <meta
+      name="twitter:description"
+      content="Professional handyman services including furniture assembly, TV mounting, ventilation, Wi-Fi and smart home setup across County Mayo."
+    />
+
+    <meta
+      name="twitter:image"
+      content="https://hometechmayo.ie/assets/hero/hero.jpg"
+    />
+
+    <link rel="canonical" href="https://hometechmayo.ie/" />
 
     <link rel="icon" href="assets/logo/logo.svg" type="image/svg+xml" />
+
+    <link rel="apple-touch-icon" href="assets/logo/Logo.png" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
 
@@ -51,10 +89,85 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
     />
 
+    <link
+      rel="preload"
+      as="image"
+      href="assets/hero/desktop.webp"
+      type="image/webp"
+      fetchpriority="high"
+    />
+
     <link rel="stylesheet" href="css/style.css" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "@id": "https://hometechmayo.ie/#business",
+        "name": "Home Tech Solutions & Services",
+        "url": "https://hometechmayo.ie/",
+        "telephone": "+353833498496",
+        "email": "info@hometechmayo.ie",
+        "description": "Handyman and home technology services including furniture assembly, TV wall mounting, ventilation, Wi-Fi and networking, smart home setup and general handyman work across County Mayo.",
+        "areaServed": {
+          "@type": "AdministrativeArea",
+          "name": "County Mayo, Ireland"
+        },
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Home services",
+          "itemListElement": [
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Furniture Assembly"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "TV Wall Mounting"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Ventilation"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Wi-Fi & Networking"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Smart Home"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "General Handyman"
+              }
+            }
+          ]
+        }
+      }
+    </script>
   </head>
 
   <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
     <header>
       <div class="container">
         <a href="#home" class="logo">
@@ -64,9 +177,9 @@
           />
         </a>
 
-        <nav>
+        <nav id="site-navigation" aria-label="Main navigation">
           <ul>
-            <li><a href="#home">Home</a></li>
+            <li><a href="#home" aria-current="page">Home</a></li>
 
             <li><a href="services.html">Services</a></li>
 
@@ -80,11 +193,23 @@
           </ul>
         </nav>
 
+        <button
+          class="menu-toggle"
+          type="button"
+          aria-label="Open main navigation"
+          aria-controls="site-navigation"
+          aria-expanded="false"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
         <a href="#contact" class="quote-button"> Request a Free Quote </a>
       </div>
     </header>
 
-    <main>
+    <main id="main-content">
       <section id="home" class="hero">
         <div class="overlay"></div>
 
@@ -130,9 +255,14 @@
         <div class="container about-grid">
           <div class="about-image">
             <img
-              src="assets/projects/about.jpg"
-              alt="Home Tech Solutions & Services"
+              src="assets/projects/about-800.webp"
+              srcset="assets/projects/about-800.webp 800w, assets/projects/about-1600.webp 1600w"
+              sizes="(max-width: 768px) 90vw, (max-width: 1200px) 45vw, 540px"
+              alt="Completed furniture assembly project"
               loading="lazy"
+              decoding="async"
+              width="1920"
+              height="1397"
             />
           </div>
 
@@ -242,9 +372,14 @@
           <div class="projects-grid">
             <article class="project-card">
               <img
-                src="assets/projects/PXL_20260713_151848763.jpg"
-                alt="Bathroom Ventilation Upgrade"
+                src="assets/projects/PXL_20260713_151848763-800.webp"
+                srcset="assets/projects/PXL_20260713_151848763-800.webp 800w, assets/projects/PXL_20260713_151848763-1600.webp 1600w"
+                sizes="(max-width: 768px) 90vw, (max-width: 1200px) 45vw, 540px"
+                alt="Bathroom ventilation upgrade with rigid ducting"
                 loading="lazy"
+                decoding="async"
+                width="1920"
+                height="1080"
               />
 
               <div class="project-content">
@@ -259,9 +394,14 @@
 
             <article class="project-card">
               <img
-                src="assets/projects/about.jpg"
-                alt="Furniture Assembly"
+                src="assets/projects/about-800.webp"
+                srcset="assets/projects/about-800.webp 800w, assets/projects/about-1600.webp 1600w"
+                sizes="(max-width: 768px) 90vw, (max-width: 1200px) 45vw, 540px"
+                alt="Completed flat-pack furniture assembly"
                 loading="lazy"
+                decoding="async"
+                width="1920"
+                height="1397"
               />
 
               <div class="project-content">
@@ -382,7 +522,7 @@
             <a
               href="https://www.google.com/search?q=Home+Tech+Solutions+%26+Services+Mayo"
               target="_blank"
-              rel="noopener"
+              rel="noopener noreferrer"
               class="btn btn-light"
             >
               Read Google Reviews
@@ -391,7 +531,7 @@
             <a
               href="https://g.page/r/CYGFbn9c1JpcEBM/review"
               target="_blank"
-              rel="noopener"
+              rel="noopener noreferrer"
               class="btn btn-primary"
             >
               Leave a Google Review
@@ -503,7 +643,7 @@
                     <a
                       href="https://wa.me/353833498496?text=Hi%20Home%20Tech%20Solutions!%20I'd%20like%20to%20request%20a%20free%20quote."
                       target="_blank"
-                      rel="noopener"
+                      rel="noopener noreferrer"
                     >
                       WhatsApp
                     </a>.
@@ -709,7 +849,7 @@
               class="btn btn-primary"
               href="https://wa.me/353833498496?text=Hi%20Home%20Tech%20Solutions!%0A%0AI'd%20like%20to%20request%20a%20free%20quote."
               target="_blank"
-              rel="noopener"
+              rel="noopener noreferrer"
             >
               Chat on WhatsApp
             </a>
@@ -770,15 +910,10 @@
               <li><a href="pricing.html">Pricing</a></li>
 
               <li><a href="#about">About</a></li>
-<<<<<<< HEAD
 
               <li><a href="#contact">Contact</a></li>
 
               <li><a href="privacy.html">Privacy Policy</a></li>
-=======
-
-              <li><a href="#contact">Contact</a></li>
->>>>>>> e82cc373d0c41ff80c43233ddac67292fd96641d
             </ul>
           </div>
         </div>
@@ -810,7 +945,7 @@
       <a
         href="https://wa.me/353833498496?text=Hi%20Home%20Tech%20Solutions!%20I'd%20like%20to%20request%20a%20free%20quote."
         target="_blank"
-        rel="noopener"
+        rel="noopener noreferrer"
         class="btn btn-primary"
       >
         Request a Free Quote
@@ -821,7 +956,7 @@
       href="https://wa.me/353833498496?text=Hi%20Home%20Tech%20Solutions!%20I'd%20like%20to%20request%20a%20free%20quote."
       class="whatsapp-float"
       target="_blank"
-      rel="noopener"
+      rel="noopener noreferrer"
       aria-label="Chat on WhatsApp"
     >
       <i class="fa-brands fa-whatsapp"></i>

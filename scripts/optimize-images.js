@@ -5,7 +5,7 @@ const path = require("node:path");
 const sharp = require("sharp");
 
 const assetsDirectory = path.resolve(__dirname, "..", "assets");
-const maximumWidth = 1920;
+const responsiveWidths = [800, 1600];
 const webpQuality = 82;
 const supportedExtensions = new Set([".jpg", ".jpeg", ".png"]);
 const excludedDirectories = new Set([
@@ -63,10 +63,14 @@ async function findSourceImages(directory) {
   return images;
 }
 
-async function optimiseImage(sourcePath) {
+function getOutputPath(sourcePath, width) {
   const parsedPath = path.parse(sourcePath);
   const outputName = parsedPath.name.replace(/\.webp$/i, "");
-  const outputPath = path.join(parsedPath.dir, `${outputName}.webp`);
+  return path.join(parsedPath.dir, `${outputName}-${width}.webp`);
+}
+
+async function optimiseVariant(sourcePath, width) {
+  const outputPath = getOutputPath(sourcePath, width);
   const sourceStats = await fs.stat(sourcePath);
 
   try {
@@ -85,7 +89,7 @@ async function optimiseImage(sourcePath) {
   await sharp(sourcePath)
     .rotate()
     .resize({
-      width: maximumWidth,
+      width,
       withoutEnlargement: true
     })
     .webp({ quality: webpQuality })
@@ -96,6 +100,14 @@ async function optimiseImage(sourcePath) {
   );
 
   return "optimized";
+}
+
+async function optimiseImage(sourcePath) {
+  const results = await Promise.all(
+    responsiveWidths.map(width => optimiseVariant(sourcePath, width))
+  );
+
+  return results;
 }
 
 async function main() {
@@ -119,12 +131,14 @@ async function main() {
 
   for (const sourcePath of sourceImages) {
     try {
-      const result = await optimiseImage(sourcePath);
+      const results = await optimiseImage(sourcePath);
 
-      if (result === "optimized") {
-        optimizedCount += 1;
-      } else {
-        skippedCount += 1;
+      for (const result of results) {
+        if (result === "optimized") {
+          optimizedCount += 1;
+        } else {
+          skippedCount += 1;
+        }
       }
     } catch (error) {
       failedCount += 1;

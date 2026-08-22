@@ -203,13 +203,14 @@ Inter
 
 - Homepage FAQ section added with an accessible accordion
 
-<<<<<<< HEAD
 ## v0.6
 
 - Privacy Policy page added with website data, cookies and contact information
 
-=======
->>>>>>> e82cc373d0c41ff80c43233ddac67292fd96641d
+## v0.7
+
+- Technical SEO implemented: canonical URLs, social metadata, LocalBusiness structured data, sitemap, robots and custom 404 page
+
 ---
 
 # Current Sprint
@@ -227,11 +228,10 @@ Inter
 ☑ Smart Home Service Alignment — Completed
 
 ☑ FAQ Section — Completed
-<<<<<<< HEAD
 
 ☑ Privacy Policy — Completed
-=======
->>>>>>> e82cc373d0c41ff80c43233ddac67292fd96641d
+
+☑ Technical SEO — Completed
 
 ☐ Footer
 

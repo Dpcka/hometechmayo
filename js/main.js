@@ -78,6 +78,60 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const sections = document.querySelectorAll("section[id]");
     const navLinks = document.querySelectorAll("nav a");
+    const navigation = document.getElementById("site-navigation");
+    const menuToggle = document.querySelector(".menu-toggle");
+
+    function closeMobileMenu() {
+
+        if (!navigation || !menuToggle) return;
+
+        navigation.classList.remove("is-open");
+        menuToggle.setAttribute("aria-expanded", "false");
+        menuToggle.setAttribute("aria-label", "Open main navigation");
+
+    }
+
+    if (navigation && menuToggle) {
+
+        menuToggle.addEventListener("click", () => {
+
+            const isOpen = navigation.classList.toggle("is-open");
+
+            menuToggle.setAttribute("aria-expanded", String(isOpen));
+            menuToggle.setAttribute(
+                "aria-label",
+                isOpen ? "Close main navigation" : "Open main navigation"
+            );
+
+        });
+
+        navLinks.forEach(link => {
+
+            link.addEventListener("click", closeMobileMenu);
+
+        });
+
+        document.addEventListener("keydown", event => {
+
+            if (event.key === "Escape") {
+
+                closeMobileMenu();
+
+            }
+
+        });
+
+        window.addEventListener("resize", () => {
+
+            if (window.innerWidth > 900) {
+
+                closeMobileMenu();
+
+            }
+
+        });
+
+    }
 
     function updateMenu() {
 
