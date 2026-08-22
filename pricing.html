@@ -81,14 +81,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@600;700;800&display=swap"
+      onload="this.onload=null;this.rel='stylesheet'"
     />
-
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-    />
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@600;700;800&display=swap" />
+    </noscript>
 
     <link rel="stylesheet" href="css/style.css" />
   </head>
@@ -102,6 +102,8 @@
           <img
             src="assets/logo/logo.svg"
             alt="Home Tech Solutions & Services Logo"
+            width="980"
+            height="825"
           />
         </a>
 
@@ -476,12 +478,16 @@
               src="assets/logo/logo.svg"
               alt="Home Tech Solutions & Services"
               class="footer-logo footer-logo-desktop"
+              width="980"
+              height="825"
             />
 
             <img
               src="assets/logo/Logo_home_tech_small.svg"
               alt="Home Tech Solutions & Services"
               class="footer-logo footer-logo-mobile"
+              width="457"
+              height="363"
             />
           </h3>
 
@@ -553,7 +559,7 @@
       rel="noopener noreferrer"
       aria-label="Chat on WhatsApp"
     >
-      <i class="fa-brands fa-whatsapp"></i>
+      <img class="whatsapp-icon" src="assets/icons/whatsapp.svg" alt="" width="38" height="38" />
     </a>
 
     <script src="js/main.js"></script>
