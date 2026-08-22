@@ -1992,6 +1992,359 @@ SERVICES PAGE
         transition:none !important;
 
     }
+<<<<<<< HEAD
+
+}
+
+
+/*================================================
+PRIVACY POLICY PAGE
+================================================*/
+
+.privacy-hero{
+
+    display:flex;
+
+    align-items:center;
+
+    min-height:390px;
+
+    padding:130px 0 72px;
+
+    background:#111;
+
+    color:#fff;
+
+}
+
+.privacy-hero-content{
+
+    max-width:850px;
+
+}
+
+.privacy-eyebrow{
+
+    margin:0 0 16px;
+
+    color:var(--accent);
+
+    font-size:14px;
+
+    font-weight:700;
+
+    letter-spacing:.12em;
+
+    text-transform:uppercase;
+
+}
+
+.privacy-hero h1{
+
+    margin-bottom:20px;
+
+    color:#fff;
+
+    font-size:clamp(3rem,6vw,4.5rem);
+
+    line-height:1.08;
+
+}
+
+.privacy-hero p:not(.privacy-eyebrow){
+
+    max-width:650px;
+
+    margin:0;
+
+    color:rgba(255,255,255,.82);
+
+    font-size:20px;
+
+    line-height:1.8;
+
+}
+
+.privacy-policy{
+
+    padding:100px 0;
+
+    background:var(--light);
+
+}
+
+.privacy-policy-content{
+
+    max-width:920px;
+
+    margin:auto;
+
+    padding:clamp(34px,6vw,72px);
+
+    background:#fff;
+
+    border-radius:20px;
+
+    box-shadow:0 16px 42px rgba(17,17,17,.08);
+
+}
+
+.privacy-policy-content > p{
+
+    color:#555;
+
+    font-size:17px;
+
+    line-height:1.8;
+
+}
+
+.privacy-updated{
+
+    margin:0 0 24px;
+
+    color:#777 !important;
+
+    font-size:14px !important;
+
+    font-weight:600;
+
+}
+
+.privacy-intro{
+
+    margin-bottom:18px;
+
+    color:var(--primary) !important;
+
+    font-size:clamp(1.2rem,2.4vw,1.45rem) !important;
+
+    font-weight:600;
+
+    line-height:1.65 !important;
+
+}
+
+.privacy-section{
+
+    margin-top:40px;
+
+    padding-top:40px;
+
+    border-top:1px solid #e8e8e8;
+
+}
+
+.privacy-section h2{
+
+    margin-bottom:14px;
+
+    font-size:clamp(1.3rem,2.5vw,1.7rem);
+
+    line-height:1.35;
+
+}
+
+.privacy-section p{
+
+    color:#555;
+
+    font-size:17px;
+
+    line-height:1.8;
+
+}
+
+.privacy-section p + p{
+
+    margin-top:16px;
+
+}
+
+.privacy-list{
+
+    display:grid;
+
+    gap:10px;
+
+    margin-top:16px;
+
+}
+
+.privacy-list li{
+
+    position:relative;
+
+    padding-left:22px;
+
+    color:#555;
+
+    font-size:17px;
+
+    line-height:1.7;
+
+}
+
+.privacy-list li::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:.68em;
+
+    left:0;
+
+    width:7px;
+
+    height:7px;
+
+    border-radius:50%;
+
+    background:var(--accent);
+
+}
+
+.privacy-policy a{
+
+    color:var(--primary);
+
+    font-weight:600;
+
+    overflow-wrap:anywhere;
+
+    text-decoration:underline;
+
+    text-decoration-color:var(--accent);
+
+    text-decoration-thickness:2px;
+
+    text-underline-offset:3px;
+
+}
+
+.privacy-policy a:hover{
+
+    color:var(--accent);
+
+}
+
+.privacy-policy a:focus-visible{
+
+    outline:3px solid var(--accent);
+
+    outline-offset:3px;
+
+}
+
+.privacy-policy code{
+
+    padding:2px 6px;
+
+    border-radius:4px;
+
+    background:#f1f1f1;
+
+    color:var(--primary);
+
+    font-size:.9em;
+
+    overflow-wrap:anywhere;
+
+}
+
+.privacy-contact{
+
+    padding:32px;
+
+    border:0;
+
+    border-left:4px solid var(--accent);
+
+    border-radius:0 var(--radius) var(--radius) 0;
+
+    background:var(--light);
+
+}
+
+@media(max-width:768px){
+
+    .privacy-hero{
+
+        min-height:clamp(360px,52svh,440px);
+
+        padding:108px 0 48px;
+
+    }
+
+    .privacy-hero h1{
+
+        font-size:clamp(2.4rem,9vw,3.5rem);
+
+    }
+
+    .privacy-hero p:not(.privacy-eyebrow),
+    .privacy-policy-content > p,
+    .privacy-section p,
+    .privacy-list li{
+
+        font-size:16px;
+
+        line-height:1.7;
+
+    }
+
+    .privacy-policy{
+
+        padding:56px 0;
+
+    }
+
+    .privacy-policy-content{
+
+        border-radius:16px;
+
+    }
+
+    .privacy-section{
+
+        margin-top:32px;
+
+        padding-top:32px;
+
+    }
+
+    .privacy-contact{
+
+        padding:24px 20px;
+
+    }
+
+}
+
+@media(max-width:480px){
+
+    .privacy-policy-content{
+
+        padding:30px 24px;
+
+    }
+
+    .privacy-hero p:not(.privacy-eyebrow){
+
+        font-size:16px;
+
+        line-height:1.7;
+
+    }
+
+    .privacy-section h2{
+
+        font-size:1.3rem;
+
+    }
+=======
+>>>>>>> e82cc373d0c41ff80c43233ddac67292fd96641d
 
 }
 

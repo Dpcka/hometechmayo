@@ -203,6 +203,13 @@ Inter
 
 - Homepage FAQ section added with an accessible accordion
 
+<<<<<<< HEAD
+## v0.6
+
+- Privacy Policy page added with website data, cookies and contact information
+
+=======
+>>>>>>> e82cc373d0c41ff80c43233ddac67292fd96641d
 ---
 
 # Current Sprint
@@ -220,6 +227,11 @@ Inter
 ☑ Smart Home Service Alignment — Completed
 
 ☑ FAQ Section — Completed
+<<<<<<< HEAD
+
+☑ Privacy Policy — Completed
+=======
+>>>>>>> e82cc373d0c41ff80c43233ddac67292fd96641d
 
 ☐ Footer
 
@@ -239,6 +251,20 @@ Inter
 - Google Maps
 - Analytics
 - Cookie Banner
+
+---
+
+# Privacy Review Note
+
+Review the Privacy Policy before adding:
+
+- Google Analytics
+- Meta Pixel or advertising tracking
+- A website contact or quote form
+- Customer accounts
+- HBM website integration
+- Automated project or gallery publishing
+- Additional third-party embeds
 
 ---
 
