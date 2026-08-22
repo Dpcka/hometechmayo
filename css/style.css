@@ -249,7 +249,7 @@ nav a:hover::after{
 
     background:var(--accent);
 
-    color:#fff;
+    color:var(--primary);
 
     padding:13px 24px;
 
@@ -420,7 +420,7 @@ BUTTONS
 
     background:var(--accent);
 
-    color:#fff;
+    color:var(--primary);
 
 }
 
