@@ -17,14 +17,16 @@ provider settings described as owner-confirmed were not independently audited.
 ## Website architecture
 
 Static HTML, shared `css/style.css`, vanilla `js/main.js` and local `assets/`.
-No framework, CMS, database, form backend or HBM connection is implemented.
-Node.js and `sharp` are used only for image maintenance.
+No framework, CMS or HBM connection is implemented. The pricing page has a
+shared browser/server pricing engine and Pages Functions for email requests.
+A dedicated Cloudflare D1 binding stores anti-abuse metadata only. Node.js runs
+image maintenance and tests; `sharp` remains the only package dependency.
 
 | File | Purpose |
 | --- | --- |
 | `index.html` | Home, About, services, recent projects, reviews, FAQ and contact |
 | `services.html` | Furniture Assembly, TV Wall Mounting, Ventilation, Wi-Fi & Networking, Smart Home and General Handyman |
-| `pricing.html` | Current starting prices and pricing conditions |
+| `pricing.html` | Starting prices, 17-category calculator and email quote request form |
 | `privacy.html` | Privacy policy |
 | `404.html` | Custom noindex error page |
 
@@ -48,9 +50,11 @@ is connected to GitHub. Production branch, build command, output directory and
 preview/environment settings must be verified in the Cloudflare dashboard;
 they are not recorded in repository configuration.
 
-There are no tracked GitHub Actions workflows, Wrangler configuration or Pages
-Functions. The only npm script is `images`; no site build or test script is
-currently defined. Both `package-lock.json` and `pnpm-lock.yaml` are present;
+There are no tracked GitHub Actions workflows or production Wrangler settings.
+Pages Functions in `functions/api/` serve `/api/quote` and `/api/quote-config`;
+`_routes.json` limits dynamic routing to `/api/*`. `npm test` runs pricing and
+endpoint tests using Node.js 24 or newer; `npm run images` remains unchanged.
+Both `package-lock.json` and `pnpm-lock.yaml` are present;
 the maintenance workflow below uses npm.
 
 **Never commit or push without explicit approval.** Approval to edit files does
@@ -105,7 +109,9 @@ ARIA state and existing reduced-motion support.
 ## Contact and email
 
 The website currently provides phone, `mailto:` and WhatsApp links. Quote CTAs
-lead to the contact section; there is no form submission or email-sending code.
+usually lead to the contact section. The pricing page additionally has a
+calculator and server-side quote submission; live email needs the configuration
+below. The server uses Brevo HTTPS API, leaving existing SMTP mail unchanged.
 
 Owner-confirmed infrastructure:
 
@@ -118,27 +124,43 @@ audited during source review. Never place SMTP passwords, API keys or credential
 in HTML, JavaScript, documentation, logs or Git. Use hosting secrets for future
 server-side integrations.
 
-## Future integrations (planning only)
+## Pricing calculator and email setup
 
-**Request a Quote:** extend the existing contact section, retaining branding and
-current contact channels. Proposed fields are name, email, optional phone,
-location in Mayo, service and job description, with optional timing. A Cloudflare
-Pages Function would validate requests and Turnstile server-side, apply abuse
-limits, and send through Brevo's transactional HTTPS API to the existing business
-inbox. Use a verified domain sender and the customer's email as Reply-To. Store
-secrets in Cloudflare, and test preview delivery/failure states before release.
-This proposed API transport does not replace current Brevo SMTP business mail.
-Keep photos on email/WhatsApp initially unless uploads are separately approved.
+The catalogue and authoritative rules live in `js/pricing-catalogue.mjs`.
+`js/pricing-calculator.mjs` renders the English interface in `pricing.html`;
+`server/quote.mjs` validates and recalculates every submission. No client-supplied
+prices are trusted. Existing prices are retained except the explicitly approved
+handyman rules. Unconfirmed service prices remain Custom Quote.
 
-**HBM:** future integration only. The actual interface, authentication, data
-mapping and scope must be agreed before implementation. Possible enquiry handoff
-or project/gallery publishing must be explicitly scoped; no current API or
-connection is assumed. Keep secrets server-side and define access, retention,
-duplicate handling, retries and publication permissions before sharing data.
+- €50 minimum labour after discount, per separate visit; handyman €45/hour.
+- Explicit half/full-day packages €170/€320, additional hours €45; specialist
+  troubleshooting €50/hour as configured in the catalogue.
+- Eligible main units: 1–5 no discount, 6–10 5%, 11+ 10% on eligible base labour.
+- Add-ons do not increase tiers. Materials, travel, Custom Quote, hourly work
+  and packages are excluded from discounts.
+- Travel once per visit: Straide/Foxford/Castlebar €0, Ballina/Westport €10;
+  other areas require confirmation. Unknown costs are never invented.
 
-Both plans require separate implementation approval and a privacy-policy review.
-The current policy explicitly says there is no contact form. Do not change it
-as part of documentation-only work.
+Run automated tests (Node.js 24+):
+
+```powershell
+npm test
+```
+
+Read [docs/QUOTE_SETUP.md](docs/QUOTE_SETUP.md) for exact Cloudflare/Brevo setup,
+secrets, Turnstile, the separate D1 anti-abuse store and live verification steps.
+Without configuration the calculator still works, but email submission is
+explicitly unavailable. Mocked test success does not verify actual email delivery.
+The privacy policy now discloses the form and its processors. No file uploads
+are implemented; use email/WhatsApp for photos.
+
+## Future HBM integration
+
+Email only for this version. No production HBM/Supabase tables, schema, RLS,
+authentication or records are accessed or changed. `server/quote.mjs` separates
+validation/calculation from delivery so an approved integration can be designed
+later. Any future API, data mapping, access, retention, duplicate handling and
+publication scope must first be agreed and reviewed for privacy.
 
 ## Development rules
 

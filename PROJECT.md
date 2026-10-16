@@ -23,7 +23,8 @@ now the production project; the existing implementation is the design baseline.
 - WhatsApp: https://wa.me/353833498496
 - Audience: homeowners, landlords, property managers and small businesses.
 
-Current services:
+Core services promoted on the existing site (additional calculator categories
+are listed in the catalogue, with Custom Quote where rates are unconfirmed):
 
 - Furniture Assembly
 - TV Wall Mounting
@@ -36,10 +37,11 @@ CCTV is not part of the service offer and must not be reintroduced.
 
 ## Architecture
 
-Static HTML5, CSS3 and vanilla JavaScript. There is no application framework,
-CMS, database, form endpoint or server-side email implementation in the current
-repository. Node.js is development tooling for image optimization, not a website
-runtime. The only npm script is `npm run images`, using the `sharp` dependency.
+Static HTML5, CSS3 and vanilla JavaScript. There is no application framework or
+CMS. The pricing calculator uses shared vanilla JavaScript modules and a Cloudflare Pages Function for email quote
+requests. A dedicated Cloudflare D1 binding stores only anti-abuse metadata; it
+does not connect to HBM/Supabase. Node.js provides image tooling and automated
+tests; no new runtime package dependencies were added.
 
 ```text
 hometechmayo/
@@ -56,6 +58,16 @@ hometechmayo/
     logo/
     projects/
     services/
+  css/calculator.css
+  js/pricing-catalogue.mjs
+  js/pricing-calculator.mjs
+  functions/api/quote.js
+  functions/api/quote-config.js
+  server/quote.mjs
+  server/quote-guard.sql
+  tests/
+  docs/QUOTE_SETUP.md
+  _routes.json
   scripts/optimize-images.js
   robots.txt
   sitemap.xml
@@ -78,7 +90,7 @@ may differ from the implemented site. Confirm current behavior against source.
 | --- | --- |
 | `index.html` | Hero, About, six service cards, recent projects, reviews, FAQ and contact/quote section |
 | `services.html` | Six service descriptions, selected photographs, starting prices and enquiry links |
-| `pricing.html` | Existing starting prices, pricing conditions and enquiry calls to action |
+| `pricing.html` | Starting prices, interactive 17-category estimate calculator and email quote form |
 | `privacy.html` | Current privacy policy |
 | `404.html` | Custom page-not-found page |
 
@@ -99,8 +111,10 @@ Implemented interactions:
   key remembers dismissal.
 - Automatic copyright year.
 
-There is currently no website contact form, booking system, customer account,
-HBM integration, Google Analytics or advertising tracking in the site source.
+The calculator and quote endpoint are implemented. Live submission remains
+disabled until the required Cloudflare/Brevo configuration is supplied. There is
+no booking system, customer account, HBM integration, Google Analytics or
+advertising tracking in the site source.
 
 ## Design and accessibility baseline
 
@@ -160,15 +174,17 @@ Cloudflare dashboard settings are not captured in source: production branch,
 build command, output directory, environment variables and preview controls must
 be verified there before deployment-related work.
 
-There are no tracked GitHub Actions workflows, Wrangler configuration, Pages
-Functions, `_headers` or `_redirects` at this review. Both npm and pnpm lockfiles
+There are no tracked GitHub Actions workflows or production Wrangler settings.
+`functions/api/quote.js` and `quote-config.js` provide the quote endpoints;
+`_routes.json` restricts Functions execution to `/api/*`. Both npm and pnpm lockfiles
 exist; the documented image workflow uses npm. Do not assume a package-manager
 migration or build-system change is required.
 
 ## Contact and email architecture
 
-Current website enquiries use `mailto:`, `tel:` and WhatsApp links. Quote buttons
-lead to the existing contact section; they do not submit data to a backend.
+Existing contact options use `mailto:`, `tel:` and WhatsApp links. The pricing
+page now also provides a calculator and server-backed quote form. Most existing
+site quote buttons continue to lead to the homepage contact section.
 A `mailto:` link opens the visitor's email application.
 
 Owner-confirmed email infrastructure:
@@ -186,38 +202,47 @@ Outgoing business email
 The email domain is authenticated with SPF, DKIM and DMARC, as confirmed by the
 owner. DNS authentication, delivery and provider dashboard settings were not
 independently audited during the source review. Cloudflare Email Routing handles
-incoming forwarding; Brevo handles outbound delivery. Neither is currently called
-by website JavaScript or a website backend.
+incoming forwarding; Brevo handles outbound delivery. The new quote endpoint
+uses the Brevo HTTPS API when configured; it does not
+expose credentials to website JavaScript or change existing SMTP mail usage.
 
 Never store email credentials, SMTP passwords, API keys or other secrets in
 source, browser code, documentation, screenshots, logs or Git history. Future
 server credentials must use the hosting platform's secret storage.
 
-## Future Request a Quote form (not implemented)
+## Pricing calculator and email quote requests
 
-Proposed approach, requiring separate implementation approval:
+Implemented in `pricing.html` with `css/calculator.css` and
+`js/pricing-calculator.mjs`. The authoritative catalogue and calculation engine
+are in `js/pricing-catalogue.mjs`, shared with `server/quote.mjs`.
 
-1. Extend the existing contact section using the current design and accessible
-   form patterns; retain phone, email and WhatsApp options.
-2. Collect name, email, optional phone, Mayo town/location, one of the existing
-   service categories and job description; optionally preferred timing.
-3. Submit to a same-origin Cloudflare Pages Function with server validation,
-   request limits, abuse protection and server-verified Turnstile.
-4. Use Brevo's transactional HTTPS API for form notifications to
-   `info@hometechmayo.ie`, forwarded to Gmail through the existing incoming route.
-   This is a proposed form transport; current business outbound email remains
-   Brevo SMTP. Use an authenticated domain sender and the visitor's validated
-   email as Reply-To, never as the From address.
-5. Store Brevo and Turnstile secrets only in Cloudflare secret bindings. Define
-   separate preview and production configuration before testing.
-6. Provide accessible validation, pending, success and failure states; confirm
-   provider acceptance before displaying success. Avoid logging enquiry content.
+The catalogue contains 17 categories. Existing published starting prices are
+used where established; newly requested work without an approved rate remains
+Custom Quote. The owner's 16 October 2026 calculator rules supersede old handyman
+rates: €45/hour, €50 minimum labour per separate visit, explicit €170 half-day
+and €320 full-day packages, and €50/hour specialist troubleshooting as specified.
+Fixed jobs are never automatically converted to packages.
 
-For an initial version, job photos can continue through email/WhatsApp. Uploads
-would require separately agreed storage, file limits, access and deletion rules.
-Review and update the privacy policy before launch: it currently states there
-is no contact form. Test delivery to Gmail and reply behavior in a preview before
-any approved production release. Do not add a price calculator or alter prices.
+Discount tiers count eligible main units including quantities: 1–5 = 0%, 6–10 =
+5%, 11+ = 10%. Only eligible base labour is discounted. Add-ons do not increase
+the count; hourly work, packages, custom work, materials and travel are excluded.
+The €50 labour minimum is applied after discount, when labour is known. Travel
+is once per visit: Straide/Foxford/Castlebar €0; Ballina/Westport €10; Other is
+Custom Quote. Unknown work/materials/travel are excluded and marked clearly.
+The calculator is for one visit, not a final quotation or confirmed booking.
+
+Email flow: form -> Pages Function -> Brevo transactional HTTPS API -> business
+inbox -> Cloudflare Email Routing -> Gmail. Optional customer acknowledgement
+is sent only if an email was supplied. The server validates inputs, verifies
+Turnstile, recalculates all prices and uses plain-text emails with a unique
+reference. A dedicated D1 anti-abuse store provides atomic duplicate reservation
+and a five-request-per-IP/hour limit, without storing enquiry content.
+
+Required setup and operational limitations are documented in
+[docs/QUOTE_SETUP.md](docs/QUOTE_SETUP.md). Missing configuration fails closed;
+calculator estimates still work but online submission remains disabled. No live
+email delivery is implied by passing mocked tests. Privacy-policy form disclosures
+were updated with this implementation. Photos remain on email/WhatsApp.
 
 ## Future HBM integration (not implemented)
 

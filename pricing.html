@@ -91,6 +91,7 @@
     </noscript>
 
     <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/calculator.css" />
   </head>
 
   <body class="pricing-page">
@@ -147,6 +148,7 @@
           <p class="pricing-eyebrow">Home Tech Solutions & Services</p>
 
           <h1 id="pricing-title">Pricing</h1>
+          <a href="#quote-calculator" class="btn btn-primary">Calculate your estimate</a>
 
           <p>
             Clear starting prices for common services across County Mayo. Final
@@ -157,6 +159,48 @@
           <a href="index.html#contact" class="btn btn-primary">
             Request a Free Quote
           </a>
+        </div>
+      </section>
+
+      <section id="quote-calculator" class="calculator" aria-labelledby="calculator-title">
+        <div class="container">
+          <h2 id="calculator-title">Build your estimate</h2>
+          <p class="calc-intro">Choose services for one visit in County Mayo. All prices are indicative and subject to confirmation. Minimum labour is €50 per separate visit, after eligible discounts. Materials and custom work are quoted separately unless stated as included.</p>
+          <noscript><p>Please enable JavaScript to use the calculator, or <a href="mailto:info@hometechmayo.ie">email us for a quote</a>.</p></noscript>
+          <form id="quote-form">
+            <div class="calc-layout">
+              <div class="calc-main">
+                <label class="calc-field"><span>Search services</span><input id="service-search" type="search" placeholder="Try furniture, Wi-Fi or flooring" /></label>
+                <div id="service-categories"></div>
+                <h3 id="selection-count" aria-live="polite">0 services selected</h3>
+                <a href="#estimate-summary" class="calc-summary-link">View estimate summary</a>
+                <div id="selected-services"></div>
+                <label class="calc-field"><span>Service area (required)</span><select name="area" required><option value="">Choose your area</option></select></label>
+                <p>Travel is charged once per visit: Straide, Foxford and Castlebar €0; Ballina and Westport €10. Other areas require a custom travel quote.</p>
+                <div id="quote-customer" class="calc-customer" hidden>
+                  <h3>Request your quote</h3>
+                  <p>Your selected services, quantities, options, materials choices and estimate are included automatically. Please do not include passwords, payment details or sensitive personal information.</p>
+                  <div class="calc-controls">
+                    <label class="calc-field"><span>Customer name (required)</span><input name="name" autocomplete="name" maxlength="100" required /></label>
+                    <label class="calc-field"><span>Phone number (required)</span><input name="phone" type="tel" autocomplete="tel" pattern="[+()0-9 .\-]{7,40}" maxlength="40" required /></label>
+                    <label class="calc-field"><span>Email (optional, for acknowledgement)</span><input name="email" type="email" autocomplete="email" maxlength="254" /></label>
+                    <label class="calc-field"><span>Eircode (optional)</span><input name="eircode" autocomplete="postal-code" maxlength="10" /></label>
+                  </div>
+                  <label class="calc-field"><span>Job description (optional)</span><textarea name="description" maxlength="3000"></textarea></label>
+                  <label class="calc-field"><span>Preferred date or availability (optional)</span><input name="availability" maxlength="300" /></label>
+                  <label class="calc-field"><span>Additional materials information (optional)</span><textarea name="materialsInformation" maxlength="1000"></textarea></label>
+                  <label class="calc-honeypot" aria-hidden="true">Leave this empty<input name="website" tabindex="-1" autocomplete="off" /></label>
+                  <label class="calc-consent"><input name="consent" type="checkbox" required /><span>I agree to the processing of my details to respond to this quote request, as described in the <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a> (required). This is not marketing consent.</span></label>
+                  <p class="calc-warning">This estimate is indicative and subject to confirmation. Sending a request does not confirm a quotation or booking. Custom work and unknown costs are excluded from the known total.</p>
+                  <div id="quote-turnstile"></div>
+                  <button id="quote-submit" class="btn btn-primary" type="submit" disabled>Send quote request</button>
+                </div>
+                <p id="quote-status" class="calc-status" role="status" aria-live="polite" tabindex="-1">Checking online quote availability…</p>
+                <p>You can also <a href="mailto:info@hometechmayo.ie">email info@hometechmayo.ie</a> or <a href="tel:+353833498496">call 083 349 8496</a>.</p>
+              </div>
+              <aside id="estimate-summary" class="calc-summary" aria-label="Estimate summary" aria-live="polite" aria-atomic="true" tabindex="-1"><p>Add services to see your estimate.</p></aside>
+            </div>
+          </form>
         </div>
       </section>
 
@@ -263,12 +307,12 @@
                   <ul class="pricing-list">
                 <li class="pricing-row">
                   <span class="pricing-service">General handyman work</span>
-                  <strong class="pricing-price">From €40/hour</strong>
+                  <strong class="pricing-price">€45/hour</strong>
                 </li>
 
                 <li class="pricing-row">
                   <span class="pricing-service">Minimum visit / small job charge</span>
-                  <strong class="pricing-price">From €60</strong>
+                  <strong class="pricing-price">€50</strong>
                 </li>
 
                 <li class="pricing-row">
@@ -563,5 +607,6 @@
     </a>
 
     <script src="js/main.js"></script>
+    <script type="module" src="js/pricing-calculator.mjs"></script>
   </body>
 </html>

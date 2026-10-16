@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "images": "node scripts/optimize-images.js"
+    "images": "node scripts/optimize-images.js",
+    "test": "node --test tests/*.test.mjs"
   },
   "devDependencies": {
     "sharp": "^0.35.3"

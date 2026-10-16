@@ -143,7 +143,7 @@
       <section class="privacy-policy" aria-labelledby="privacy-title">
         <div class="container">
           <div class="privacy-policy-content">
-            <p class="privacy-updated">Last updated: August 2026</p>
+            <p class="privacy-updated">Last updated: 16 October 2026</p>
 
             <p class="privacy-intro">
               Home Tech Solutions &amp; Services respects your privacy and is
@@ -228,12 +228,18 @@
             </section>
 
             <section class="privacy-section">
-              <h2>7. Email and phone enquiries</h2>
+              <h2>7. Quote form, email and phone enquiries</h2>
               <p>
                 You can contact us by email or phone. We use the information
                 you provide through those channels to reply to you and manage
-                the service you request. There is currently no contact form on
-                this website.
+                the service you request. The pricing calculator lets you submit a quote
+                request with your name, phone number, optional email and Eircode,
+                service area, selected work, quantities, options, materials choices,
+                estimate and any job description or availability you provide.
+                We record your agreement to processing this enquiry. We use these
+                details to respond and prepare a quotation, not to subscribe you
+                to marketing. Calculator selections remain in page memory until
+                submission; reloading the page clears them.
               </p>
             </section>
 
@@ -262,7 +268,7 @@
               </p>
               <p>
                 Requests to third-party resources, such as Google Fonts and
-                Font Awesome from cdnjs, may involve technical data being
+                Cloudflare Turnstile, may involve technical data being
                 processed by those providers. We will review this policy before
                 adding analytics, advertising or other non-essential tracking.
               </p>
@@ -272,10 +278,28 @@
               <h2>10. Third-party services</h2>
               <p>
                 The website uses Cloudflare Pages for hosting, Google Fonts for
-                website fonts and cdnjs to load Font Awesome icons. WhatsApp is
+                website fonts. The quote form uses Cloudflare Turnstile for spam
+                protection and Brevo for transactional email delivery. Incoming
+                business email is forwarded by Cloudflare Email Routing to Gmail.
+                Acknowledgements are sent only when you provide an email address.
+                WhatsApp is
                 only opened if you choose to use a WhatsApp link. These third
                 parties process information under their own privacy policies.
               </p>
+            </section>
+
+            <section class="privacy-section">
+              <h2>Quote request security and storage</h2>
+              <p>Cloudflare processes security information for Turnstile and request
+                protection. A separate Cloudflare D1 store holds keyed hashes of
+                request identifiers, request fingerprints and IP addresses, a request
+                reference, timestamps and delivery status. It does not store the
+                enquiry text or contact fields. These protection records are used for a 24-hour protection window
+                and removed on subsequent submissions; during
+                inactivity expired records remain until the next submission or
+                administrative cleanup. Quote details are delivered by email and
+                retained as business correspondence under this policy. The form does
+                not connect to HBM or Supabase customer databases.</p>
             </section>
 
             <section class="privacy-section">
