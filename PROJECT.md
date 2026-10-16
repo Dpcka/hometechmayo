@@ -48,6 +48,7 @@ hometechmayo/
   index.html
   services.html
   pricing.html
+  quote.html
   privacy.html
   404.html
   css/style.css
@@ -61,6 +62,8 @@ hometechmayo/
   css/calculator.css
   js/pricing-catalogue.mjs
   js/pricing-calculator.mjs
+  js/quote-categories.mjs
+  js/pricing-page.mjs
   functions/api/quote.js
   functions/api/quote-config.js
   server/quote.mjs
@@ -90,7 +93,8 @@ may differ from the implemented site. Confirm current behavior against source.
 | --- | --- |
 | `index.html` | Hero, About, six service cards, recent projects, reviews, FAQ and contact/quote section |
 | `services.html` | Six service descriptions, selected photographs, starting prices and enquiry links |
-| `pricing.html` | Starting prices, interactive 17-category estimate calculator and email quote form |
+| `pricing.html` | Starting-price cards and preselected category links to the quote wizard |
+| `quote.html` | Dedicated three-step services, estimate and quote-request wizard; noindex utility |
 | `privacy.html` | Current privacy policy |
 | `404.html` | Custom page-not-found page |
 
@@ -113,8 +117,9 @@ Implemented interactions:
 
 The calculator and quote endpoint are implemented. Live submission remains
 disabled until the required Cloudflare/Brevo configuration is supplied. There is
-no booking system, customer account, HBM integration, Google Analytics or
-advertising tracking in the site source.
+no booking system, customer account or HBM integration. Consent-based Analytics
+is implemented but gated off pending Google account configuration; no
+advertising tracking is implemented.
 
 ## Design and accessibility baseline
 
@@ -183,7 +188,7 @@ migration or build-system change is required.
 ## Contact and email architecture
 
 Existing contact options use `mailto:`, `tel:` and WhatsApp links. The pricing
-page now also provides a calculator and server-backed quote form. Most existing
+page links to a dedicated calculator and server-backed quote form in `quote.html`. Most existing
 site quote buttons continue to lead to the homepage contact section.
 A `mailto:` link opens the visitor's email application.
 
@@ -212,9 +217,24 @@ server credentials must use the hosting platform's secret storage.
 
 ## Pricing calculator and email quote requests
 
-Implemented in `pricing.html` with `css/calculator.css` and
+Implemented in `quote.html` with `css/calculator.css` and
 `js/pricing-calculator.mjs`. The authoritative catalogue and calculation engine
 are in `js/pricing-catalogue.mjs`, shared with `server/quote.mjs`.
+
+Pricing now presents its existing starting-price cards before any estimate
+workflow. Each category heading and Get an Estimate action links directly to
+`quote.html?category=<id>`. Eleven additional categories appear in a compact
+expandable directory. The wizard has three steps: select services and options;
+choose area/materials and review the estimate; provide contact details and submit.
+Its category dropdown and six-result pagination replace the long accordion list.
+State is retained within the page when going back to edit. The old Pricing
+calculator fragment forwards to the new route. Existing SEO is untouched; the
+new quote utility is noindex with a self-referencing canonical and is not added
+to the sitemap.
+
+The owner approved publishing this redesign and cookie-consent integration on
+16 October 2026 with GA4 collection disabled. The catalogue and email backend
+are unchanged; this approval does not authorize enabling analytics.
 
 The catalogue contains 17 categories. Existing published starting prices are
 used where established; newly requested work without an approved rate remains
@@ -274,3 +294,30 @@ separate approval and must preserve the public site's design and SEO.
   change HTML, CSS, JavaScript, assets, configuration or the privacy policy.
 - Review the privacy policy before adding forms, HBM integration, analytics,
   advertising, customer accounts, automated publishing or third-party embeds.
+
+## Consent-based GA4 (collection disabled)
+
+GA4 measurement ID `G-7H312MNH9B` uses the shared consent entry on all six pages.
+The banner has equal Accept/Reject choices; every footer has Cookie settings.
+No Google Analytics script, request or cookie is allowed before consent. Quote
+privacy consent remains separate, and rejection does not change site features.
+
+`js/analytics-policy.mjs` defines strict page/referrer/campaign allowlists.
+Permitted landing attribution is held only in page memory until consent; it is
+not persisted across pre-consent page navigation. Contact clicks are separate
+from `generate_lead`, which is emitted only after the quote server confirms
+success, without any request/customer data in Analytics.
+
+**Production remains fail-closed:** `GOOGLE_CONFIGURATION_VERIFIED = false`
+until Enhanced Measurement and automatic user-provided data collection are
+turned off in the GA4 account and re-verified. An intercepted real-tag test
+observed automatic form events containing the current form URL; it forwarded
+no measurements to Google. Publishing the integration with collection disabled
+was approved by the owner on 16 October 2026. Do not activate collection until
+the account configuration is corrected and verified. Full setup, limits and Realtime/DebugView instructions:
+[docs/ANALYTICS.md](docs/ANALYTICS.md).
+
+No API credentials, backend/schema changes or HBM integration are involved.
+The owner approved publishing the calculator/cart redesign and cookie-consent
+changes together on 16 October 2026, with GA4 collection remaining disabled.
+Any later activation requires separate approval.

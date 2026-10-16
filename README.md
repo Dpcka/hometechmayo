@@ -17,8 +17,8 @@ provider settings described as owner-confirmed were not independently audited.
 ## Website architecture
 
 Static HTML, shared `css/style.css`, vanilla `js/main.js` and local `assets/`.
-No framework, CMS or HBM connection is implemented. The pricing page has a
-shared browser/server pricing engine and Pages Functions for email requests.
+No framework, CMS or HBM connection is implemented. The dedicated quote page has a shared browser/server pricing engine and Pages
+Functions for email requests; Pricing provides category links and starting prices.
 A dedicated Cloudflare D1 binding stores anti-abuse metadata only. Node.js runs
 image maintenance and tests; `sharp` remains the only package dependency.
 
@@ -26,7 +26,8 @@ image maintenance and tests; `sharp` remains the only package dependency.
 | --- | --- |
 | `index.html` | Home, About, services, recent projects, reviews, FAQ and contact |
 | `services.html` | Furniture Assembly, TV Wall Mounting, Ventilation, Wi-Fi & Networking, Smart Home and General Handyman |
-| `pricing.html` | Starting prices, 17-category calculator and email quote request form |
+| `pricing.html` | Compact starting-price cards and links to all 17 quote categories |
+| `quote.html` | Three-step services / estimate / email quote wizard (noindex utility page) |
 | `privacy.html` | Privacy policy |
 | `404.html` | Custom noindex error page |
 
@@ -109,7 +110,7 @@ ARIA state and existing reduced-motion support.
 ## Contact and email
 
 The website currently provides phone, `mailto:` and WhatsApp links. Quote CTAs
-usually lead to the contact section. The pricing page additionally has a
+usually lead to the contact section. The dedicated quote page provides a
 calculator and server-side quote submission; live email needs the configuration
 below. The server uses Brevo HTTPS API, leaving existing SMTP mail unchanged.
 
@@ -127,7 +128,7 @@ server-side integrations.
 ## Pricing calculator and email setup
 
 The catalogue and authoritative rules live in `js/pricing-catalogue.mjs`.
-`js/pricing-calculator.mjs` renders the English interface in `pricing.html`;
+`js/pricing-calculator.mjs` renders the English three-step wizard in `quote.html`;
 `server/quote.mjs` validates and recalculates every submission. No client-supplied
 prices are trusted. Existing prices are retained except the explicitly approved
 handyman rules. Unconfirmed service prices remain Custom Quote.
@@ -140,6 +141,20 @@ handyman rules. Unconfirmed service prices remain Custom Quote.
   and packages are excluded from discounts.
 - Travel once per visit: Straide/Foxford/Castlebar €0, Ballina/Westport €10;
   other areas require confirmation. Unknown costs are never invented.
+
+The locally prepared redesign moves the calculator off Pricing. Each category
+links to `quote.html?category=<id>`; the wizard opens that category without adding
+unrequested work. Search is global, results are paged in groups of six, and
+selections/options remain in memory while moving between steps. Materials and
+area are in step 2; personal details and submission are in step 3. Previous-step
+fields are disabled for browser validation, and their data are included explicitly
+in the unchanged endpoint payload. Old `pricing#quote-calculator` links forward
+to the new page. The quote utility page has its own canonical and noindex metadata;
+existing page metadata, sitemap and robots remain unchanged.
+
+**Release approval:** the owner authorized commit, push and publication on
+16 October 2026, including cookie consent with GA4 collection disabled. Deployment
+results must be verified separately; this approval does not enable analytics.
 
 Run automated tests (Node.js 24+):
 
@@ -175,3 +190,30 @@ publication scope must first be agreed and reviewed for privacy.
   authorize HTML, CSS, JavaScript or privacy-policy changes.
 - Review privacy before forms, HBM, analytics, advertising, accounts, automated
   publishing or additional third-party embeds.
+
+## Consent-based GA4 (collection disabled)
+
+GA4 measurement ID `G-7H312MNH9B` uses the shared consent entry on all six pages.
+The banner has equal Accept/Reject choices; every footer has Cookie settings.
+No Google Analytics script, request or cookie is allowed before consent. Quote
+privacy consent remains separate, and rejection does not change site features.
+
+`js/analytics-policy.mjs` defines strict page/referrer/campaign allowlists.
+Permitted landing attribution is held only in page memory until consent; it is
+not persisted across pre-consent page navigation. Contact clicks are separate
+from `generate_lead`, which is emitted only after the quote server confirms
+success, without any request/customer data in Analytics.
+
+**Production remains fail-closed:** `GOOGLE_CONFIGURATION_VERIFIED = false`
+until Enhanced Measurement and automatic user-provided data collection are
+turned off in the GA4 account and re-verified. An intercepted real-tag test
+observed automatic form events containing the current form URL; it forwarded
+no measurements to Google. Publishing the integration with collection disabled
+was approved by the owner on 16 October 2026. Do not activate collection until
+the account configuration is corrected and verified. Full setup, limits and Realtime/DebugView instructions:
+[docs/ANALYTICS.md](docs/ANALYTICS.md).
+
+No API credentials, backend/schema changes or HBM integration are involved.
+The owner approved publishing the calculator/cart redesign and cookie-consent
+changes together on 16 October 2026, with GA4 collection remaining disabled.
+Any later activation requires separate approval.

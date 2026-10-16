@@ -83,6 +83,7 @@
     </noscript>
 
     <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/cookie-consent.css" />
   </head>
 
   <body class="privacy-page">
@@ -253,32 +254,83 @@
                 protect the website.
               </p>
               <p>
-                We do not currently use Google Analytics or advertising
-                tracking on this website.
+                Google Analytics 4 is currently disabled, including when you
+                save a choice allowing analytics. If enabled after configuration
+                checks, it will be used only with your permission to understand
+                visits and improve the website. The Google tag is not loaded and
+                no analytics events or analytics cookies are sent or created
+                before you accept analytics. Rejecting analytics does not affect
+                the calculator, quote form, telephone or WhatsApp links. We do
+                not use advertising tracking, Google Signals or advertising
+                personalisation in this integration.
               </p>
             </section>
 
             <section class="privacy-section">
               <h2>9. Cookies and local storage</h2>
               <p>
-                This website does not intentionally use non-essential
-                analytics or advertising cookies at present. It uses browser
-                local storage with the key <code>whatsappClosed</code> to
-                remember when the WhatsApp welcome widget has been dismissed.
+                We store your analytics choice, its version and the time you
+                made it in first-party local storage under
+                <code>htss_cookie_consent</code> for up to 180 days. This
+                preference record is used to respect your decision; it contains
+                no advertising identifier. The <code>whatsappClosed</code> key
+                remembers when you dismiss the WhatsApp welcome widget.
               </p>
               <p>
                 Requests to third-party resources, such as Google Fonts and
                 Cloudflare Turnstile, may involve technical data being
-                processed by those providers. We will review this policy before
-                adding analytics, advertising or other non-essential tracking.
+                processed by those providers independently of optional analytics.
+                Accepting analytics is separate from agreeing to the processing
+                of a quote request.
               </p>
+            </section>
+
+            <section id="analytics-cookies" class="privacy-section">
+              <h2>Optional Google Analytics</h2>
+              <p><strong>Current status: analytics collection is disabled.</strong>
+                Saving analytics permission does not currently load Google
+                Analytics or send measurement requests. You can change or
+                withdraw your saved choice using Cookie settings.</p>
+              <p>If analytics collection is enabled and you accept analytics,
+                Google Analytics 4 (measurement ID
+                <code>G-7H312MNH9B</code>) receives page views, general traffic
+                sources, WhatsApp and telephone click events, quote interactions
+                and a lead event only after the quote server confirms success.
+                A contact click is not counted as a successful quote request.</p>
+              <p>We do not send your name, email, phone number, Eircode, job
+                description, form contents, request reference or quote details to
+                Google Analytics. Page URLs use fixed page paths without query
+                strings or fragments. Only a limited set of non-personal UTM
+                labels and recognised referral origins are used; other referral
+                domains are grouped as external referrals. Before consent these
+                permitted landing details are held only in page memory, not
+                cookies or browser storage. Leaving that page before accepting
+                can therefore lose the original campaign attribution.</p>
+              <p>Google processes technical data, including device/browser
+                information and cookie identifiers, and receives the network IP
+                address needed for the connection. Analytics is not represented
+                as completely anonymous. Google's processing may involve
+                international transfers, including processing outside the EEA,
+                under its applicable terms and safeguards. See
+                <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google's Privacy Policy</a>
+                and <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer">how Google uses information from partner sites</a>.</p>
+              <p>After consent, first-party cookies named <code>htss_ga</code>
+                and <code>htss_ga_7H312MNH9B</code> may be used for up to 180 days.
+                You can reject analytics or withdraw permission through Cookie
+                settings in any footer. Withdrawal stops further analytics and
+                deletes this integration's analytics cookies in your browser;
+                it does not undo information already sent while consent was
+                active. Previously collected data remains subject to the
+                configured Google Analytics retention settings.</p>
+              <p><button type="button" class="cookie-settings" data-cookie-settings hidden>Change or withdraw analytics consent</button></p>
             </section>
 
             <section class="privacy-section">
               <h2>10. Third-party services</h2>
               <p>
                 The website uses Cloudflare Pages for hosting, Google Fonts for
-                website fonts. The quote form uses Cloudflare Turnstile for spam
+                website fonts, and Google Analytics only with your analytics
+                permission. The quote form uses Cloudflare Turnstile for spam
                 protection and Brevo for transactional email delivery. Incoming
                 business email is forwarded by Cloudflare Email Routing to Gmail.
                 Acknowledgements are sent only when you provide an email address.
@@ -442,6 +494,7 @@
             <li><a href="index.html#about">About</a></li>
             <li><a href="index.html#contact">Contact</a></li>
             <li><a href="privacy.html" aria-current="page">Privacy Policy</a></li>
+            <li><button type="button" class="cookie-settings" data-cookie-settings hidden>Cookie settings</button></li>
           </ul>
         </div>
       </div>
@@ -483,5 +536,6 @@
     </a>
 
     <script src="js/main.js"></script>
+    <script type="module" src="js/cookie-consent.mjs"></script>
   </body>
 </html>

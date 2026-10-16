@@ -3,7 +3,9 @@
 ## Current implementation
 
 The existing GitHub-connected Cloudflare Pages site serves the calculator in
-`pricing.html`. Pages auto-discovers `functions/api/quote.js` and
+`quote.html` (Pricing links to preselected categories). The owner approved
+publishing the three-step/cart redesign and cookie consent on 16 October 2026,
+with GA4 collection disabled. Pages auto-discovers `functions/api/quote.js` and
 `functions/api/quote-config.js`. `_routes.json` includes only `/api/*`; existing
 public page URLs, metadata and SEO are unchanged. No new package dependencies
 or website framework are required.
@@ -118,14 +120,15 @@ not require Cloudflare credentials or live network requests.
 
 1. Run `npm test` on Node.js 24+. Tests use the real pricing module, real SQLite
    constraints for D1 SQL and mocked Turnstile/Brevo responses. No live mail is sent.
-2. Optional browser regression: with a local static preview running on
+2. Optional browser regression: with the current local files served on
    `http://127.0.0.1:8788`, installed Microsoft Edge, and Playwright available
    outside the website dependencies, run `node tests/browser.cjs`. Set
    `PLAYWRIGHT_MODULE` to its absolute module path if it is not globally
    resolvable. The preview must serve `.mjs` as JavaScript and return
    `{"enabled":false,"version":"2026-10-16.1"}` for `/api/quote-config`.
-   Browser tests mock the enabled config, Turnstile and quote responses; they
-   never send email. Screenshots are written to ignored `work/`.
+   Browser tests exercise all 17 category links, the three-step workflow, retained
+   selections and validation. They mock enabled config, Turnstile and quote
+   responses and never send email.
 3. In an owned preview, test Android-sized viewport, desktop/tablet, keyboard-only
    controls, service search, quantities, removal, material choices and incomplete
    totals. Check console errors and horizontal overflow.
@@ -151,3 +154,25 @@ unknown materials or wire this public form to HBM production tables.
 Provider references: [Pages bindings](https://developers.cloudflare.com/pages/functions/bindings/),
 [Turnstile validation](https://developers.cloudflare.com/turnstile/get-started/server-side-validation/),
 [Brevo transactional API](https://developers.brevo.com/reference/send-transac-email).
+
+## Redesign price audit (16 October 2026)
+
+All 32 entries in the six existing Starting Prices cards were compared against
+the unchanged authoritative calculator catalogue or minimum labour rule. No
+numeric price discrepancies were found. The TV label previously said 75 inches+
+while the catalogue prices 66–75 inches at €110 and over 75 inches as Custom
+Quote; the label now says over 75 inches, following the catalogue boundary.
+
+The existing broad label “Complex or multi-job visits” remains Quote required;
+it has no standalone fixed-price catalogue item. Bracket supply, custom services
+and unconfirmed materials remain unpriced. PC troubleshooting still appears in
+the Wi-Fi starting-price table at the matching €50 rate; the calculator locates
+it in Computer & Laptop Repair, and the table now provides a direct service
+category link. No rate, service ID, discount flag or restriction was changed.
+
+The email API, Turnstile action, environment variables and separate D1 binding
+are unchanged. This redesign adds no secrets, schema or Supabase integration.
+Live email delivery is still not verified and must not be inferred from mocked
+UI/API tests. New page route: `quote.html?category=furniture`, served by Pages
+as a static page. Legacy `pricing#quote-calculator` fragments redirect locally
+to the dedicated quote page when JavaScript is enabled.

@@ -91,6 +91,7 @@
     </noscript>
 
     <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/cookie-consent.css" />
     <link rel="stylesheet" href="css/calculator.css" />
   </head>
 
@@ -148,63 +149,18 @@
           <p class="pricing-eyebrow">Home Tech Solutions & Services</p>
 
           <h1 id="pricing-title">Pricing</h1>
-          <a href="#quote-calculator" class="btn btn-primary">Calculate your estimate</a>
-
           <p>
             Clear starting prices for common services across County Mayo. Final
             pricing may vary depending on the scope of work, access, materials
             and project requirements.
           </p>
 
-          <a href="index.html#contact" class="btn btn-primary">
-            Request a Free Quote
-          </a>
+          <a href="#starting-prices" class="btn btn-primary">View starting prices</a>
+          <a href="quote.html" class="btn btn-light">Get an Estimate</a>
         </div>
       </section>
 
-      <section id="quote-calculator" class="calculator" aria-labelledby="calculator-title">
-        <div class="container">
-          <h2 id="calculator-title">Build your estimate</h2>
-          <p class="calc-intro">Choose services for one visit in County Mayo. All prices are indicative and subject to confirmation. Minimum labour is €50 per separate visit, after eligible discounts. Materials and custom work are quoted separately unless stated as included.</p>
-          <noscript><p>Please enable JavaScript to use the calculator, or <a href="mailto:info@hometechmayo.ie">email us for a quote</a>.</p></noscript>
-          <form id="quote-form">
-            <div class="calc-layout">
-              <div class="calc-main">
-                <label class="calc-field"><span>Search services</span><input id="service-search" type="search" placeholder="Try furniture, Wi-Fi or flooring" /></label>
-                <div id="service-categories"></div>
-                <h3 id="selection-count" aria-live="polite">0 services selected</h3>
-                <a href="#estimate-summary" class="calc-summary-link">View estimate summary</a>
-                <div id="selected-services"></div>
-                <label class="calc-field"><span>Service area (required)</span><select name="area" required><option value="">Choose your area</option></select></label>
-                <p>Travel is charged once per visit: Straide, Foxford and Castlebar €0; Ballina and Westport €10. Other areas require a custom travel quote.</p>
-                <div id="quote-customer" class="calc-customer" hidden>
-                  <h3>Request your quote</h3>
-                  <p>Your selected services, quantities, options, materials choices and estimate are included automatically. Please do not include passwords, payment details or sensitive personal information.</p>
-                  <div class="calc-controls">
-                    <label class="calc-field"><span>Customer name (required)</span><input name="name" autocomplete="name" maxlength="100" required /></label>
-                    <label class="calc-field"><span>Phone number (required)</span><input name="phone" type="tel" autocomplete="tel" pattern="[+()0-9 .\-]{7,40}" maxlength="40" required /></label>
-                    <label class="calc-field"><span>Email (optional, for acknowledgement)</span><input name="email" type="email" autocomplete="email" maxlength="254" /></label>
-                    <label class="calc-field"><span>Eircode (optional)</span><input name="eircode" autocomplete="postal-code" maxlength="10" /></label>
-                  </div>
-                  <label class="calc-field"><span>Job description (optional)</span><textarea name="description" maxlength="3000"></textarea></label>
-                  <label class="calc-field"><span>Preferred date or availability (optional)</span><input name="availability" maxlength="300" /></label>
-                  <label class="calc-field"><span>Additional materials information (optional)</span><textarea name="materialsInformation" maxlength="1000"></textarea></label>
-                  <label class="calc-honeypot" aria-hidden="true">Leave this empty<input name="website" tabindex="-1" autocomplete="off" /></label>
-                  <label class="calc-consent"><input name="consent" type="checkbox" required /><span>I agree to the processing of my details to respond to this quote request, as described in the <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a> (required). This is not marketing consent.</span></label>
-                  <p class="calc-warning">This estimate is indicative and subject to confirmation. Sending a request does not confirm a quotation or booking. Custom work and unknown costs are excluded from the known total.</p>
-                  <div id="quote-turnstile"></div>
-                  <button id="quote-submit" class="btn btn-primary" type="submit" disabled>Send quote request</button>
-                </div>
-                <p id="quote-status" class="calc-status" role="status" aria-live="polite" tabindex="-1">Checking online quote availability…</p>
-                <p>You can also <a href="mailto:info@hometechmayo.ie">email info@hometechmayo.ie</a> or <a href="tel:+353833498496">call 083 349 8496</a>.</p>
-              </div>
-              <aside id="estimate-summary" class="calc-summary" aria-label="Estimate summary" aria-live="polite" aria-atomic="true" tabindex="-1"><p>Add services to see your estimate.</p></aside>
-            </div>
-          </form>
-        </div>
-      </section>
-
-      <section class="pricing" aria-labelledby="pricing-services-title">
+      <section id="starting-prices" class="pricing" aria-labelledby="pricing-services-title">
         <div class="container">
           <div class="pricing-header">
             <h2 id="pricing-services-title">Starting Prices</h2>
@@ -216,196 +172,192 @@
           </div>
 
           <div class="pricing-grid">
-            <article class="pricing-card">
-              <h3 class="pricing-card-title">Furniture Assembly</h3>
+            <article class="pricing-card" data-category="furniture">
+              <h3 class="pricing-card-title"><a href="quote.html?category=furniture">Furniture Assembly</a></h3>
 
               <div class="pricing-card-panel" id="pricing-furniture-panel">
                 <div class="pricing-card-panel-content">
 
                   <ul class="pricing-list">
-                <li class="pricing-row">
+                <li class="pricing-row" data-service="furniture-small">
                   <span class="pricing-service">Small furniture item</span>
                   <strong class="pricing-price">From €50</strong>
                 </li>
 
-                <li class="pricing-row">
+                <li class="pricing-row" data-service="furniture-drawers">
                   <span class="pricing-service">Chest of Drawers</span>
                   <strong class="pricing-price">From €70</strong>
                 </li>
 
-                <li class="pricing-row">
+                <li class="pricing-row" data-service="furniture-bed">
                   <span class="pricing-service">Bed Assembly</span>
                   <strong class="pricing-price">From €70</strong>
                 </li>
 
-                <li class="pricing-row">
+                </ul>
+                  <details class="pricing-card-details"><summary>View all starting prices</summary><ul class="pricing-list"><li class="pricing-row" data-service="furniture-desk">
                   <span class="pricing-service">Desk / Console Table</span>
                   <strong class="pricing-price">From €60</strong>
                 </li>
-
-                <li class="pricing-row">
+<li class="pricing-row" data-service="furniture-wardrobe">
                   <span class="pricing-service">Wardrobe Assembly</span>
                   <strong class="pricing-price">From €100</strong>
                 </li>
-
-                <li class="pricing-row">
+<li class="pricing-row" data-service="furniture-complex">
                   <span class="pricing-service">Large or complex furniture</span>
                   <strong class="pricing-price">Quote required</strong>
-                </li>
-                  </ul>
+                </li></ul></details>
                 </div>
               </div>
+              <a class="pricing-card-action" href="quote.html?category=furniture">Get an Estimate <span aria-hidden="true">→</span></a>
             </article>
 
-            <article class="pricing-card">
-              <h3 class="pricing-card-title">TV Wall Mounting</h3>
+            <article class="pricing-card" data-category="tv-mounting">
+              <h3 class="pricing-card-title"><a href="quote.html?category=tv-mounting">TV Wall Mounting</a></h3>
 
               <div class="pricing-card-panel" id="pricing-tv-panel">
                 <div class="pricing-card-panel-content">
 
                   <ul class="pricing-list">
-                <li class="pricing-row">
+                <li class="pricing-row" data-service="tv-mount" data-option="size" data-value="small">
                   <span class="pricing-service">TV up to 55&quot;</span>
                   <strong class="pricing-price">From €80</strong>
                 </li>
 
-                <li class="pricing-row">
+                <li class="pricing-row" data-service="tv-mount" data-option="size" data-value="medium">
                   <span class="pricing-service">TV 56&quot;–65&quot;</span>
                   <strong class="pricing-price">From €90</strong>
                 </li>
 
-                <li class="pricing-row">
+                <li class="pricing-row" data-service="tv-mount" data-option="size" data-value="large">
                   <span class="pricing-service">TV 66&quot;–75&quot;</span>
                   <strong class="pricing-price">From €110</strong>
                 </li>
 
-                <li class="pricing-row">
-                  <span class="pricing-service">TV 75&quot;+</span>
+                </ul>
+                  <details class="pricing-card-details"><summary>View all starting prices</summary><ul class="pricing-list"><li class="pricing-row" data-service="tv-mount" data-option="size" data-value="oversize">
+                  <span class="pricing-service">TV over 75&quot;</span>
                   <strong class="pricing-price">Quote required</strong>
                 </li>
-
-                <li class="pricing-row">
+<li class="pricing-row" data-service="tv-mount" data-addon="cables" data-value="yes">
                   <span class="pricing-service">Cable management / trunking</span>
                   <strong class="pricing-price">From €20</strong>
                 </li>
-
-                <li class="pricing-row">
+<li class="pricing-row" data-service="tv-mount" data-material="bracket">
                   <span class="pricing-service">Bracket supply</span>
                   <strong class="pricing-price">Priced separately</strong>
-                </li>
-                  </ul>
+                </li></ul></details>
                 </div>
               </div>
+              <a class="pricing-card-action" href="quote.html?category=tv-mounting">Get an Estimate <span aria-hidden="true">→</span></a>
             </article>
 
-            <article class="pricing-card">
-              <h3 class="pricing-card-title">General Handyman</h3>
+            <article class="pricing-card" data-category="handyman">
+              <h3 class="pricing-card-title"><a href="quote.html?category=handyman">General Handyman</a></h3>
 
               <div class="pricing-card-panel" id="pricing-handyman-panel">
                 <div class="pricing-card-panel-content">
 
                   <ul class="pricing-list">
-                <li class="pricing-row">
+                <li class="pricing-row" data-service="handyman-hour">
                   <span class="pricing-service">General handyman work</span>
                   <strong class="pricing-price">€45/hour</strong>
                 </li>
 
-                <li class="pricing-row">
-                  <span class="pricing-service">Minimum visit / small job charge</span>
+                <li class="pricing-row" data-minimum="labour">
+                  <span class="pricing-service">Minimum labour per visit</span>
                   <strong class="pricing-price">€50</strong>
                 </li>
 
-                <li class="pricing-row">
-                  <span class="pricing-service">Shelving / curtain rails / fittings</span>
+                <li class="pricing-row" data-service="shelving-fitting">
+                  <span class="pricing-service"><a href="quote.html?category=shelving">Shelving / curtain rails / fittings</a></span>
                   <strong class="pricing-price">From €50</strong>
                 </li>
 
-                <li class="pricing-row">
-                  <span class="pricing-service">Minor repairs</span>
+                </ul>
+                  <details class="pricing-card-details"><summary>View all starting prices</summary><ul class="pricing-list"><li class="pricing-row" data-service="property-minor">
+                  <span class="pricing-service"><a href="quote.html?category=property">Minor repairs</a></span>
                   <strong class="pricing-price">From €50</strong>
                 </li>
-
-                <li class="pricing-row">
-                  <span class="pricing-service">Complex or multi-job visits</span>
+<li class="pricing-row" data-custom="true">
+                  <span class="pricing-service"><a href="quote.html?category=property">Complex or multi-job visits</a></span>
                   <strong class="pricing-price">Quote required</strong>
-                </li>
-                  </ul>
+                </li></ul></details>
                 </div>
               </div>
+              <a class="pricing-card-action" href="quote.html?category=handyman">Get an Estimate <span aria-hidden="true">→</span></a>
             </article>
 
-            <article class="pricing-card">
-              <h3 class="pricing-card-title">Wi-Fi &amp; Networking</h3>
+            <article class="pricing-card" data-category="wifi">
+              <h3 class="pricing-card-title"><a href="quote.html?category=wifi">Wi-Fi &amp; Networking</a></h3>
 
               <div class="pricing-card-panel" id="pricing-home-tech-panel">
                 <div class="pricing-card-panel-content">
 
                   <ul class="pricing-list">
-                <li class="pricing-row">
+                <li class="pricing-row" data-service="wifi-setup">
                   <span class="pricing-service">Wi-Fi setup / optimisation</span>
                   <strong class="pricing-price">From €60</strong>
                 </li>
 
-                <li class="pricing-row">
+                <li class="pricing-row" data-service="wifi-mesh">
                   <span class="pricing-service">Router / mesh setup</span>
                   <strong class="pricing-price">From €70</strong>
                 </li>
 
-                <li class="pricing-row">
+                <li class="pricing-row" data-service="wifi-printer">
                   <span class="pricing-service">Printer / device setup</span>
                   <strong class="pricing-price">From €40</strong>
                 </li>
 
-                <li class="pricing-row">
-                  <span class="pricing-service">PC troubleshooting</span>
+                </ul>
+                  <details class="pricing-card-details"><summary>View all starting prices</summary><ul class="pricing-list"><li class="pricing-row" data-service="pc-troubleshoot">
+                  <span class="pricing-service"><a href="quote.html?category=computer">PC troubleshooting</a></span>
                   <strong class="pricing-price">From €50</strong>
                 </li>
-
-                <li class="pricing-row">
+<li class="pricing-row" data-service="wifi-network">
                   <span class="pricing-service">Home network setup</span>
                   <strong class="pricing-price">Quote required</strong>
-                </li>
-                  </ul>
+                </li></ul></details>
                 </div>
               </div>
+              <a class="pricing-card-action" href="quote.html?category=wifi">Get an Estimate <span aria-hidden="true">→</span></a>
             </article>
 
-            <article class="pricing-card">
-              <h3 class="pricing-card-title">Smart Home</h3>
+            <article class="pricing-card" data-category="smart-home">
+              <h3 class="pricing-card-title"><a href="quote.html?category=smart-home">Smart Home</a></h3>
 
               <div class="pricing-card-panel" id="pricing-smart-home-panel">
                 <div class="pricing-card-panel-content">
                   <ul class="pricing-list">
-                    <li class="pricing-row">
+                    <li class="pricing-row" data-service="smart-device">
                       <span class="pricing-service">Smart device setup</span>
                       <strong class="pricing-price">From €50</strong>
                     </li>
 
-                    <li class="pricing-row">
+                    <li class="pricing-row" data-service="smart-speaker">
                       <span class="pricing-service">Smart speaker setup</span>
                       <strong class="pricing-price">From €40</strong>
                     </li>
 
-                    <li class="pricing-row">
+                    <li class="pricing-row" data-service="smart-plug">
                       <span class="pricing-service">Smart plug / smart bulb setup</span>
                       <strong class="pricing-price">From €40</strong>
                     </li>
 
-                    <li class="pricing-row">
+                    </ul>
+                  <details class="pricing-card-details"><summary>View all starting prices</summary><ul class="pricing-list"><li class="pricing-row" data-service="smart-tv">
                       <span class="pricing-service">Smart TV setup</span>
                       <strong class="pricing-price">From €40</strong>
                     </li>
-
-                    <li class="pricing-row">
+<li class="pricing-row" data-service="smart-thermostat">
                       <span class="pricing-service">Smart thermostat setup</span>
                       <strong class="pricing-price">From €60</strong>
                     </li>
-
-                    <li class="pricing-row">
+<li class="pricing-row" data-service="smart-automation">
                       <span class="pricing-service">Multiple-device / automation setup</span>
                       <strong class="pricing-price">Quote required</strong>
-                    </li>
-                  </ul>
+                    </li></ul></details>
 
                   <p class="pricing-note">
                     Pricing depends on the number of devices, existing Wi-Fi
@@ -413,35 +365,36 @@
                   </p>
                 </div>
               </div>
+              <a class="pricing-card-action" href="quote.html?category=smart-home">Get an Estimate <span aria-hidden="true">→</span></a>
             </article>
 
-            <article class="pricing-card">
-              <h3 class="pricing-card-title">Ventilation</h3>
+            <article class="pricing-card" data-category="ventilation">
+              <h3 class="pricing-card-title"><a href="quote.html?category=ventilation">Ventilation</a></h3>
 
               <div class="pricing-card-panel" id="pricing-ventilation-panel">
                 <div class="pricing-card-panel-content">
 
                   <ul class="pricing-list">
-                <li class="pricing-row">
+                <li class="pricing-row" data-service="vent-fan">
                   <span class="pricing-service">Extractor fan replacement</span>
                   <strong class="pricing-price">From €80 labour</strong>
                 </li>
 
-                <li class="pricing-row">
+                <li class="pricing-row" data-service="vent-upgrade">
                   <span class="pricing-service">Bathroom ventilation upgrade</span>
                   <strong class="pricing-price">Quote required</strong>
                 </li>
 
-                <li class="pricing-row">
+                <li class="pricing-row" data-service="vent-duct">
                   <span class="pricing-service">Rigid duct installation</span>
                   <strong class="pricing-price">Quote required</strong>
                 </li>
 
-                <li class="pricing-row">
+                </ul>
+                  <details class="pricing-card-details"><summary>View all starting prices</summary><ul class="pricing-list"><li class="pricing-row" data-service="vent-external">
                   <span class="pricing-service">External vent installation</span>
                   <strong class="pricing-price">Quote required</strong>
-                </li>
-                  </ul>
+                </li></ul></details>
 
                   <p class="pricing-note">
                     Ventilation pricing depends heavily on access, wall construction,
@@ -449,9 +402,27 @@
                   </p>
                 </div>
               </div>
+              <a class="pricing-card-action" href="quote.html?category=ventilation">Get an Estimate <span aria-hidden="true">→</span></a>
             </article>
 
           </div>
+          <details class="pricing-more">
+            <summary>Explore more services <span>11 more categories</span></summary>
+            <p>Choose a category to see all available services. Unconfirmed prices remain Custom Quote.</p>
+            <div class="pricing-more-grid">
+              <a href="quote.html?category=outdoor"><strong>Outdoor Assembly &amp; Installation</strong><span>Get an Estimate →</span></a>
+              <a href="quote.html?category=computer"><strong>Computer &amp; Laptop Repair</strong><span>Get an Estimate →</span></a>
+              <a href="quote.html?category=property"><strong>Property Maintenance &amp; Minor Repairs</strong><span>Get an Estimate →</span></a>
+              <a href="quote.html?category=flooring"><strong>Flooring Installation &amp; Repairs</strong><span>Get an Estimate →</span></a>
+              <a href="quote.html?category=kitchen"><strong>Kitchen Installation &amp; Fitting</strong><span>Get an Estimate →</span></a>
+              <a href="quote.html?category=shelving"><strong>Shelving &amp; Storage Solutions</strong><span>Get an Estimate →</span></a>
+              <a href="quote.html?category=doors"><strong>Doors, Locks &amp; Hardware</strong><span>Get an Estimate →</span></a>
+              <a href="quote.html?category=bathroom"><strong>Bathroom Installation &amp; Accessories</strong><span>Get an Estimate →</span></a>
+              <a href="quote.html?category=blinds"><strong>Blinds, Curtains &amp; Window Accessories</strong><span>Get an Estimate →</span></a>
+              <a href="quote.html?category=furniture-fitting"><strong>Furniture Modification &amp; Custom Fitting</strong><span>Get an Estimate →</span></a>
+              <a href="quote.html?category=wall-panels"><strong>Wall Panels &amp; Decorative Installation</strong><span>Get an Estimate →</span></a>
+            </div>
+          </details>
         </div>
       </section>
 
@@ -497,9 +468,7 @@
           </p>
 
           <div class="pricing-cta-buttons">
-            <a href="index.html#contact" class="btn btn-primary">
-              Request a Free Quote
-            </a>
+            <a href="quote.html" class="btn btn-primary">Get an Estimate</a>
 
             <a
               href="https://wa.me/353833498496?text=Hi%20Home%20Tech%20Solutions!%0A%0AI'd%20like%20to%20request%20a%20free%20quote."
@@ -563,6 +532,7 @@
             <li><a href="index.html#contact">Contact</a></li>
 
             <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><button type="button" class="cookie-settings" data-cookie-settings hidden>Cookie settings</button></li>
           </ul>
         </div>
       </div>
@@ -607,6 +577,7 @@
     </a>
 
     <script src="js/main.js"></script>
-    <script type="module" src="js/pricing-calculator.mjs"></script>
+    <script type="module" src="js/cookie-consent.mjs"></script>
+    <script type="module" src="js/pricing-page.mjs"></script>
   </body>
 </html>
