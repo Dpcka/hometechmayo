@@ -1,5 +1,6 @@
 import {calculate, VERSION} from '../js/pricing-catalogue.mjs';
 import {createQuoteEmails} from './quote-emails.mjs';
+import {numberingEnabled, checkNumberingSchema, assignPublicReference, publicReference} from './quote-numbering.mjs';
 
 export const json = (value, status = 200) => Response.json(value, {status, headers: {'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff'}});
 const EMAIL = /^[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Za-z0-9](?:[A-Za-z0-9.-]*[A-Za-z0-9])?\.[A-Za-z]{2,}$/;
@@ -76,7 +77,9 @@ export async function handleQuote({request, env}, fetcher = fetch) {
   try {body = await limitedJSON(request); validated = validate(body);} catch (error) {return json({error: error instanceof SyntaxError ? 'Invalid JSON request.' : error.message}, 400);}
   if (!configured(env)) return json({error: 'Online quote requests are not configured yet. Please email info@hometechmayo.ie or call 083 349 8496.'}, 503);
   let reservation;
+  const useSiteNumbering=numberingEnabled(env);
   try {
+    if(useSiteNumbering) await checkNumberingSchema(env.QUOTE_GUARD);
     const normalized = {...validated, estimate: {...validated.estimate, lines: [...validated.estimate.lines].sort((a, b) => a.id.localeCompare(b.id))}};
     const payloadHash = await digest(env.QUOTE_HASH_SECRET, JSON.stringify(normalized));
     const key = await digest(env.QUOTE_HASH_SECRET, body.requestId);
@@ -85,7 +88,10 @@ export async function handleQuote({request, env}, fetcher = fetch) {
     const previous = await env.QUOTE_GUARD.prepare('SELECT * FROM quote_guard WHERE request_key = ?').bind(key).first();
     if (previous) {
       if (previous.payload_hash !== payloadHash) return json({error: 'This request identifier was already used for different details. Reload the page.'}, 409);
-      if (previous.status === 'sent') return json({ok: true, reference: previous.reference, acknowledgement: previous.ack === 1, duplicate: true});
+      if (previous.status === 'sent') {
+        const reference=useSiteNumbering ? await publicReference(env.QUOTE_GUARD,key) || previous.reference : previous.reference;
+        return json({ok: true, reference, acknowledgement: previous.ack === 1, duplicate: true});
+      }
       return json({error: `Request ${previous.reference} is already being processed or its delivery is uncertain. Please contact us with this reference instead of submitting again.`, reference: previous.reference}, 409);
     }
     const token = field(body, 'turnstileToken', 2048, true);
@@ -96,17 +102,18 @@ export async function handleQuote({request, env}, fetcher = fetch) {
     if (!verification.ok) return json({error: 'Security verification is temporarily unavailable. Please try again.'}, 503);
     const check = await verification.json();
     if (!check.success || check.hostname !== new URL(env.SITE_ORIGIN).hostname || check.action !== 'quote') return json({error: 'Security verification failed or expired. Please complete it again.'}, 400);
-    const reference = `HT-${new Date(now).toISOString().slice(0, 10).replaceAll('-', '')}-${crypto.randomUUID().slice(0, 12).toUpperCase()}`;
+    const internalReference = `HT-${new Date(now).toISOString().slice(0, 10).replaceAll('-', '')}-${crypto.randomUUID().slice(0, 12).toUpperCase()}`;
     // One atomic INSERT reserves both the key and fingerprint and enforces an
     // hourly IP limit across isolates; no best-effort in-memory/KV lock.
     const results = await env.QUOTE_GUARD.batch([
       env.QUOTE_GUARD.prepare('DELETE FROM quote_guard WHERE created_at < ?').bind(now - 86400000),
       env.QUOTE_GUARD.prepare(`INSERT OR IGNORE INTO quote_guard (request_key, payload_hash, ip_hash, reference, created_at, status, ack)
         SELECT ?, ?, ?, ?, ?, 'pending', 0 WHERE
-        (SELECT COUNT(*) FROM quote_guard WHERE ip_hash = ? AND created_at > ?) < 5`).bind(key, payloadHash, ipHash, reference, now, ipHash, now - 3600000)
+        (SELECT COUNT(*) FROM quote_guard WHERE ip_hash = ? AND created_at > ?) < 5`).bind(key, payloadHash, ipHash, internalReference, now, ipHash, now - 3600000)
     ]);
     if (results[1].meta.changes !== 1) return json({error: 'This enquiry was already submitted, or the submission limit was reached. Please wait or contact us by phone/email.'}, 429);
-    reservation = {key, reference};
+    reservation = {key, reference:internalReference};
+    const reference=useSiteNumbering ? await assignPublicReference(env.QUOTE_GUARD,key,now) : internalReference;
     const {customer: c, estimate} = validated;
     const emails = createQuoteEmails({customer:c, estimate, reference, receivedAt:now, version:VERSION}, env);
     await sendMail(env, emails.business, fetcher);

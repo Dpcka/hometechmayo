@@ -455,7 +455,7 @@ form.addEventListener('submit', async event => {
     }
     finished = true;
     if (result.ok === true) document.dispatchEvent(new CustomEvent('htss:quote-submitted'));
-    status.textContent = `Request ${result.reference} has been accepted for email delivery to Home Tech.${data.email ? result.acknowledgement ? ' An acknowledgement has also been accepted for delivery.' : ' Your request was accepted, but the acknowledgement could not be confirmed.' : ''} Keep this reference. This is not a confirmed quotation or booking.`;
+    status.textContent = `Quote Request Received\nReference: ${result.reference}\n\nYour request has been accepted for email delivery to Home Tech.${data.email ? result.acknowledgement ? ' An acknowledgement has also been accepted for delivery.' : ' Your request was accepted, but the acknowledgement could not be confirmed.' : ''} Keep this reference. This is not a confirmed quotation or booking.`;
   } catch (error) {
     status.textContent = error.message === 'Failed to fetch' ? 'The connection was interrupted and delivery is uncertain. Keep this page open and retry with the same details, or contact us directly.' : error.message;
   } finally {

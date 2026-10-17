@@ -4,13 +4,14 @@ import {readFileSync} from 'node:fs';
 import {DatabaseSync} from 'node:sqlite';
 import {handleQuote, validate, publicConfig} from '../server/quote.mjs';
 import {VERSION} from '../js/pricing-catalogue.mjs';
-function db() {
- const sql = new DatabaseSync(':memory:'); sql.exec(readFileSync(new URL('../server/quote-guard.sql', import.meta.url), 'utf8'));
- const prepare = query => ({bind(...args) {return {first: async () => sql.prepare(query).get(...args), run: async () => ({meta: {changes: Number(sql.prepare(query).run(...args).changes)}}), execute: () => ({meta: {changes: Number(sql.prepare(query).run(...args).changes)}})};}});
+function db(withNumbering=false) {
+ const sql = new DatabaseSync(':memory:'); sql.exec('PRAGMA foreign_keys=ON'); sql.exec(readFileSync(new URL('../server/quote-guard.sql', import.meta.url), 'utf8'));
+ if(withNumbering) sql.exec(readFileSync(new URL('../server/migrations/0001-website-quote-numbering.sql',import.meta.url),'utf8'));
+ const prepare = query => ({first:async()=>sql.prepare(query).get(),bind(...args) {return {first: async () => sql.prepare(query).get(...args), run: async () => ({meta: {changes: Number(sql.prepare(query).run(...args).changes)}}), execute: () => ({meta: {changes: Number(sql.prepare(query).run(...args).changes)}})};}});
  return {prepare, batch: async statements => {sql.exec('BEGIN'); try {const r = statements.map(s => s.execute()); sql.exec('COMMIT'); return r;} catch (e) {sql.exec('ROLLBACK'); throw e;}}};
 }
 const payload = (extra = {}) => ({name: 'Test Customer', phone: '0831234567', email: '', eircode: '', area: 'Castlebar', consent: true, version: VERSION, items: [{id: 'wifi-printer', quantity: 1, materials: 'yes', options: {}}], requestId: crypto.randomUUID(), turnstileToken: 'test-token-only', ...extra});
-const environment = () => ({SITE_ORIGIN: 'https://hometechmayo.ie', BREVO_API_KEY: 'test-only-not-a-real-key', TURNSTILE_SECRET_KEY: 'test-only', TURNSTILE_SITE_KEY: 'test-only', QUOTE_FROM_EMAIL: 'info@hometechmayo.ie', QUOTE_TO_EMAIL: 'info@hometechmayo.ie', QUOTE_HASH_SECRET: 'test-only-hmac-value-at-least-32-characters', QUOTE_GUARD: db()});
+const environment = (withNumbering=false) => ({SITE_ORIGIN: 'https://hometechmayo.ie', BREVO_API_KEY: 'test-only-not-a-real-key', TURNSTILE_SECRET_KEY: 'test-only', TURNSTILE_SITE_KEY: 'test-only', QUOTE_FROM_EMAIL: 'info@hometechmayo.ie', QUOTE_TO_EMAIL: 'info@hometechmayo.ie', QUOTE_HASH_SECRET: 'test-only-hmac-value-at-least-32-characters', QUOTE_GUARD: db(withNumbering), QUOTE_SITE_NUMBERING_ENABLED:withNumbering?'true':undefined});
 const request = (body, origin = 'https://hometechmayo.ie') => new Request('https://hometechmayo.ie/api/quote', {method: 'POST', headers: {Origin: origin, 'Content-Type': 'application/json', 'CF-Connecting-IP': '192.0.2.10'}, body: JSON.stringify(body)});
 function provider({businessFail = false, ackFail = false, turnstile = {success: true, hostname: 'hometechmayo.ie', action: 'quote'}} = {}) {
  const mails = [];
@@ -99,4 +100,44 @@ test('actual Brevo wire payload preserves business/customer From, To, Reply-To a
  assert.ok(business.htmlContent.includes('Example &quot;Customer&quot; &amp; Co'));
  assert.ok(customer.htmlContent.includes('Example &quot;Customer&quot; &amp; Co'));
  for(const mail of p.mails){assert.ok(mail.htmlContent);assert.ok(mail.textContent);assert.equal(mail.headers?.['Reply-To'],undefined);}
+});
+
+test('numbered successful requests share one public reference across response and both emails',async()=>{
+ const env=environment(true),p=provider(),body=payload({email:'example@example.com'}),originalId=body.requestId;
+ const response=await handleQuote({request:request(body),env},p.fetcher),result=await response.json();
+ assert.equal(response.status,200);assert.equal(result.ok,true);assert.match(result.reference,/^Q-SITE-\d{4}-0001$/);
+ assert.equal(body.requestId,originalId);
+ for(const mail of p.mails){assert.ok(mail.subject.includes(result.reference));assert.ok(mail.htmlContent.includes(result.reference));assert.ok(mail.textContent.includes(result.reference));}
+ const retry=await handleQuote({request:request(body),env},p.fetcher);
+ assert.equal((await retry.json()).reference,result.reference);assert.equal(p.mails.length,2);
+ const internal=await env.QUOTE_GUARD.prepare('SELECT reference FROM quote_guard').first();assert.match(internal.reference,/^HT-/);
+});
+test('numbering activation with missing schema fails before reservation or provider calls',async()=>{
+ const env=environment();env.QUOTE_SITE_NUMBERING_ENABLED='true';let calls=0;
+ const response=await handleQuote({request:request(payload()),env},()=>{calls++;throw new Error('unexpected provider call');});
+ assert.equal(response.status,503);assert.equal(calls,0);
+ assert.equal((await env.QUOTE_GUARD.prepare('SELECT COUNT(*) AS n FROM quote_guard').first()).n,0);
+});
+test('rejected validation and failed Turnstile do not acquire a website number',async()=>{
+ const env=environment(true),p=provider({turnstile:{success:false}});
+ assert.equal((await handleQuote({request:request(payload({consent:false})),env},p.fetcher)).status,400);
+ assert.equal((await handleQuote({request:request(payload()),env},p.fetcher)).status,400);
+ assert.equal((await env.QUOTE_GUARD.prepare('SELECT COUNT(*) AS n FROM quote_reference_counters').first()).n,0);
+ assert.equal(p.mails.length,0);
+});
+test('numbered provider failure never reports public success and never resends an uncertain request',async()=>{
+ const env=environment(true),p=provider({businessFail:true}),body=payload();
+ const response=await handleQuote({request:request(body),env},p.fetcher),result=await response.json();
+ assert.equal(response.status,502);assert.equal(result.ok,undefined);assert.match(result.reference,/^HT-/);
+ assert.equal((await handleQuote({request:request(body),env},p.fetcher)).status,409);assert.equal(p.mails.length,1);
+});
+test('legacy successful records retain their original references when numbering is enabled later',async()=>{
+ const env=environment(true),p=provider(),body=payload();delete env.QUOTE_SITE_NUMBERING_ENABLED;
+ const first=await handleQuote({request:request(body),env},p.fetcher),original=await first.json();
+ // Additive schema already exists; switching the feature on must not renumber legacy data.
+ env.QUOTE_SITE_NUMBERING_ENABLED='true';
+ const legacyReference=original.reference;
+ assert.match(legacyReference,/^HT-/);assert.equal(p.mails.length,1);
+ const repeat=await handleQuote({request:request(body),env},p.fetcher);
+ assert.equal((await repeat.json()).reference,legacyReference);assert.equal(p.mails.length,1);
 });

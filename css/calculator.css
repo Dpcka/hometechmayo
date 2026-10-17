@@ -191,3 +191,6 @@
 .service-editor .calc-note {margin-bottom:14px;}
 .service-editor .calc-secondary {display:block; margin:18px 0 0 auto;}
 .quote-page:has(.service-editor[open]) {overflow:hidden;}
+
+/* Preserve line breaks in the server-confirmed request reference. */
+#quote-status {white-space:pre-line;}
