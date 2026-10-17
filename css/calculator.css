@@ -194,3 +194,13 @@
 
 /* Preserve line breaks in the server-confirmed request reference. */
 #quote-status {white-space:pre-line;}
+
+/* Expanded mobile carts stay in document flow instead of covering the form. */
+#quote-turnstile[hidden] {display:none;}
+@media(max-width:900px) {
+ .wizard-fields .calc-summary:has(.cart-disclosure[open]) {position:relative;top:auto;max-height:none;overflow:visible;z-index:auto;}
+ .wizard-fields .calc-summary:not(:has(.cart-disclosure[open])) {max-height:none;overflow:visible;}
+ .cart-heading {min-height:58px;padding:8px 12px;}
+ .quote-received .wizard-fields .calc-summary {position:relative;top:auto;}
+ #quote-status {scroll-margin-top:calc(var(--quote-summary-top,118px) + 78px);padding-bottom:env(safe-area-inset-bottom);}
+}

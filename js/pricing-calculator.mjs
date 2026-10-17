@@ -455,13 +455,18 @@ form.addEventListener('submit', async event => {
     }
     finished = true;
     if (result.ok === true) document.dispatchEvent(new CustomEvent('htss:quote-submitted'));
-    status.textContent = `Quote Request Received\nReference: ${result.reference}\n\nYour request has been accepted for email delivery to Home Tech.${data.email ? result.acknowledgement ? ' An acknowledgement has also been accepted for delivery.' : ' Your request was accepted, but the acknowledgement could not be confirmed.' : ''} Keep this reference. This is not a confirmed quotation or booking.`;
+    status.textContent = `Quote Request Received\nReference: ${result.reference}\n\nThank you! We've received your request and will contact you to confirm the details.\n\nThis is not a confirmed quotation or booking.${data.email && !result.acknowledgement ? '\n\nYour request was received, but the acknowledgement email could not be confirmed.' : ''}`;
+    const widget = document.querySelector('#quote-turnstile');
+    try {if (widgetId !== undefined) window.turnstile?.remove?.(widgetId);} catch { /* A third-party cleanup error must not hide a confirmed request. */ }
+    widget.replaceChildren(); widget.hidden = true;
+    form.classList.add('quote-received');
+    if (compactSummary.matches) summaryNodes[2].querySelector('details').open = false;
   } catch (error) {
     status.textContent = error.message === 'Failed to fetch' ? 'The connection was interrupted and delivery is uncertain. Keep this page open and retry with the same details, or contact us directly.' : error.message;
   } finally {
     sending = false; turnstileToken = ''; lockForm(finished);
     submit.textContent = finished ? 'Request recorded — see status' : 'Send quote request';
-    if (widgetId !== undefined) window.turnstile.reset(widgetId);
+    if (widgetId !== undefined && !finished) window.turnstile.reset(widgetId);
     refresh(); status.focus();
   }
 });

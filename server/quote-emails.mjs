@@ -26,22 +26,22 @@ function infoSection(title, rows) {
 </td>
 </tr>`).join(''))}`;
 }
-function totalRows(estimate) {
+function totalRows(estimate, customer = false) {
   return [
     ['Labour subtotal',money(estimate.labour)],
-    [`Discount (${estimate.discountPercent}%)`,`−${money(estimate.discount)}`],
+    ...(!customer || estimate.discount ? [[`Discount (${estimate.discountPercent}%)`,`−${money(estimate.discount)}`]] : []),
     ...(estimate.minimumAdjustment ? [['Minimum labour adjustment',money(estimate.minimumAdjustment)]] : []),
     [`Travel · ${estimate.area} (once per visit)`,estimate.travel === null ? 'Custom Quote — excluded' : money(estimate.travel)],
     ['Materials',materialLabel(estimate)]
   ];
 }
-export function summaryHTML(estimate) {
+export function summaryHTML(estimate, customer = false) {
   const services = estimate.lines.map(line=>`<tr>
 <td style="width:72%;padding:12px 8px 12px 0;vertical-align:top;border-bottom:1px solid #eeeeee;overflow-wrap:anywhere;word-break:break-word;">
 <p style="margin:0 0 5px;font-size:14px;line-height:21px;color:#111111;font-weight:bold;">${escapeHTML(serviceLabel(line))}</p>${line.optionLabels.length ? paragraph(line.optionLabels.map(escapeHTML).join('<br>'),'margin:0 0 5px;font-size:12px;line-height:19px;color:#555555;') : ''}${paragraph(`Materials: ${escapeHTML(MATERIALS[line.materials])}${line.materialUnknown ? ' Unconfirmed material costs excluded.' : ''}`,'margin:0;font-size:12px;line-height:19px;color:#555555;')}${line.note ? paragraph(escapeHTML(line.note),'margin:5px 0 0;font-size:12px;line-height:19px;color:#555555;') : ''}</td>
 <td align="right" style="width:28%;padding:12px 0 12px 4px;vertical-align:top;border-bottom:1px solid #eeeeee;font-size:14px;line-height:21px;font-weight:bold;color:#111111;">${escapeHTML(lineAmount(line))}</td>
 </tr>`).join('');
-  const totals=totalRows(estimate).map(([label,value])=>`<tr>
+  const totals=totalRows(estimate, customer).map(([label,value])=>`<tr>
 <td style="padding:5px 8px 5px 0;vertical-align:top;font-size:13px;line-height:20px;color:#555555;">${escapeHTML(label)}</td>
 <td align="right" style="padding:5px 0;vertical-align:top;font-size:13px;line-height:20px;color:#111111;font-weight:bold;">${escapeHTML(value)}</td>
 </tr>`).join('');
@@ -63,18 +63,18 @@ export function summaryHTML(estimate) {
 <tbody>${services}</tbody>
 </table>${table(`<tr>
 <td colspan="2" height="10" style="height:10px;font-size:1px;line-height:1px;">&nbsp;</td>
-</tr>${totals}`)}${paragraph(`${estimate.eligibleUnits} qualifying main units · Eligible labour ${escapeHTML(money(estimate.eligibleLabour))}. Add-ons do not increase the discount tier.`,'margin:10px 0 0;font-size:11px;line-height:18px;color:#555555;')}${paragraph('Line prices include selected options, before discounts and the visit minimum. Included consumables are not charged again.','margin:8px 0 0;font-size:11px;line-height:18px;color:#555555;')}${estimate.customOnly ? paragraph('Labour requires a Custom Quote; minimum €50 per separate visit.','margin:8px 0 0;font-size:12px;line-height:19px;color:#806400;') : ''}${estimate.incomplete ? paragraph(escapeHTML(exclusions),'margin:8px 0 0;font-size:12px;line-height:19px;color:#806400;') : ''}</td>
+</tr>${totals}`)}${!customer ? paragraph(`${estimate.eligibleUnits} qualifying main ${estimate.eligibleUnits === 1 ? 'unit' : 'units'} · Eligible labour ${escapeHTML(money(estimate.eligibleLabour))}. Add-ons do not increase the discount tier.`,'margin:10px 0 0;font-size:11px;line-height:18px;color:#555555;') : ''}${!customer ? paragraph('Line prices include selected options, before discounts and the visit minimum. Included consumables are not charged again.','margin:8px 0 0;font-size:11px;line-height:18px;color:#555555;') : ''}${estimate.customOnly ? paragraph('Labour requires a Custom Quote; minimum €50 per separate visit.','margin:8px 0 0;font-size:12px;line-height:19px;color:#806400;') : ''}${estimate.incomplete ? paragraph(escapeHTML(exclusions),'margin:8px 0 0;font-size:12px;line-height:19px;color:#806400;') : ''}</td>
 </tr>
 </table>`;
 }
-export function summaryText(estimate) {
+export function summaryText(estimate, customer = false) {
   return ['Order summary (EUR)', ...estimate.lines.map(line=>[
     `${serviceLabel(line)}: ${lineAmount(line)}`, ...line.optionLabels,
     `Materials: ${MATERIALS[line.materials]}${line.materialUnknown ? ' Unconfirmed material costs excluded.' : ''}`, line.note
-  ].filter(Boolean).join('\n')), ...totalRows(estimate).map(([label,value])=>`${label}: ${value}`),
+  ].filter(Boolean).join('\n')), ...totalRows(estimate, customer).map(([label,value])=>`${label}: ${value}`),
   `Estimated known total: ${totalAmount(estimate)}`,
-  `${estimate.eligibleUnits} qualifying main units; eligible labour ${money(estimate.eligibleLabour)}. Add-ons do not increase the discount tier.`,
-  'Line prices include selected options, before discounts and the visit minimum. Included consumables are not charged again.',
+  !customer ? `${estimate.eligibleUnits} qualifying main ${estimate.eligibleUnits === 1 ? 'unit' : 'units'}; eligible labour ${money(estimate.eligibleLabour)}. Add-ons do not increase the discount tier.` : '',
+  !customer ? 'Line prices include selected options, before discounts and the visit minimum. Included consumables are not charged again.' : '',
   estimate.customOnly ? 'Labour requires a Custom Quote; minimum €50 per separate visit.' : '',estimate.incomplete ? exclusions : '',notice].filter(Boolean).join('\n\n');
 }
 function shell(title, content) {
@@ -156,10 +156,12 @@ export function createQuoteEmails({customer:c, estimate, reference, receivedAt, 
   const footer=`${BRAND}\nCounty Mayo, Ireland\nhttps://hometechmayo.ie\ninfo@hometechmayo.ie | 083 349 8496`;
   const businessHTML=shell('New quote request',`<h1 style="margin:0 0 12px;font-size:24px;line-height:32px;color:#111111;">New quote request</h1>${paragraph('A customer has requested an estimate. Their details are below; pricing is calculated automatically from the approved catalogue.')}${referenceHTML(reference)}${paragraph(`Received: ${escapeHTML(receivedLabel(receivedAt))}`,'font-size:12px;color:#555555;')}${infoSection('Customer details — provided by customer',customerRows)}${infoSection('Job details — provided by customer',jobRows)}${summaryHTML(estimate)}${paragraph(`Catalogue: ${escapeHTML(version)}<br>Privacy consent: given for processing this enquiry`,'margin:16px 0 0;font-size:11px;line-height:18px;color:#555555;')}`);
   const business={to:[{email:env.QUOTE_TO_EMAIL}],...(c.email ? {replyTo:{email:c.email,name:c.name}} : {}),subject:`Home Tech quote request ${reference}`,htmlContent:businessHTML,textContent:[`Quote request ${reference}`,meta,'Customer details — provided by customer',...customerRows.map(([label,value])=>`${label}: ${supplied(value)}`),'Job details — provided by customer',jobText,summary,footer].join('\n\n')};
+  const visibleJobRows=jobRows.filter(([,value])=>Boolean(value));
+  const visibleContactRows=customerRows.filter(([,value])=>Boolean(value));
   const acknowledgement=c.email ? {
     to:[{email:c.email}],replyTo:{email:env.QUOTE_TO_EMAIL},subject:`Your Home Tech quote request ${reference}`,
-    htmlContent:shell('Thank you for your request!',`<h1 style="margin:0 0 16px;font-size:24px;line-height:32px;color:#111111;">Thank you for your request!</h1>${paragraph(`Hi ${escapeHTML(c.name)},`)}${paragraph('We have received your request. We will contact you to confirm the work, materials, access and availability.')}${referenceHTML(reference)}${summaryHTML(estimate)}${infoSection('Your job details',jobRows)}`),
-    textContent:[`Thank you for your request!\n\nHi ${c.name},`,`We have received your request ${reference}. We will contact you to confirm the work, materials, access and availability.`,summary,'Your job details',jobText,footer].join('\n\n')
+    htmlContent:shell('Thank you for your request!',`<h1 style="margin:0 0 16px;font-size:24px;line-height:32px;color:#111111;">Thank you for your request!</h1>${paragraph(`Hi ${escapeHTML(c.name)},`)}${paragraph('We have received your request. We will contact you to confirm the work, materials, access and availability.')}${referenceHTML(reference)}${summaryHTML(estimate,true)}${infoSection('Your contact details',visibleContactRows)}${visibleJobRows.length ? infoSection('Your job details',visibleJobRows) : ''}`),
+    textContent:[`Thank you for your request!\n\nHi ${c.name},`,`We have received your request ${reference}. We will contact you to confirm the work, materials, access and availability.`,summaryText(estimate,true),'Your contact details',...visibleContactRows.map(([label,value])=>`${label}: ${value}`),...(visibleJobRows.length ? ['Your job details',visibleJobRows.map(([label,value])=>`${label}: ${value}`).join('\n\n')] : []),footer].join('\n\n')
   } : null;
   return {business,acknowledgement};
 }

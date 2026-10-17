@@ -67,12 +67,13 @@ test('HTML and text match authoritative discounts, travel, minimum and materials
   const {business,acknowledgement,data:{estimate:e}}=make(items,area);
   for(const mail of [business,acknowledgement]) {
    const text=textOf(mail.htmlContent);
-   for(const label of ['Labour subtotal','Discount','Travel','Materials','Estimated known total'])assert.ok(text.includes(label));
-   for(const cents of [e.labour,e.discount,e.total,...e.lines.map(l=>l.known)]) {
+   for(const label of ['Labour subtotal','Travel','Materials','Estimated known total'])assert.ok(text.includes(label));
+   for(const cents of [e.labour,...(mail===business || e.discount ? [e.discount] : []),e.total,...e.lines.map(l=>l.known)]) {
     const value=new Intl.NumberFormat('en-IE',{style:'currency',currency:'EUR'}).format(cents/100);
     assert.ok(text.includes(value),value);assert.ok(mail.textContent.includes(value),value);
    }
-   assert.ok(text.includes(`Discount (${e.discountPercent}%)`));
+   assert.equal(text.includes(`Discount (${e.discountPercent}%)`),mail===business || e.discount>0);
+   assert.equal(mail.textContent.includes(`Discount (${e.discountPercent}%)`),mail===business || e.discount>0);
    assert.equal(mail.htmlContent.includes('Minimum labour adjustment'),Boolean(e.minimumAdjustment));
    assert.equal(mail.textContent.includes('Minimum labour adjustment'),Boolean(e.minimumAdjustment));
    if(e.incomplete){assert.match(mail.htmlContent,/not a complete quotation/);assert.match(mail.textContent,/not a complete quotation/);}
@@ -130,4 +131,19 @@ test('PNG logo is transparent, high resolution and derived at original SVG aspec
   else {ink++;assert.equal(data[i],255);assert.equal(data[i+1],255);assert.equal(data[i+2],255);}
  }
  assert.ok(transparent>0 && ink>0);
+});
+
+test('customer presentation hides empty fields and diagnostics; business grammar follows unit count',()=>{
+ for(const quantity of [1,2,6]) {
+  const {business,acknowledgement}=make([item('furniture-small',quantity)],'Castlebar',{eircode:'',description:'',availability:'',materialsInformation:''});
+  for(const content of [acknowledgement.htmlContent,acknowledgement.textContent]) {
+   assert.doesNotMatch(content,/Not provided|qualifying main|Eligible labour|eligible labour|Catalogue:/);
+   assert.doesNotMatch(content,/Preferred availability|Job description|Materials information|Eircode/);
+   assert.match(content,/Alex Example/);assert.match(content,/alex@example.com/);
+  }
+  for(const content of [business.htmlContent,business.textContent]) {
+   assert.match(content,new RegExp(`${quantity} qualifying main ${quantity===1?'unit(?!s)':'units'}`));
+   assert.match(content,/Catalogue:/);
+  }
+ }
 });

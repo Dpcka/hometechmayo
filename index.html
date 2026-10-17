@@ -93,6 +93,7 @@
     </noscript>
 
     <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/site-refinements.css" />
     <link rel="stylesheet" href="css/cookie-consent.css" />
 
     <script type="application/ld+json">
@@ -161,7 +162,7 @@
     </script>
   </head>
 
-  <body>
+  <body class="home-page">
     <a class="skip-link" href="#main-content">Skip to main content</a>
 
     <header>
@@ -209,55 +210,108 @@
 
     <main id="main-content">
       <section id="home" class="hero">
-        <picture class="hero-media" aria-hidden="true">
-          <source media="(max-width: 599px)" srcset="assets/hero/hero-800.webp" />
-          <img
-            src="assets/hero/hero-1600.webp"
-            alt=""
-            width="1600"
-            height="1066"
-            fetchpriority="high"
-            decoding="async"
-          />
-        </picture>
-        <div class="overlay"></div>
-
-        <div class="container hero-content">
-          <h1>
-            Professional Home Improvement
-            <br />
-            & Smart Home Solutions
-          </h1>
-
-          <p>
-            Reliable handyman services across County Mayo.
-
-            <br /><br />
-
-            Furniture Assembly • TV Mounting • Ventilation
-
-            <br />
-
-            Wi-Fi Networks • Smart Home • General Handyman
-          </p>
-
-          <div class="hero-buttons">
-            <a href="#contact" class="btn btn-primary">
-              Request a Free Quote
-            </a>
-
-            <a href="#services" class="btn btn-secondary"> View Services </a>
+        <div class="container home-hero-layout">
+          <div class="hero-content">
+            <p class="home-eyebrow">Home Tech Solutions &amp; Services</p>
+            <h1>Home Repairs &amp; Smart Home Solutions</h1>
+            <p>Professional handyman and home technology services across County Mayo.</p>
+            <div class="hero-buttons">
+              <a href="quote.html" class="btn btn-primary">Request a Free Quote</a>
+              <a href="pricing.html" class="btn btn-secondary">View Services &amp; Prices</a>
+            </div>
           </div>
-
-          <div class="hero-features">
-            <span>✓ Free Quotations</span>
-
-            <span>✓ Quality Workmanship</span>
-
-            <span>✓ County Mayo</span>
-          </div>
+          <picture class="hero-media" aria-hidden="true">
+            <source type="image/webp" srcset="assets/hero/scenic-window-480.webp 480w, assets/hero/scenic-window-800.webp 800w, assets/hero/scenic-window-1280.webp 1280w" sizes="(max-width: 900px) 90vw, 52vw" />
+            <img src="assets/hero/scenic-window-original.jpg" alt="" width="1280" height="487" fetchpriority="high" decoding="async" />
+          </picture>
         </div>
       </section>
+      <section id="services" class="services">
+        <div class="container">
+          <h2>Our Services</h2>
+
+          <p class="section-intro">
+            Practical help for your home, with clear starting prices.
+          </p>
+
+          <div class="services-grid">
+            <a class="service-card" href="pricing.html#pricing-furniture">
+              <h3>Furniture Assembly</h3>
+
+              <p>
+                IKEA, JYSK and all flat-pack furniture assembled quickly, safely
+                and professionally.
+              </p>
+
+              <span class="service-starting-price">From €50</span>
+              <span class="service-pricing-action">View prices <span aria-hidden="true">→</span></span>
+            </a>
+
+            <a class="service-card" href="pricing.html#pricing-tv-mounting">
+              <h3>TV Wall Mounting</h3>
+
+              <p>
+                Secure TV installation with neat cable management and
+                professional finishing.
+              </p>
+
+              <span class="service-starting-price">From €80</span>
+              <span class="service-pricing-action">View prices <span aria-hidden="true">→</span></span>
+            </a>
+
+            <a class="service-card" href="pricing.html#pricing-ventilation">
+              <h3>Ventilation</h3>
+
+              <p>
+                Installation and replacement of extractor fans, rigid ducting
+                and external vents.
+              </p>
+
+              <span class="service-starting-price">Fan replacement from €80</span>
+              <span class="service-pricing-action">View prices <span aria-hidden="true">→</span></span>
+            </a>
+
+            <a class="service-card" href="pricing.html#pricing-wifi">
+              <h3>Wi-Fi &amp; Networking</h3>
+
+              <p>
+                Improve Wi-Fi coverage, home networking and internet
+                performance.
+              </p>
+
+              <span class="service-starting-price">Wi-Fi setup from €60</span>
+              <span class="service-pricing-action">View prices <span aria-hidden="true">→</span></span>
+            </a>
+
+            <a class="service-card" href="pricing.html#pricing-smart-home">
+              <h3>Smart Home</h3>
+
+              <p>
+                Smart device setup, Wi-Fi integration and simple home
+                automation.
+              </p>
+
+              <span class="service-starting-price">Device setup from €40</span>
+              <span class="service-pricing-action">View prices <span aria-hidden="true">→</span></span>
+            </a>
+
+            <a class="service-card" href="pricing.html#pricing-handyman">
+              <h3>General Handyman</h3>
+
+              <p>
+                Repairs, installations, shelving, curtain rails, fittings and
+                general home maintenance.
+              </p>
+
+              <span class="service-starting-price">€45/hour · €50 minimum</span>
+              <span class="service-pricing-action">View prices <span aria-hidden="true">→</span></span>
+            </a>
+          </div>
+          <p class="service-preview-note">Starting labour prices; materials and travel may be additional. Minimum labour €50 per visit.</p>
+          <a class="btn btn-primary" href="pricing.html">View all services &amp; prices</a>
+        </div>
+</section>
+
       <!-- ================= ABOUT ================= -->
 
       <section id="about" class="about">
@@ -276,7 +330,7 @@
           </div>
 
           <div class="about-content">
-            <h2>About Home Tech Solutions & Services</h2>
+            <h2>Why Choose Home Tech</h2>
 
             <p>
               Home Tech Solutions & Services provides reliable handyman and home
@@ -293,7 +347,7 @@
               workmanship and honest pricing.
             </p>
 
-            <a href="#contact" class="btn btn-primary">
+            <a href="quote.html" class="btn btn-primary">
               Request a Free Quote
             </a>
           </div>
@@ -302,71 +356,7 @@
 
       <!-- ================= SERVICES ================= -->
 
-      <section id="services" class="services">
-        <div class="container">
-          <h2>Our Services</h2>
 
-          <p class="section-intro">
-            Professional home improvement services tailored to your needs.
-          </p>
-
-          <div class="services-grid">
-            <article class="service-card">
-              <h3>Furniture Assembly</h3>
-
-              <p>
-                IKEA, JYSK and all flat-pack furniture assembled quickly, safely
-                and professionally.
-              </p>
-            </article>
-
-            <article class="service-card">
-              <h3>TV Wall Mounting</h3>
-
-              <p>
-                Secure TV installation with neat cable management and
-                professional finishing.
-              </p>
-            </article>
-
-            <article class="service-card">
-              <h3>Ventilation</h3>
-
-              <p>
-                Installation and replacement of extractor fans, rigid ducting
-                and external vents.
-              </p>
-            </article>
-
-            <article class="service-card">
-              <h3>Wi-Fi &amp; Networking</h3>
-
-              <p>
-                Improve Wi-Fi coverage, home networking and internet
-                performance.
-              </p>
-            </article>
-
-            <article class="service-card">
-              <h3>Smart Home</h3>
-
-              <p>
-                Smart device setup, Wi-Fi integration and simple home
-                automation.
-              </p>
-            </article>
-
-            <article class="service-card">
-              <h3>General Handyman</h3>
-
-              <p>
-                Repairs, installations, shelving, curtain rails, fittings and
-                general home maintenance.
-              </p>
-            </article>
-          </div>
-        </div>
-      </section>
 
       <!-- ================= PROJECTS ================= -->
 
@@ -838,16 +828,20 @@
           </p>
 
           <div class="contact-grid">
-            <div class="contact-card">
-              <h3><svg class="icon icon-contact" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .8 2.9a2 2 0 0 1-.5 2.1L8.1 10a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.4 1.9.7 2.9.8a2 2 0 0 1 1.6 1.9Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /></svg> Phone</h3>
-
-              <a href="tel:+353833498496"> 083 349 8496 </a>
+            <div class="contact-card contact-action-card">
+              <a class="contact-card-main" href="tel:+353833498496">
+                <h3><svg class="icon icon-contact" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .8 2.9a2 2 0 0 1-.5 2.1L8.1 10a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.4 1.9.7 2.9.8a2 2 0 0 1 1.6 1.9Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /></svg> Phone</h3>
+                <span>083 349 8496</span>
+              </a>
+              <button class="contact-copy" type="button" data-copy-contact="phone" hidden>Copy phone</button>
             </div>
 
-            <div class="contact-card">
-              <h3><svg class="icon icon-contact" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="2" /><path d="m3 7 9 6 9-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /></svg> Email</h3>
-
-              <a href="mailto:info@hometechmayo.ie"> info@hometechmayo.ie </a>
+            <div class="contact-card contact-action-card">
+              <a class="contact-card-main" href="mailto:info@hometechmayo.ie">
+                <h3><svg class="icon icon-contact" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="2" /><path d="m3 7 9 6 9-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /></svg> Email</h3>
+                <span>info@hometechmayo.ie</span>
+              </a>
+              <button class="contact-copy" type="button" data-copy-contact="email" hidden>Copy email</button>
             </div>
 
             <div class="contact-card">
@@ -857,7 +851,10 @@
             </div>
           </div>
 
+          <p class="contact-handler-note">Phone and email links open your device’s calling or email app. If no app opens, copy the details below.</p>
+          <p id="contact-copy-status" class="contact-copy-status" role="status" aria-live="polite"></p>
           <div class="contact-buttons">
+            <a class="btn btn-primary" href="quote.html">Request a Free Quote</a>
             <a
               class="btn btn-primary"
               href="https://wa.me/353833498496?text=Hi%20Home%20Tech%20Solutions!%0A%0AI'd%20like%20to%20request%20a%20free%20quote."
@@ -981,6 +978,7 @@
     </a>
 
     <script src="js/main.js"></script>
+    <script type="module" src="js/contact-actions.mjs"></script>
     <script type="module" src="js/cookie-consent.mjs"></script>
   </body>
 </html>
