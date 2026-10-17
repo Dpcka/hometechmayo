@@ -211,20 +211,52 @@
     <main id="main-content">
       <section id="home" class="hero">
         <picture class="hero-media" aria-hidden="true">
-          <source type="image/webp" srcset="assets/hero/hero-800.webp 800w, assets/hero/hero-1600.webp 1600w" sizes="100vw" />
-          <img src="assets/hero/hero.jpg" alt="" width="1600" height="1066" fetchpriority="high" decoding="async" />
+          <source media="(max-width: 599px)" srcset="assets/hero/hero-800.webp" />
+          <img
+            src="assets/hero/hero-1600.webp"
+            alt=""
+            width="1600"
+            height="1066"
+            fetchpriority="high"
+            decoding="async"
+          />
         </picture>
-        <div class="container home-hero-layout">
-          <div class="hero-content">
-            <p class="home-eyebrow">Home Tech Solutions &amp; Services</p>
-            <h1>Home Repairs &amp; Smart Home Solutions</h1>
-            <p>Professional handyman and home technology services across County Mayo.</p>
-            <div class="hero-buttons">
-              <a href="quote.html" class="btn btn-primary">Request a Free Quote</a>
-              <a href="pricing.html" class="btn btn-secondary">View Services &amp; Prices</a>
-            </div>
+        <div class="overlay"></div>
+
+        <div class="container hero-content">
+          <h1>
+            Professional Home Improvement
+            <br />
+            & Smart Home Solutions
+          </h1>
+
+          <p>
+            Reliable handyman services across County Mayo.
+
+            <br /><br />
+
+            Furniture Assembly • TV Mounting • Ventilation
+
+            <br />
+
+            Wi-Fi Networks • Smart Home • General Handyman
+          </p>
+
+          <div class="hero-buttons">
+            <a href="quote.html" class="btn btn-primary">
+              Request a Free Quote
+            </a>
+
+            <a href="#services" class="btn btn-secondary"> View Services </a>
           </div>
 
+          <div class="hero-features">
+            <span>✓ Free Quotations</span>
+
+            <span>✓ Quality Workmanship</span>
+
+            <span>✓ County Mayo</span>
+          </div>
         </div>
       </section>
       <section id="services" class="services">
