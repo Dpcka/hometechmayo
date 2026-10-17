@@ -210,6 +210,10 @@
 
     <main id="main-content">
       <section id="home" class="hero">
+        <picture class="hero-media" aria-hidden="true">
+          <source type="image/webp" srcset="assets/hero/window-wide-640.webp 640w, assets/hero/window-wide-1280.webp 1280w, assets/hero/window-wide-1920.webp 1920w" sizes="100vw" />
+          <img src="assets/hero/window-wide-fallback.jpg" alt="" width="1920" height="1080" fetchpriority="high" decoding="async" />
+        </picture>
         <div class="container home-hero-layout">
           <div class="hero-content">
             <p class="home-eyebrow">Home Tech Solutions &amp; Services</p>
@@ -220,10 +224,7 @@
               <a href="pricing.html" class="btn btn-secondary">View Services &amp; Prices</a>
             </div>
           </div>
-          <picture class="hero-media" aria-hidden="true">
-            <source type="image/webp" srcset="assets/hero/scenic-window-480.webp 480w, assets/hero/scenic-window-800.webp 800w, assets/hero/scenic-window-1280.webp 1280w" sizes="(max-width: 900px) 90vw, 52vw" />
-            <img src="assets/hero/scenic-window-original.jpg" alt="" width="1280" height="487" fetchpriority="high" decoding="async" />
-          </picture>
+
         </div>
       </section>
       <section id="services" class="services">
