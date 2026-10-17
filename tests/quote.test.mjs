@@ -46,11 +46,11 @@ test('Turnstile failure, wrong hostname and wrong action rejected', async () => 
 test('authoritative itemised business mail only, optional email absent', async () => {
  const p = provider(), env = environment(); const r = await handleQuote({request: request(payload({total: 1})), env}, p.fetcher);
  assert.equal(r.status, 200); const result = await r.json(); assert.equal(result.ok, true); assert.match(result.reference, /^HT-/); assert.equal(p.mails.length, 1);
- assert.equal(p.mails[0].to[0].email, 'info@hometechmayo.ie'); assert.match(p.mails[0].textContent, /€50.00/); assert.equal(p.mails[0].htmlContent, undefined);
+ assert.equal(p.mails[0].to[0].email, 'info@hometechmayo.ie'); assert.match(p.mails[0].textContent, /€50.00/); assert.ok(p.mails[0].htmlContent.includes('Order summary')); assert.ok(p.mails[0].textContent);
 });
 test('customer acknowledgement only when email supplied; no unsafe HTML', async () => {
  const p = provider(); const r = await handleQuote({request: request(payload({email: 'customer@example.com', name: '<script>test</script>'})), env: environment()}, p.fetcher);
- assert.equal((await r.json()).acknowledgement, true); assert.equal(p.mails.length, 2); assert.equal(p.mails[0].replyTo.email, 'customer@example.com'); assert.equal(p.mails[1].to[0].email, 'customer@example.com'); assert.equal(p.mails[0].htmlContent, undefined);
+ assert.equal((await r.json()).acknowledgement, true); assert.equal(p.mails.length, 2); assert.equal(p.mails[0].replyTo.email, 'customer@example.com'); assert.equal(p.mails[1].to[0].email, 'customer@example.com'); assert.ok(p.mails[0].htmlContent.includes('Order summary')); assert.ok(p.mails[0].textContent);
 });
 test('ack failure does not lose business success or resend business mail', async () => {
  const p = provider({ackFail: true}), env = environment(), body = payload({email: 'customer@example.com'});
@@ -81,4 +81,22 @@ test('concurrent duplicates reserve once using real SQLite constraints', async (
 test('missing database fails closed without email or details leakage', async () => {
  const env = environment(); env.QUOTE_GUARD = {prepare() {throw new Error('private infrastructure details');}}; const p = provider();
  const r = await handleQuote({request: request(payload()), env}, p.fetcher); assert.equal(r.status, 503); assert.equal(p.mails.length, 0); assert.doesNotMatch((await r.json()).error, /private/);
+});
+
+test('actual Brevo wire payload preserves business/customer From, To, Reply-To and multipart bodies', async () => {
+ const p = provider(), env = environment();
+ const body=payload({email:'different-customer@example.com',name:'Example "Customer" & Co'});
+ const response=await handleQuote({request:request(body),env},p.fetcher);
+ assert.equal((await response.json()).ok,true);
+ assert.equal(p.mails.length,2);
+ const [business,customer]=p.mails;
+ assert.deepEqual(business.sender,{email:'info@hometechmayo.ie',name:'Home Tech Solutions & Services'});
+ assert.deepEqual(business.to,[{email:'info@hometechmayo.ie'}]);
+ assert.deepEqual(business.replyTo,{email:body.email,name:body.name});
+ assert.deepEqual(customer.sender,business.sender);
+ assert.deepEqual(customer.to,[{email:body.email}]);
+ assert.deepEqual(customer.replyTo,{email:'info@hometechmayo.ie'});
+ assert.ok(business.htmlContent.includes('Example &quot;Customer&quot; &amp; Co'));
+ assert.ok(customer.htmlContent.includes('Example &quot;Customer&quot; &amp; Co'));
+ for(const mail of p.mails){assert.ok(mail.htmlContent);assert.ok(mail.textContent);assert.equal(mail.headers?.['Reply-To'],undefined);}
 });

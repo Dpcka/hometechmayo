@@ -1,4 +1,5 @@
-import {calculate, estimateText, VERSION} from '../js/pricing-catalogue.mjs';
+import {calculate, VERSION} from '../js/pricing-catalogue.mjs';
+import {createQuoteEmails} from './quote-emails.mjs';
 
 export const json = (value, status = 200) => Response.json(value, {status, headers: {'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff'}});
 const EMAIL = /^[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Za-z0-9](?:[A-Za-z0-9.-]*[A-Za-z0-9])?\.[A-Za-z]{2,}$/;
@@ -107,15 +108,15 @@ export async function handleQuote({request, env}, fetcher = fetch) {
     if (results[1].meta.changes !== 1) return json({error: 'This enquiry was already submitted, or the submission limit was reached. Please wait or contact us by phone/email.'}, 429);
     reservation = {key, reference};
     const {customer: c, estimate} = validated;
-    const details = [`Quote request ${reference}`, `Catalogue: ${VERSION}`, `Received: ${new Date(now).toISOString()}`, `Name: ${c.name}`, `Phone: ${c.phone}`, `Email: ${c.email || 'Not provided'}`, `Eircode: ${c.eircode || 'Not provided'}`, `Area: ${estimate.area}`, `Availability: ${c.availability || 'Not provided'}`, `Job description:\n${c.description || 'Not provided'}`, `Materials information:\n${c.materialsInformation || 'Not provided'}`, 'Privacy consent: given for processing this enquiry', estimateText(estimate)].join('\n\n');
-    await sendMail(env, {to: [{email: env.QUOTE_TO_EMAIL}], ...(c.email ? {replyTo: {email: c.email, name: c.name}} : {}), subject: `Home Tech quote request ${reference}`, textContent: details}, fetcher);
+    const emails = createQuoteEmails({customer:c, estimate, reference, receivedAt:now, version:VERSION}, env);
+    await sendMail(env, emails.business, fetcher);
     // Record business acceptance BEFORE any customer acknowledgement. Never resend
     // the business request to recover an acknowledgement failure.
     await env.QUOTE_GUARD.prepare("UPDATE quote_guard SET status = 'sent' WHERE request_key = ?").bind(key).run();
     let acknowledgement = false;
     if (c.email) {
       try {
-        await sendMail(env, {to: [{email: c.email}], replyTo: {email: env.QUOTE_TO_EMAIL}, subject: `Your Home Tech quote request ${reference}`, textContent: `Thank you, ${c.name}.\n\nWe have received your request ${reference}. This is an indicative estimate, not a confirmed quotation or booking. We will contact you to confirm scope, materials, access and availability.\n\n${estimateText(estimate)}\n\nHome Tech Solutions & Services\ninfo@hometechmayo.ie | 083 349 8496`}, fetcher);
+        await sendMail(env, emails.acknowledgement, fetcher);
         acknowledgement = true;
         await env.QUOTE_GUARD.prepare('UPDATE quote_guard SET ack = 1 WHERE request_key = ?').bind(key).run();
       } catch { /* Business request succeeded; tell the browser acknowledgement failed. */ }
