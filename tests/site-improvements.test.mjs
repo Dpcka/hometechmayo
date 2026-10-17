@@ -9,8 +9,8 @@ test('Projects remains unchanged from the deployed baseline',()=>{
  assert.equal(section(home),section(previous));
 });
 test('hero is responsive with explicit dimensions and approved navigation',()=>{
- assert.match(home,/window-wide-640.webp 640w/);assert.match(home,/window-wide-1280.webp 1280w/);assert.match(home,/window-wide-1920.webp 1920w/);
- assert.match(home,/width="1920" height="1080"/);assert.match(home,/Home Repairs &amp; Smart Home Solutions/);
+ assert.match(home,/hero-800.webp 800w/);assert.match(home,/hero-1600.webp 1600w/);
+ assert.match(home,/width="1600" height="1066"/);assert.match(home,/Home Repairs &amp; Smart Home Solutions/);
  assert.ok(home.indexOf('<section id="services"')<home.indexOf('<section id="about"'));
 });
 test('service cards point to existing unique Pricing anchors',()=>{
