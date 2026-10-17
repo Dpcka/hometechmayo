@@ -118,8 +118,8 @@ Implemented interactions:
 The calculator and quote endpoint are implemented. Live submission remains
 disabled until the required Cloudflare/Brevo configuration is supplied. There is
 no booking system, customer account or HBM integration. Consent-based Analytics
-is implemented but gated off pending Google account configuration; no
-advertising tracking is implemented.
+is enabled in the locally prepared source after account/tag verification;
+publication is pending separate approval. No advertising tracking is implemented.
 
 ## Design and accessibility baseline
 
@@ -239,15 +239,15 @@ are unchanged; this approval does not authorize enabling analytics.
 The catalogue contains 17 categories. Existing published starting prices are
 used where established; newly requested work without an approved rate remains
 Custom Quote. The owner's 16 October 2026 calculator rules supersede old handyman
-rates: €45/hour, €50 minimum labour per separate visit, explicit €170 half-day
-and €320 full-day packages, and €50/hour specialist troubleshooting as specified.
+rates: в‚¬45/hour, в‚¬50 minimum labour per separate visit, explicit в‚¬170 half-day
+and в‚¬320 full-day packages, and в‚¬50/hour specialist troubleshooting as specified.
 Fixed jobs are never automatically converted to packages.
 
-Discount tiers count eligible main units including quantities: 1–5 = 0%, 6–10 =
+Discount tiers count eligible main units including quantities: 1вЂ“5 = 0%, 6вЂ“10 =
 5%, 11+ = 10%. Only eligible base labour is discounted. Add-ons do not increase
 the count; hourly work, packages, custom work, materials and travel are excluded.
-The €50 labour minimum is applied after discount, when labour is known. Travel
-is once per visit: Straide/Foxford/Castlebar €0; Ballina/Westport €10; Other is
+The в‚¬50 labour minimum is applied after discount, when labour is known. Travel
+is once per visit: Straide/Foxford/Castlebar в‚¬0; Ballina/Westport в‚¬10; Other is
 Custom Quote. Unknown work/materials/travel are excluded and marked clearly.
 The calculator is for one visit, not a final quotation or confirmed booking.
 
@@ -295,29 +295,32 @@ separate approval and must preserve the public site's design and SEO.
 - Review the privacy policy before adding forms, HBM integration, analytics,
   advertising, customer accounts, automated publishing or third-party embeds.
 
-## Consent-based GA4 (collection disabled)
+## Consent-based GA4 (activation prepared; publication pending)
 
 GA4 measurement ID `G-7H312MNH9B` uses the shared consent entry on all six pages.
-The banner has equal Accept/Reject choices; every footer has Cookie settings.
-No Google Analytics script, request or cookie is allowed before consent. Quote
-privacy consent remains separate, and rejection does not change site features.
+The owner approved technical activation on 17 October 2026 after intercepted
+real-tag audits, including automatic `user_engagement` on document navigation.
+`GOOGLE_CONFIGURATION_VERIFIED = true` is now prepared locally. No commit,
+push or deployment is authorized for these final changes yet.
 
-`js/analytics-policy.mjs` defines strict page/referrer/campaign allowlists.
-Permitted landing attribution is held only in page memory until consent; it is
-not persisted across pre-consent page navigation. Contact clicks are separate
-from `generate_lead`, which is emitted only after the quote server confirms
-success, without any request/customer data in Analytics.
+No Analytics script, measurement request or non-essential Analytics cookie
+loads before consent. Every footer has Cookie settings; rejecting or withdrawing
+Analytics does not affect the calculator, contacts or quote form. Analytics and
+quote privacy consent are separate. Advertising consent remains denied.
 
-**Production remains fail-closed:** `GOOGLE_CONFIGURATION_VERIFIED = false`
-until Enhanced Measurement and automatic user-provided data collection are
-turned off in the GA4 account and re-verified. An intercepted real-tag test
-observed automatic form events containing the current form URL; it forwarded
-no measurements to Google. Publishing the integration with collection disabled
-was approved by the owner on 16 October 2026. Do not activate collection until
-the account configuration is corrected and verified. Full setup, limits and Realtime/DebugView instructions:
-[docs/ANALYTICS.md](docs/ANALYTICS.md).
+`js/analytics-policy.mjs` allows only fixed page/referrer values and explicit
+campaign labels. Landing attribution is held only in page memory before consent;
+it does not survive pre-consent navigation. Contact clicks are distinct from
+`generate_lead`, emitted only after the quote API confirms success, without
+customer details, form values or quote contents in the Analytics parameters.
 
-No API credentials, backend/schema changes or HBM integration are involved.
-The owner approved publishing the calculator/cart redesign and cookie-consent
-changes together on 16 October 2026, with GA4 collection remaining disabled.
-Any later activation requires separate approval.
+Enhanced Measurement, automatic event detectors and user-provided contact data
+capabilities must remain disabled in Google. A fresh public-tag audit confirmed
+that configuration; authenticated property UI and live Realtime/DebugView were
+not accessed. If the remote tag configuration changes, repeat the intercepted
+audit and set the source gate false if unsafe collection is found.
+
+The calculator/cart redesign and cookie-consent code already exist in commit
+`e86a661`; this activation does not replace or duplicate them. No new API secrets,
+backend/schema changes or HBM integration are involved. Full behavior, audit
+history, tests and post-publication checks: [docs/ANALYTICS.md](docs/ANALYTICS.md).

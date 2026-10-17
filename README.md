@@ -133,13 +133,13 @@ The catalogue and authoritative rules live in `js/pricing-catalogue.mjs`.
 prices are trusted. Existing prices are retained except the explicitly approved
 handyman rules. Unconfirmed service prices remain Custom Quote.
 
-- €50 minimum labour after discount, per separate visit; handyman €45/hour.
-- Explicit half/full-day packages €170/€320, additional hours €45; specialist
-  troubleshooting €50/hour as configured in the catalogue.
-- Eligible main units: 1–5 no discount, 6–10 5%, 11+ 10% on eligible base labour.
+- в‚¬50 minimum labour after discount, per separate visit; handyman в‚¬45/hour.
+- Explicit half/full-day packages в‚¬170/в‚¬320, additional hours в‚¬45; specialist
+  troubleshooting в‚¬50/hour as configured in the catalogue.
+- Eligible main units: 1вЂ“5 no discount, 6вЂ“10 5%, 11+ 10% on eligible base labour.
 - Add-ons do not increase tiers. Materials, travel, Custom Quote, hourly work
   and packages are excluded from discounts.
-- Travel once per visit: Straide/Foxford/Castlebar €0, Ballina/Westport €10;
+- Travel once per visit: Straide/Foxford/Castlebar в‚¬0, Ballina/Westport в‚¬10;
   other areas require confirmation. Unknown costs are never invented.
 
 The locally prepared redesign moves the calculator off Pricing. Each category
@@ -191,29 +191,32 @@ publication scope must first be agreed and reviewed for privacy.
 - Review privacy before forms, HBM, analytics, advertising, accounts, automated
   publishing or additional third-party embeds.
 
-## Consent-based GA4 (collection disabled)
+## Consent-based GA4 (activation prepared; publication pending)
 
 GA4 measurement ID `G-7H312MNH9B` uses the shared consent entry on all six pages.
-The banner has equal Accept/Reject choices; every footer has Cookie settings.
-No Google Analytics script, request or cookie is allowed before consent. Quote
-privacy consent remains separate, and rejection does not change site features.
+The owner approved technical activation on 17 October 2026 after intercepted
+real-tag audits, including automatic `user_engagement` on document navigation.
+`GOOGLE_CONFIGURATION_VERIFIED = true` is now prepared locally. No commit,
+push or deployment is authorized for these final changes yet.
 
-`js/analytics-policy.mjs` defines strict page/referrer/campaign allowlists.
-Permitted landing attribution is held only in page memory until consent; it is
-not persisted across pre-consent page navigation. Contact clicks are separate
-from `generate_lead`, which is emitted only after the quote server confirms
-success, without any request/customer data in Analytics.
+No Analytics script, measurement request or non-essential Analytics cookie
+loads before consent. Every footer has Cookie settings; rejecting or withdrawing
+Analytics does not affect the calculator, contacts or quote form. Analytics and
+quote privacy consent are separate. Advertising consent remains denied.
 
-**Production remains fail-closed:** `GOOGLE_CONFIGURATION_VERIFIED = false`
-until Enhanced Measurement and automatic user-provided data collection are
-turned off in the GA4 account and re-verified. An intercepted real-tag test
-observed automatic form events containing the current form URL; it forwarded
-no measurements to Google. Publishing the integration with collection disabled
-was approved by the owner on 16 October 2026. Do not activate collection until
-the account configuration is corrected and verified. Full setup, limits and Realtime/DebugView instructions:
-[docs/ANALYTICS.md](docs/ANALYTICS.md).
+`js/analytics-policy.mjs` allows only fixed page/referrer values and explicit
+campaign labels. Landing attribution is held only in page memory before consent;
+it does not survive pre-consent navigation. Contact clicks are distinct from
+`generate_lead`, emitted only after the quote API confirms success, without
+customer details, form values or quote contents in the Analytics parameters.
 
-No API credentials, backend/schema changes or HBM integration are involved.
-The owner approved publishing the calculator/cart redesign and cookie-consent
-changes together on 16 October 2026, with GA4 collection remaining disabled.
-Any later activation requires separate approval.
+Enhanced Measurement, automatic event detectors and user-provided contact data
+capabilities must remain disabled in Google. A fresh public-tag audit confirmed
+that configuration; authenticated property UI and live Realtime/DebugView were
+not accessed. If the remote tag configuration changes, repeat the intercepted
+audit and set the source gate false if unsafe collection is found.
+
+The calculator/cart redesign and cookie-consent code already exist in commit
+`e86a661`; this activation does not replace or duplicate them. No new API secrets,
+backend/schema changes or HBM integration are involved. Full behavior, audit
+history, tests and post-publication checks: [docs/ANALYTICS.md](docs/ANALYTICS.md).

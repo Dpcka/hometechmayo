@@ -1,18 +1,112 @@
-# GA4 integration — consent, privacy and verification
+# GA4 integration вЂ” consent, privacy and verification
 
-## Release state
+## Current release state — 17 October 2026
 
-On 16 October 2026, the owner approved commit, push and publication of the
-calculator/cart redesign and cookie-consent integration together, with GA4
-collection disabled. Deployment status must be checked separately.
-Measurement ID: `G-7H312MNH9B` (public configuration, not an API secret).
-This release approval does not authorize activating Google Analytics.
+The owner accepted the final privacy/network audit and explicitly approved
+technical activation of `G-7H312MNH9B` in source. The production-source gate
+`GOOGLE_CONFIGURATION_VERIFIED` is **true**. Analytics still requires affirmative
+consent before even loading Google. This source preparation does not authorize
+commit, push or deployment; those remain pending a separate owner instruction.
 
-**Production collection is deliberately gated off.**
-`GOOGLE_CONFIGURATION_VERIFIED` in `js/analytics-policy.mjs` is `false`.
-Do not change it until the account-side checks below pass. The debug flag cannot bypass this gate on production or localhost.
+A fresh public tag has Enhanced Measurement handlers absent, automatic history,
+forms, outbound clicks, scroll, downloads and video detection disabled, and the
+user-provided-data module disabled. Its SHA-256 is
+`094bc2d9e179f89af0572683dd31c51fa0139239214ec6892ab6a511c583a198`.
+This confirms the configuration distributed by Google, not an authenticated
+inspection of every property setting. No credentials or customer data are used.
 
-A local test using the real public Google tag (with EVERY measurement request
+The final standalone automatic `user_engagement` was captured on natural
+Pricing-to-Privacy navigation, with `_et=6041`, sanitized page location and empty
+referrer. Source activation needs no custom heartbeat, manual reserved event,
+re-enabled Enhanced Measurement or weakened consent. Refusal, withdrawal and
+returning visits remain covered. Realtime/DebugView and actual Google delivery
+are post-publication checks; all audit measurement transport is intercepted.
+
+The calculator/cart/Cookie Consent implementation is already in `e86a661`.
+The pending release diff adds activation, verification tooling and current docs.
+Temporary reports and downloaded Google code stay in ignored `work/` and must
+never be staged. Test helpers can also exercise a false-gate fixture; that is not
+a change to the approved production source.
+
+## Historical audit record
+
+The sections below retain earlier disabled-gate and missing-coverage states as
+audit history. The current release state above supersedes their old instructions
+to wait for activation approval or keep the gate false. Account-side privacy
+settings must stay disabled; repeat the audit if they change.
+
+## Latest audit after owner account changes вЂ” 16 October 2026
+
+17 October resolution: the owner's manual report established trusted visibility
+changes but contained only one page_view, no body/_et, and only two font requests
+in blockedOther. A separate all-intercepted probe with the identical public tag
+SHA-256 `094bc2d9e179f89af0572683dd31c51fa0139239214ec6892ab6a511c583a198`
+then reproduced automatic `user_engagement` on real Pricing-to-Privacy document
+navigation: `_et=6041`, safe pricing `dl`, empty `dr`, no private/query/form data.
+The next privacy page view was also safe. Thus this configuration DOES generate
+automatic engagement; a separate hit was absent in the earlier visibility-only
+scenario, not demonstrably disabled by Enhanced Measurement settings. No manual
+reserved event, weakened consent, or production workaround is needed. The
+minimal test change is normal document navigation after foreground activity.
+See `work/ga4-navigation-probe.json` and the updated manual procedure. The source
+gate remains false pending explicit activation approval; no live delivery or
+Realtime/DebugView verification is claimed. Earlier missing-coverage notes below
+describe the historical probes, not the final navigation result.
+
+17 October follow-up: one headed Google Chrome probe with a fresh tag still
+did not establish a trusted visible-to-hidden transition (focus changed, but
+visibility stayed visible). It emitted only a safe `page_view`; no separate
+`user_engagement` was observed. Automatic retries stopped. The source gate
+remains false. See [the exact manual Chrome DevTools procedure](GA4_MANUAL_CHROME.md)
+and `scripts/manual-ga4-chrome.cjs`, a dependency-free manual interception
+helper. A subsequent helper fault was reproduced and fixed: `Page.enable`
+was missing before registration of the document init script, leaving the local
+debug key unset even though the fixture gate was true. The corrected helper's
+Chrome `--self-test` now passes no-consent/accept/withdrawal checks and captures
+a safe real-tag page view. The human-driven engagement scenario has not yet
+been executed. Existing calculator/cart/GA source files are preserved.
+
+Fresh official tag SHA-256:
+`823bd9982444bf58848408769442b9ce016798d631d7c567debc0e7698b73b26`.
+The public configuration now has automatic forms, outbound clicks, history,
+scroll, download and video detection disabled, no enhanced site-search handler,
+and the first-party user-data module disabled. The owner's changes are visible
+in the downloaded tag. No further account setting changes are currently indicated
+by this audit. Authenticated property UI and live reporting were not inspected.
+
+At 390px and 1280px, with test-only gate overrides and all third-party measurement
+transport intercepted, the initial document emitted one manual page view and
+the intended quote/contact/lead events in two batched requests. `pushState`,
+`replaceState` and back navigation emitted no additional page views. No synthetic
+private value, arbitrary query, raw referrer path, or known synthetic contact
+hash was found. `dl` remained `https://hometechmayo.ie/quote.html`; `dr` remained
+`https://www.google.ie/`. `_ss=1`, a session ID and `sct=1` accompanied the first
+page view. A returning visit with stored consent emitted one page view without
+a new session-start flag. Before consent, after Reject including a reload,
+after withdrawal and on a return with stored refusal there were zero collection
+requests. Namespaced analytics cookies were removed on withdrawal. The real
+source flag still prevents even tag loading after consent.
+
+Engagement time `_et` was observed on intended events with safe default context.
+No separate `en=user_engagement` was observed. Additional headed/tab-switch,
+minimise, freeze/resume, navigation and close probes did not produce it; the
+visibility probe continued reporting the original document as visible/focused.
+Thus a real visible-to-hidden lifecycle was not established in this automation
+environment. No reserved event was fabricated to claim automatic-event coverage.
+`configurationSafe: true` in the wire report means the observed payloads passed
+the privacy checks; it is not a claim that every requested lifecycle event was
+observed or that live GA reporting was verified. Keep the source gate false until
+that remaining engagement coverage is verified, then seek activation approval.
+
+`npm test` passed 50/50; the normal consent/browser event suite passed, including
+API success/failure/duplicate lead semantics. The real-tag lead transport probe
+uses a synthetic DOM success signal; real API-confirmation semantics are tested
+separately with mocked API responses. No quote mail or test hit was sent live.
+
+The sections below retain the earlier unsafe-configuration findings as history;
+those previously observed URL/form/search leaks did not recur with this tag.
+
+An earlier local test using the real public Google tag (with EVERY measurement request
 intercepted locally) observed automatic `form_start`/`scroll` events. Its
 `form_destination` included the current URL query string. This is an observed
 privacy risk if Enhanced Measurement remains enabled, not just a hypothetical
@@ -23,7 +117,46 @@ Google's remote automatic measurement settings.
 
 ## Required GA4 account settings before activation
 
-### Network re-audit, 16 October 2026
+### Extended session/lifecycle audit, 16 October 2026
+
+This supersedes the short-run context conclusion below. With foreground focus,
+a 12-second idle interval, history replacement and trusted navigation, the real
+tag emitted a second automatic `page_view`: its `dl` contained the history URL
+query and its `dr` contained the previous full URL, including a synthetic phone
+and click/search markers. Email redaction did not remove these other values.
+Thus explicit event overrides do NOT guarantee safe context on automatic
+history events. The gate must remain false; disabling forms/search alone is
+insufficient. No transport monkey-patching or calculator/history mutation was
+introduced to hide this remote configuration issue.
+
+At both 390px and 1280px there were seven intercepted collection requests in
+the diagnostic phase. Initial manual page views had safe page/referrer context.
+Session start appeared as `_ss=1` on the first collected event, with `sid`,
+`sct=1`, safe `dl` and safe `dr`; no separate `en=session_start` request was
+observed. Engagement time was present as `_et` on multiple events, including
+the unsafe automatic history page view. No standalone `en=user_engagement`
+was observed despite the idle/navigation probe; its safety is NOT verified.
+Do not manufacture that reserved event to make a test appear to pass.
+
+Before consent, after an explicit Reject, and with the actual source gate false
+after consent, there were zero tag loads/collection requests. Withdrawal stopped
+subsequent collection and removed namespaced cookies. All measurement transport
+was intercepted; no test hit reached Google. Known SHA-256 hashes of the synthetic
+email/phone were also checked; none was observed, which is not a guarantee about
+all possible remotely enabled user-data formats.
+
+After changing account settings, rerun both the normal consent browser suite and
+the real-tag lifecycle audit. Require one page view per document, safe default
+context on every emitted automatic event, no private URL/form/link parameters,
+and a further engagement check in a headed/real-device browser. Confirm actual
+session/engagement reporting in DebugView only after a separately approved safe
+activation. Until those checks pass, this integration is not ready to publish.
+
+Google references: [automatic events](https://support.google.com/analytics/answer/9234069),
+[tag settings](https://support.google.com/analytics/answer/12131703),
+[enhanced conversions/user-data controls](https://support.google.com/analytics/answer/14252663).
+
+### Earlier short-run audit, 16 October 2026 (limited coverage)
 
 A freshly downloaded public tag still exposes enabled auto-events (outbound,
 scroll, download, history, forms, video and page views), site-search keys
@@ -200,8 +333,8 @@ If necessary set `PLAYWRIGHT_MODULE` to the installed Playwright module path.
 The preload only sets an explicit rejected preference for existing calculator
 regression tests, without editing their source or changing the customer UI.
 Analytics tests use mock Google/Turnstile/quote responses and intercept all mock
-hits. Their test-only policy response fixture enables the verified state without
-changing the actual source flag. They never send test leads or data to Google/Brevo.
+hits. The approved source is tested directly for positive collection checks;
+a disabled response fixture also preserves fail-closed coverage. They never send test leads or data to Google/Brevo.
 
 After account verification, for manual debugging on localhost explicitly opt
 in in the browser console:

@@ -54,6 +54,24 @@ const sleep = ms => new Promise(resolve=>setTimeout(resolve,ms));
   const gp=await gated.ctx.newPage();await gp.goto('https://hometechmayo.ie/pricing.html',{waitUntil:'networkidle'});
   await gp.locator('[data-choice=accept]').click();await sleep(100);
   assert.equal(gated.scripts.length,0);assert.equal(gated.hits.length,0);await gated.ctx.close();
+ } else {
+  // Verify the actual approved source on the production hostname. Only the
+  // static page transport and Google library/hits are replaced by local mocks.
+  const production=await context(undefined,{},false);
+  await production.ctx.route('https://hometechmayo.ie/**',async route=>{
+   const u=new URL(route.request().url());const r=await fetch(origin+u.pathname+u.search);
+   return route.fulfill({status:r.status,headers:{'Content-Type':r.headers.get('content-type')||'text/plain'},body:Buffer.from(await r.arrayBuffer())});
+  });
+  const pp=await production.ctx.newPage();await pp.goto('https://hometechmayo.ie/pricing.html',{waitUntil:'networkidle'});
+  assert.equal(production.scripts.length,0);assert.equal(production.hits.length,0);
+  await pp.locator('[data-choice=reject]').click();await pp.reload({waitUntil:'networkidle'});
+  assert.equal(production.scripts.length,0);assert.equal(production.hits.length,0);
+  await settings(pp);await pp.locator('#cookie-analytics-toggle').check();await pp.locator('#cookie-save').click();
+  await pp.waitForFunction(()=>typeof window.gtag==='function');await sleep(100);
+  assert.equal(production.scripts.length,1);assert.equal(pageviewCount(production),1);
+  await settings(pp);await pp.locator('#cookie-analytics-toggle').uncheck();await pp.locator('#cookie-save').click();
+  const count=production.hits.length;await pp.evaluate(()=>window.gtag('event','phone_click',{placement:'footer'}));await sleep(100);
+  assert.equal(production.hits.length,count);await production.ctx.close();
  }
  // Initial refusal and no analytics before an affirmative choice.
  const first=await context();const p=await first.ctx.newPage();

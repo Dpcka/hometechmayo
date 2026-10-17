@@ -1,8 +1,8 @@
 // Public, intentionally narrow configuration. No API keys or customer data.
 export const MEASUREMENT_ID = 'G-7H312MNH9B';
-// Fail closed until Enhanced Measurement/user-provided data are disabled in GA4
-// and the public tag is re-verified. Debug never bypasses this gate.
-export const GOOGLE_CONFIGURATION_VERIFIED = false;
+// Account configuration and intercepted real-tag audit verified; activation
+// approved on 17 October 2026. Consent is still required before loading Google.
+export const GOOGLE_CONFIGURATION_VERIFIED = true;
 export const CONSENT_KEY = 'htss_cookie_consent';
 export const CONSENT_VERSION = 1;
 export const CONSENT_MAX_AGE = 180 * 24 * 60 * 60 * 1000;
