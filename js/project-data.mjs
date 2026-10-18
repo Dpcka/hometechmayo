@@ -20,6 +20,7 @@ const consoleImage = (number, alt, portrait = false) => ({
 export const PROJECTS = [
   {
     id: "bathroom-ventilation",
+    relatedService: "pricing.html#pricing-ventilation",
     title: "Bathroom Ventilation Upgrade",
     category: "Ventilation",
     description:
@@ -41,6 +42,7 @@ export const PROJECTS = [
   },
   {
     id: "furniture-assembly",
+    relatedService: "pricing.html#pricing-furniture",
     title: "Furniture Assembly",
     category: "Furniture Assembly",
     description:

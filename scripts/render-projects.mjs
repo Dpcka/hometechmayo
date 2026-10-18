@@ -11,6 +11,9 @@ const escape = (value) =>
 export function renderProjectCards() {
   return PROJECTS.map((project) => {
     const image = project.images[0];
+    const workDetails = [project.extendedDescription, project.result].filter(
+      Boolean,
+    );
     return `            <article class="project-card" data-project-id="${project.id}">
               <div class="project-photo">
                 <a class="project-photo-open" href="${image.full}" aria-label="View photos: ${escape(project.title)}">
@@ -19,10 +22,12 @@ export function renderProjectCards() {
               </div>
               <div class="project-content">
                 <h3>${escape(project.title)}</h3>
-                ${project.location ? `<p class="project-meta">${escape(project.category)} · ${escape(project.location)}</p>` : ""}
+                ${project.category ? `<p class="project-meta">${escape(project.category)}${project.location ? ` · ${escape(project.location)}` : ""}</p>` : ""}
                 <p>${escape(project.description)}</p>
-                ${project.extendedDescription ? `<details class="project-work-details"><summary>Work details</summary><p>${escape(project.extendedDescription)}</p><p>${escape(project.result)}</p></details>` : ""}
-                ${project.relatedService ? `<a class="project-service-link" href="${project.relatedService}">Request a Similar Service</a>` : ""}
+                <div class="project-actions">
+                  <a class="project-service-link" href="${escape(project.relatedService || "quote.html")}">Request a Similar Service</a>
+                  ${workDetails.length ? `<details class="project-work-details"><summary>Work details</summary>${workDetails.map((detail) => `<p>${escape(detail)}</p>`).join("")}</details>` : ""}
+                </div>
               </div>
             </article>`;
   })

@@ -214,6 +214,52 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
           (n) => getComputedStyle(n).gridTemplateColumns.split(" ").length,
         );
       assert.equal(columns, width <= 650 ? 1 : width <= 1100 ? 2 : 3);
+      await page.mouse.move(2, 2);
+      await page.waitForTimeout(400);
+      const layout = await page.locator(".project-card").evaluateAll((cards) =>
+        cards.map((card) => {
+          const box = card.getBoundingClientRect(),
+            link = card
+              .querySelector(".project-service-link")
+              .getBoundingClientRect(),
+            description = card
+              .querySelector(".project-content > p:not(.project-meta)")
+              .getBoundingClientRect(),
+            actions = card
+              .querySelector(".project-actions")
+              .getBoundingClientRect();
+          return {
+            top: box.top,
+            bottom: box.bottom,
+            linkBottom: link.bottom,
+            gap: actions.top - description.bottom,
+          };
+        }),
+      );
+      for (const card of layout)
+        assert.ok(
+          Math.abs(card.bottom - card.linkBottom - 24) < 2,
+          "shared action area has consistent bottom padding",
+        );
+      for (let i = 0; i < layout.length; i++)
+        for (let j = i + 1; j < layout.length; j++)
+          if (Math.abs(layout[i].top - layout[j].top) < 2)
+            assert.ok(
+              Math.abs(layout[i].linkBottom - layout[j].linkBottom) < 2,
+              "same-row service links align",
+            );
+      if (width <= 650)
+        for (const card of layout)
+          assert.ok(
+            card.gap <= 17,
+            "mobile cards should not reserve empty details space",
+          );
+      assert.equal(await bath.locator(".project-work-details").count(), 0);
+      assert.equal(await single.locator(".project-work-details").count(), 0);
+      assert.equal(
+        await consoleCard.locator(".project-work-details").count(),
+        1,
+      );
       await page.screenshot({
         path: `work/projects-${width}.png`,
         fullPage: false,
@@ -248,6 +294,31 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
         `PASS ${width}px: grid, controls, no overflow${width <= 390 ? ", real horizontal/vertical touch, no accidental opening, viewer swipe" : ""}`,
       );
     }
+    await consoleCard.locator(".project-work-details summary").focus();
+    await page.keyboard.press("Enter");
+    assert.equal(
+      await consoleCard
+        .locator(".project-work-details")
+        .evaluate((n) => n.open),
+      true,
+    );
+    assert.equal(
+      await consoleCard.locator(".project-work-details p").first().isVisible(),
+      true,
+    );
+    assert.equal(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth > innerWidth,
+      ),
+      false,
+    );
+    await page.keyboard.press("Enter");
+    assert.equal(
+      await consoleCard
+        .locator(".project-work-details")
+        .evaluate((n) => n.open),
+      false,
+    );
     assert.equal(
       await consoleCard.locator(".project-service-link").getAttribute("href"),
       "pricing.html#pricing-furniture",

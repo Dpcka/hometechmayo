@@ -71,3 +71,32 @@ test("console source copies and optimized variants preserve source proportions a
     }
   }
 });
+
+test("every project uses shared actions, valid service links, and only verified optional work details", () => {
+  const html = readFileSync("index.html", "utf8"),
+    pricing = readFileSync("pricing.html", "utf8");
+  assert.deepEqual(
+    PROJECTS.map((p) => p.relatedService),
+    [
+      "pricing.html#pricing-ventilation",
+      "pricing.html#pricing-furniture",
+      "pricing.html#pricing-furniture",
+    ],
+  );
+  for (const project of PROJECTS) {
+    const card = html.match(
+      new RegExp(
+        `<article class="project-card" data-project-id="${project.id}">[\\s\\S]*?<\\/article>`,
+      ),
+    )[0];
+    assert.equal((card.match(/class="project-actions"/g) || []).length, 1);
+    assert.ok(card.includes(`href="${project.relatedService}"`));
+    assert.equal(
+      card.includes('class="project-work-details"'),
+      Boolean(project.extendedDescription || project.result),
+    );
+    assert.ok(pricing.includes(`id="${project.relatedService.split("#")[1]}"`));
+  }
+  assert.equal(PROJECTS[0].extendedDescription, undefined);
+  assert.equal(PROJECTS[1].extendedDescription, undefined);
+});
