@@ -94,6 +94,7 @@
 
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/site-refinements.css" />
+    <link rel="stylesheet" href="css/projects.css" />
     <link rel="stylesheet" href="css/cookie-consent.css" />
 
     <script type="application/ld+json">
@@ -402,49 +403,52 @@
           </p>
 
           <div class="projects-grid">
-            <article class="project-card">
-              <img
-                src="assets/projects/PXL_20260713_151848763-800.webp"
-                srcset="assets/projects/PXL_20260713_151848763-800.webp 800w, assets/projects/PXL_20260713_151848763-1600.webp 1600w"
-                sizes="(max-width: 768px) 90vw, (max-width: 1200px) 45vw, 540px"
-                alt="Bathroom ventilation upgrade with rigid ducting"
-                loading="lazy"
-                decoding="async"
-                width="1920"
-                height="1080"
-              />
-
+          <!-- PROJECT CARDS START -->
+            <article class="project-card" data-project-id="bathroom-ventilation">
+              <div class="project-photo">
+                <a class="project-photo-open" href="assets/projects/PXL_20260713_151848763-1600.webp" aria-label="View photos: Bathroom Ventilation Upgrade">
+                  <img src="assets/projects/PXL_20260713_151848763-800.webp" srcset="assets/projects/PXL_20260713_151848763-800.webp 800w, assets/projects/PXL_20260713_151848763-1600.webp 1600w" sizes="(max-width: 650px) 90vw, (max-width: 1100px) 45vw, 360px" alt="Bathroom ventilation upgrade with rigid ducting" width="1920" height="1080" style="object-position:center" loading="lazy" decoding="async" />
+                </a>
+              </div>
               <div class="project-content">
                 <h3>Bathroom Ventilation Upgrade</h3>
 
-                <p>
-                  Complete installation of a rigid duct ventilation system with
-                  external vent and professional finishing.
-                </p>
+                <p>Complete installation of a rigid duct ventilation system with external vent and professional finishing.</p>
+
+
               </div>
             </article>
 
-            <article class="project-card">
-              <img
-                src="assets/projects/about-800.webp"
-                srcset="assets/projects/about-800.webp 800w, assets/projects/about-1600.webp 1600w"
-                sizes="(max-width: 768px) 90vw, (max-width: 1200px) 45vw, 540px"
-                alt="Completed flat-pack furniture assembly"
-                loading="lazy"
-                decoding="async"
-                width="1920"
-                height="1397"
-              />
-
+            <article class="project-card" data-project-id="furniture-assembly">
+              <div class="project-photo">
+                <a class="project-photo-open" href="assets/projects/about-1600.webp" aria-label="View photos: Furniture Assembly">
+                  <img src="assets/projects/about-800.webp" srcset="assets/projects/about-800.webp 800w, assets/projects/about-1600.webp 1600w" sizes="(max-width: 650px) 90vw, (max-width: 1100px) 45vw, 360px" alt="Completed flat-pack furniture assembly" width="1920" height="1397" style="object-position:center" loading="lazy" decoding="async" />
+                </a>
+              </div>
               <div class="project-content">
                 <h3>Furniture Assembly</h3>
 
-                <p>
-                  Professional flat-pack furniture assembly completed
-                  efficiently with great attention to detail.
-                </p>
+                <p>Professional flat-pack furniture assembly completed efficiently with great attention to detail.</p>
+
+
               </div>
             </article>
+
+            <article class="project-card" data-project-id="wayfair-console-table">
+              <div class="project-photo">
+                <a class="project-photo-open" href="assets/projects/wayfair-console-table/console-table-1-1600.webp" aria-label="View photos: Wayfair Console Table Assembly">
+                  <img src="assets/projects/wayfair-console-table/console-table-1-800.webp" srcset="assets/projects/wayfair-console-table/console-table-1-480.webp 480w, assets/projects/wayfair-console-table/console-table-1-800.webp 800w, assets/projects/wayfair-console-table/console-table-1-1600.webp 1600w" sizes="(max-width: 650px) 90vw, (max-width: 1100px) 45vw, 360px" alt="Wide view of the completed wooden console table in the hallway" width="1672" height="941" style="object-position:center 65%" loading="lazy" decoding="async" />
+                </a>
+              </div>
+              <div class="project-content">
+                <h3>Wayfair Console Table Assembly</h3>
+                <p class="project-meta">Furniture Assembly · County Mayo, Ireland</p>
+                <p>Assembly of a 160 cm wooden console table supplied by the customer, completed and positioned in their hallway.</p>
+                <details class="project-work-details"><summary>Work details</summary><p>The flat-pack furniture was assembled, checked and positioned in the customer&#39;s chosen location.</p><p>A neatly assembled wooden console table, ready for everyday use.</p></details>
+                <a class="project-service-link" href="pricing.html#pricing-furniture">Request a Similar Service</a>
+              </div>
+            </article>
+          <!-- PROJECT CARDS END -->
           </div>
 
           <div class="projects-button">
@@ -1012,6 +1016,7 @@
 
     <script src="js/main.js"></script>
     <script type="module" src="js/contact-actions.mjs"></script>
+    <script type="module" src="js/project-gallery.mjs"></script>
     <script type="module" src="js/cookie-consent.mjs"></script>
   </body>
 </html>

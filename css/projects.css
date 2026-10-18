@@ -1,0 +1,229 @@
+/* Project-only styles preserve the established cards, photos and content. */
+.projects-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px;
+}
+.project-card {
+  min-width: 0;
+}
+.project-photo {
+  position: relative;
+  height: 280px;
+  background: #eee;
+  overflow: hidden;
+}
+.project-photo-open {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: pan-y;
+}
+.project-photo img {
+  display: block;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+.project-photo-open:focus-visible {
+  outline: 3px solid var(--accent-contrast);
+  outline-offset: -5px;
+}
+.project-photo button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border: 1px solid #fff;
+  border-radius: 50%;
+  background: rgba(17, 17, 17, 0.8);
+  color: #fff;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+}
+.project-photo-prev {
+  left: 10px;
+}
+.project-photo-next {
+  right: 10px;
+}
+.project-photo-counter {
+  position: absolute;
+  bottom: 12px;
+  right: 14px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: rgba(17, 17, 17, 0.85);
+  color: #fff;
+  font-size: 13px;
+  pointer-events: none;
+}
+.project-card .project-meta {
+  font-size: 12px;
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+.project-work-details {
+  margin-top: 14px;
+  font-size: 14px;
+}
+.project-work-details summary {
+  cursor: pointer;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  color: var(--accent-contrast);
+  font-weight: 600;
+}
+.project-work-details p {
+  margin: 8px 0 12px;
+}
+.project-service-link {
+  display: inline-block;
+  margin-top: 14px;
+  padding-block: 10px;
+  font-size: 14px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  color: var(--accent-contrast);
+}
+.project-card button:focus-visible,
+.project-content a:focus-visible,
+.project-work-details summary:focus-visible,
+.project-viewer button:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+.project-image-error {
+  position: absolute;
+  inset: 25% 15%;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  color: #333;
+  background: #eee;
+  padding: 16px;
+  pointer-events: none;
+}
+.project-image-error[hidden] {
+  display: none;
+}
+.project-image-failed {
+  visibility: hidden;
+}
+.project-viewer {
+  margin: auto;
+  padding: 0;
+  border: 1px solid #666;
+  border-radius: 12px;
+  background: #111;
+  color: #fff;
+  width: min(1100px, 94vw);
+  max-width: 94vw;
+  max-height: 94dvh;
+  overflow: auto;
+}
+.project-viewer::backdrop {
+  background: rgba(0, 0, 0, 0.85);
+}
+.project-viewer-panel {
+  padding: 16px;
+}
+.project-viewer .project-viewer-header {
+  position: static;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: transparent;
+  padding: 0 0 12px;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+.project-viewer h2 {
+  color: #fff;
+  font-size: 20px;
+  line-height: 1.4;
+  margin: 0;
+}
+.project-viewer button {
+  flex-shrink: 0;
+  min-width: 44px;
+  min-height: 44px;
+  border: 1px solid #999;
+  border-radius: 7px;
+  background: #222;
+  color: #fff;
+  padding: 8px 12px;
+  font: inherit;
+  cursor: pointer;
+}
+.project-viewer-stage {
+  position: relative;
+  height: min(68dvh, 780px);
+  touch-action: pan-y;
+}
+.project-viewer-stage img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.project-viewer-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding-top: 12px;
+}
+.project-viewer-caption {
+  font-size: 14px;
+  line-height: 1.5;
+  text-align: center;
+  margin: 0;
+}
+.project-viewer [hidden] {
+  display: none;
+}
+html.project-viewer-open {
+  overflow: hidden;
+}
+@media (max-width: 1100px) {
+  .projects-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 650px) {
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+  .project-photo {
+    height: 240px;
+  }
+  .project-content {
+    padding: 24px;
+  }
+  .project-viewer-panel {
+    padding: 10px;
+  }
+  .project-viewer h2 {
+    font-size: 16px;
+  }
+  .project-viewer-stage {
+    height: 60dvh;
+  }
+  .project-viewer-caption {
+    font-size: 12px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .project-card,
+  .project-card img {
+    transition: none !important;
+  }
+  .project-card:hover,
+  .project-card:hover img {
+    transform: none;
+  }
+}
