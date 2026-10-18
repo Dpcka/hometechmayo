@@ -25,61 +25,87 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
     });
     await page.goto("http://127.0.0.1:8788/", { waitUntil: "networkidle" });
     await page.locator("#projects").scrollIntoViewIfNeeded();
+    await page.emulateMedia({ reducedMotion: "reduce" });
     const consoleCard = page.locator(
         '[data-project-id="wayfair-console-table"]',
       ),
       bath = page.locator('[data-project-id="bathroom-ventilation"]'),
       single = page.locator('[data-project-id="furniture-assembly"]'),
       viewer = page.locator(".project-viewer");
-    await consoleCard.locator("img").evaluate((n) => n.decode());
-    assert.equal(await page.locator(".project-card").count(), 3);
+    async function activePosition(card) {
+      return card
+        .locator(".project-photo-dots")
+        .evaluate(
+          (n) =>
+            `${[...n.children].findIndex((b) => b.hasAttribute("aria-current")) + 1} / ${n.children.length}`,
+        );
+    }
+    async function nextDot(card) {
+      const position = await card
+        .locator(".project-photo-dot")
+        .evaluateAll((nodes) =>
+          nodes.findIndex((n) => n.hasAttribute("aria-current")),
+        );
+      const count = await card.locator(".project-photo-dot").count();
+      await card
+        .locator(".project-photo-dot")
+        .nth((position + 1) % count)
+        .click();
+    }
+    async function previousDot(card) {
+      const position = await card
+        .locator(".project-photo-dot")
+        .evaluateAll((nodes) =>
+          nodes.findIndex((n) => n.hasAttribute("aria-current")),
+        );
+      const count = await card.locator(".project-photo-dot").count();
+      await card
+        .locator(".project-photo-dot")
+        .nth((position + count - 1) % count)
+        .click();
+    }
     assert.equal(
-      await single
-        .locator(".project-photo button,.project-photo-counter")
+      await page
+        .locator(
+          ".project-photo-prev,.project-photo-next,.project-photo-counter",
+        )
         .count(),
       0,
     );
+    await consoleCard
+      .locator(".project-photo-open > img:not(.project-photo-previous)")
+      .evaluate((n) => n.decode());
+    assert.equal(await page.locator(".project-card").count(), 3);
     assert.equal(
-      await consoleCard.locator(".project-photo-counter").innerText(),
-      "1 / 4",
+      await single
+        .locator(
+          ".project-photo button,.project-photo-counter,.project-photo-dots",
+        )
+        .count(),
+      0,
     );
+    assert.equal(await activePosition(consoleCard), "1 / 4");
     assert.ok(
       !photos.some((url) => /console-table-[234]-/.test(url)),
       "only selected image is loaded initially",
     );
-    await consoleCard.locator(".project-photo-next").click();
-    assert.equal(
-      await consoleCard.locator(".project-photo-counter").innerText(),
-      "2 / 4",
-    );
+    await nextDot(consoleCard);
+    assert.equal(await activePosition(consoleCard), "2 / 4");
     assert.match(
-      await consoleCard.locator("img").getAttribute("src"),
+      await consoleCard
+        .locator(".project-photo-open > img:not(.project-photo-previous)")
+        .getAttribute("src"),
       /console-table-3-/,
     );
-    assert.equal(
-      await bath.locator(".project-photo-counter").innerText(),
-      "1 / 2",
-    );
-    await bath.locator(".project-photo-next").click();
-    assert.equal(
-      await bath.locator(".project-photo-counter").innerText(),
-      "2 / 2",
-    );
-    assert.equal(
-      await consoleCard.locator(".project-photo-counter").innerText(),
-      "2 / 4",
-    );
-    await consoleCard.locator(".project-photo-prev").click();
-    assert.equal(
-      await consoleCard.locator(".project-photo-counter").innerText(),
-      "1 / 4",
-    );
-    await consoleCard.locator(".project-photo-prev").focus();
+    assert.equal(await activePosition(bath), "1 / 2");
+    await nextDot(bath);
+    assert.equal(await activePosition(bath), "2 / 2");
+    assert.equal(await activePosition(consoleCard), "2 / 4");
+    await previousDot(consoleCard);
+    assert.equal(await activePosition(consoleCard), "1 / 4");
+    await consoleCard.locator(".project-photo-dot").nth(3).focus();
     await page.keyboard.press("Enter");
-    assert.equal(
-      await consoleCard.locator(".project-photo-counter").innerText(),
-      "4 / 4",
-    );
+    assert.equal(await activePosition(consoleCard), "4 / 4");
     await consoleCard.locator(".project-photo-open").click();
     await viewer.waitFor({ state: "visible" });
     assert.equal(
@@ -193,25 +219,18 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
         fullPage: false,
       });
       if (width <= 390) {
-        const before = await consoleCard
-          .locator(".project-photo-counter")
-          .innerText();
+        const before = await activePosition(consoleCard);
         await swipe(consoleCard.locator(".project-photo-open"), -110);
-        assert.notEqual(
-          await consoleCard.locator(".project-photo-counter").innerText(),
-          before,
-        );
+        assert.notEqual(await activePosition(consoleCard), before);
         assert.equal(
           await viewer.isVisible(),
           false,
           "swipe must not open viewer",
         );
-        const verticalBefore = await consoleCard
-          .locator(".project-photo-counter")
-          .innerText();
+        const verticalBefore = await activePosition(consoleCard);
         await swipe(consoleCard.locator(".project-photo-open"), 5, -75);
         assert.equal(
-          await consoleCard.locator(".project-photo-counter").innerText(),
+          await activePosition(consoleCard),
           verticalBefore,
           "vertical scrolling must not change image",
         );
@@ -236,8 +255,8 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
     // An unavailable image retains navigation and an accessible explanation.
     await page.route("**/console-table-2-*.webp", (r) => r.abort());
     await page.reload({ waitUntil: "networkidle" });
-    await consoleCard.locator(".project-photo-next").click();
-    await consoleCard.locator(".project-photo-next").click();
+    await nextDot(consoleCard);
+    await nextDot(consoleCard);
     await consoleCard
       .locator(".project-image-error")
       .waitFor({ state: "visible" });
@@ -250,7 +269,9 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
       false,
     );
     await viewer.locator(".project-viewer-close").click();
-    await consoleCard.locator("img").evaluate((n) => n.decode());
+    await consoleCard
+      .locator(".project-photo-open > img:not(.project-photo-previous)")
+      .evaluate((n) => n.decode());
     assert.equal(
       await consoleCard.locator(".project-image-error").isVisible(),
       false,

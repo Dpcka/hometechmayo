@@ -1,4 +1,19 @@
 import { projectById } from "./project-data.mjs";
+import { createAutoplay } from "./project-autoplay.mjs";
+const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+const autoplayClocks = [];
+function pauseSlides(reason) {
+  for (const clock of autoplayClocks) clock.pause(reason);
+}
+function resumeSlides(reason) {
+  for (const clock of autoplayClocks) clock.resume(reason);
+}
+function syncEnvironment() {
+  document.hidden ? pauseSlides("hidden") : resumeSlides("hidden");
+  reducedMotion.matches ? pauseSlides("reduced") : resumeSlides("reduced");
+}
+document.addEventListener("visibilitychange", syncEnvironment);
+reducedMotion.addEventListener("change", syncEnvironment);
 export const wrapIndex = (index, count) => ((index % count) + count) % count;
 const button = (label, text, className) => {
   const b = document.createElement("button");
@@ -67,6 +82,10 @@ const fullImage = dialog.querySelector("img"),
   prev = dialog.querySelector(".project-viewer-prev"),
   next = dialog.querySelector(".project-viewer-next");
 watchImage(fullImage, dialog.querySelector(".project-image-error"));
+reducedMotion.addEventListener("change", () => {
+  if (reducedMotion.matches)
+    fullImage.getAnimations().forEach((animation) => animation.cancel());
+});
 let active, opener, oldOverflow;
 function renderViewer() {
   const { project, index } = active,
@@ -120,13 +139,16 @@ dialog.addEventListener("close", () => {
   opener?.focus({ preventScroll: true });
   active = undefined;
   fullImage.removeAttribute("src");
+  resumeSlides("viewer");
 });
 swipe(
   dialog.querySelector(".project-viewer-stage"),
   () => move(-1),
   () => move(1),
 );
-for (const card of document.querySelectorAll("[data-project-id]")) {
+for (const [cardOrder, card] of [
+  ...document.querySelectorAll("[data-project-id]"),
+].entries()) {
   const project = projectById(card.dataset.projectId);
   if (!project) continue;
   const photo = card.querySelector(".project-photo"),
@@ -139,14 +161,88 @@ for (const card of document.querySelectorAll("[data-project-id]")) {
   error.setAttribute("role", "status");
   error.textContent = "Photo unavailable. Use another photo if available.";
   photo.append(error);
-  watchImage(image, error);
   let index = 0,
-    counter;
+    clock,
+    previousLayer,
+    fade,
+    generation = 0;
+  const dots = [];
+  const clearFade = () => {
+    fade?.cancel();
+    fade = undefined;
+    previousLayer?.remove();
+    previousLayer = undefined;
+  };
+  image.addEventListener("error", () => {
+    clearFade();
+    error.hidden = false;
+    image.classList.add("project-image-failed");
+  });
+  image.addEventListener("load", async () => {
+    const current = generation;
+    try {
+      await image.decode();
+    } catch {
+      return;
+    }
+    if (current !== generation) return;
+    error.hidden = true;
+    image.classList.remove("project-image-failed");
+    if (!previousLayer) return;
+    if (reducedMotion.matches) {
+      clearFade();
+      return;
+    }
+    const layer = previousLayer;
+    fade = layer.animate([{ opacity: 1 }, { opacity: 0 }], {
+      duration: 500,
+      easing: "ease-in-out",
+      fill: "forwards",
+    });
+    fade.finished
+      .then(() => {
+        if (current === generation && layer === previousLayer) clearFade();
+      })
+      .catch(() => {});
+  });
+  if (image.complete && !image.naturalWidth) {
+    error.hidden = false;
+    image.classList.add("project-image-failed");
+  }
+  reducedMotion.addEventListener("change", () => {
+    if (reducedMotion.matches) clearFade();
+  });
   const state = {
     project,
     index: 0,
-    setIndex(value) {
-      index = state.index = wrapIndex(value, project.images.length);
+    setIndex(value, { automatic = false } = {}) {
+      const nextIndex = wrapIndex(value, project.images.length);
+      if (nextIndex === index) return;
+      if (!automatic) clock?.restart();
+      generation++;
+      // An interrupted transition must retain the old pixels until the latest
+      // requested asset is ready, even on a slow connection.
+      fade?.cancel();
+      fade = undefined;
+      // Hold the already-displayed asset until the requested one has decoded.
+      // No other future image is prefetched. One overlay produces a true crossfade.
+      if (
+        !reducedMotion.matches &&
+        image.complete &&
+        image.naturalWidth &&
+        !previousLayer
+      ) {
+        previousLayer = image.cloneNode(false);
+        previousLayer.className = "project-photo-previous";
+        previousLayer.alt = "";
+        previousLayer.setAttribute("aria-hidden", "true");
+        previousLayer.removeAttribute("srcset");
+        previousLayer.removeAttribute("sizes");
+        previousLayer.src = image.currentSrc || image.src;
+        previousLayer.loading = "eager";
+        link.append(previousLayer);
+      } else if (reducedMotion.matches) clearFade();
+      index = state.index = nextIndex;
       const item = project.images[index];
       image.classList.remove("project-image-failed");
       error.hidden = true;
@@ -161,27 +257,89 @@ for (const card of document.querySelectorAll("[data-project-id]")) {
         "aria-label",
         `View photos: ${project.title}, photo ${index + 1} of ${project.images.length}`,
       );
-      if (counter)
-        counter.textContent = `${index + 1} / ${project.images.length}`;
+      dots.forEach((dot, i) => {
+        if (i === index) dot.setAttribute("aria-current", "true");
+        else dot.removeAttribute("aria-current");
+      });
     },
   };
   if (project.images.length > 1) {
     photo.setAttribute("role", "group");
     photo.setAttribute("aria-roledescription", "carousel");
     photo.setAttribute("aria-label", project.title);
-    const previous = button(
-        `Previous photo: ${project.title}`,
-        "‹",
-        "project-photo-prev",
-      ),
-      next = button(`Next photo: ${project.title}`, "›", "project-photo-next");
-    counter = document.createElement("span");
-    counter.className = "project-photo-counter";
-    counter.setAttribute("aria-live", "polite");
-    counter.textContent = `1 / ${project.images.length}`;
-    photo.append(previous, next, counter);
-    previous.addEventListener("click", () => state.setIndex(index - 1));
-    next.addEventListener("click", () => state.setIndex(index + 1));
+    const pagination = document.createElement("div");
+    pagination.className = "project-photo-dots";
+    pagination.setAttribute("role", "group");
+    pagination.setAttribute("aria-label", `Choose photo: ${project.title}`);
+    project.images.forEach((item, i) => {
+      const dot = button(
+        `Show photo ${i + 1} of ${project.images.length}: ${project.title}`,
+        "",
+        "project-photo-dot",
+      );
+      if (i === 0) dot.setAttribute("aria-current", "true");
+      dot.addEventListener("click", () => state.setIndex(i));
+      dot.addEventListener("keydown", (event) => {
+        if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+          event.preventDefault();
+          const target = wrapIndex(
+            i + (event.key === "ArrowRight" ? 1 : -1),
+            dots.length,
+          );
+          dots[target].focus();
+          state.setIndex(target);
+        }
+      });
+      dots.push(dot);
+      pagination.append(dot);
+    });
+    photo.append(pagination);
+    clock = createAutoplay({
+      stagger: cardOrder * 850,
+      advance: () => {
+        // Check current preferences too: change events may be queued behind a timer.
+        if (document.hidden || reducedMotion.matches) {
+          syncEnvironment();
+          return;
+        }
+        state.setIndex(index + 1, { automatic: true });
+      },
+    });
+    autoplayClocks.push(clock);
+    if (document.hidden) clock.pause("hidden");
+    if (reducedMotion.matches) clock.pause("reduced");
+    if (matchMedia("(hover: hover)").matches && card.matches(":hover"))
+      clock.pause("hover");
+    if (photo.contains(document.activeElement)) clock.pause("focus");
+    card.addEventListener("pointerenter", (event) => {
+      if (event.pointerType !== "touch") clock.pause("hover");
+    });
+    card.addEventListener("pointerleave", (event) => {
+      if (event.pointerType !== "touch") clock.resume("hover");
+    });
+    photo.addEventListener("focusin", () => clock.pause("focus"));
+    photo.addEventListener("focusout", () =>
+      queueMicrotask(() => {
+        if (!photo.contains(document.activeElement)) clock.resume("focus");
+      }),
+    );
+    card.addEventListener("pointerdown", () => clock.pause("interaction"));
+    document.addEventListener("pointerup", () => clock.resume("interaction"));
+    document.addEventListener("pointercancel", () =>
+      clock.resume("interaction"),
+    );
+    if ("IntersectionObserver" in window) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries)
+            entry.isIntersecting
+              ? clock.resume("offscreen")
+              : clock.pause("offscreen");
+        },
+        { threshold: 0.1 },
+      );
+      observer.observe(card);
+    } else clock.resume("offscreen");
     swipe(
       link,
       () => state.setIndex(index - 1),
@@ -191,6 +349,7 @@ for (const card of document.querySelectorAll("[data-project-id]")) {
   link.addEventListener("click", (event) => {
     if (typeof dialog.showModal !== "function") return;
     event.preventDefault();
+    pauseSlides("viewer");
     opener = link;
     active = state;
     oldOverflow = document.body.style.overflow;
