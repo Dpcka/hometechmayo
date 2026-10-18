@@ -220,3 +220,17 @@ The calculator/cart redesign and cookie-consent code already exist in commit
 `e86a661`; this activation does not replace or duplicate them. No new API secrets,
 backend/schema changes or HBM integration are involved. Full behavior, audit
 history, tests and post-publication checks: [docs/ANALYTICS.md](docs/ANALYTICS.md).
+
+
+## Customer Reviews — local Stage 2, not activated
+
+The isolated Reviews implementation is documented in
+[server/reviews/README.md](server/reviews/README.md). It adds `/reviews`,
+Access-protected `/admin/reviews`, a dedicated Worker, NEW reviews-only D1 and
+private R2. Production resources, bindings, retention approval and activation are
+pending. No paid plan is enabled. Do not apply review migrations to quote guard,
+Q-SITE or HBM. Preserve the existing quote/email/analytics functionality.
+
+Run `npm test` and the local-only `scripts/test-reviews-browser.mjs` harness.
+Worker and Pages compile separately; GitHub Pages deployment alone does not
+publish the additional Worker. Do not push/deploy without explicit approval.

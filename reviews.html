@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Customer Reviews | Home Tech Solutions &amp; Services</title>
+
+    <meta
+      name="description"
+      content="Read customer reviews of Home Tech Solutions &amp; Services in County Mayo, or share your experience."
+    />
+
+    <meta name="author" content="Home Tech Solutions &amp; Services" />
+
+    <meta
+      property="og:title"
+      content="Customer Reviews | Home Tech Solutions &amp; Services"
+    />
+
+    <meta
+      property="og:description"
+      content="Read customer experiences of Home Tech Solutions &amp; Services in County Mayo."
+    />
+
+    <meta property="og:type" content="website" />
+
+    <meta property="og:url" content="https://hometechmayo.ie/reviews" />
+
+    <meta
+      property="og:site_name"
+      content="Home Tech Solutions &amp; Services"
+    />
+
+    <meta
+      property="og:image"
+      content="https://hometechmayo.ie/assets/hero/hero.jpg"
+    />
+
+    <meta property="og:image:width" content="2048" />
+
+    <meta property="og:image:height" content="1365" />
+
+    <meta property="og:image:alt" content="Modern home technology setup" />
+
+    <meta property="og:locale" content="en_IE" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <meta
+      name="twitter:title"
+      content="Customer Reviews | Home Tech Solutions &amp; Services"
+    />
+
+    <meta
+      name="twitter:description"
+      content="Read customer reviews of Home Tech Solutions &amp; Services, or share your experience."
+    />
+
+    <meta
+      name="twitter:image"
+      content="https://hometechmayo.ie/assets/hero/hero.jpg"
+    />
+
+    <link rel="canonical" href="https://hometechmayo.ie/reviews" />
+    <link rel="icon" href="assets/logo/logo.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="assets/logo/Logo.png" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@600;700;800&display=swap"
+      onload="
+        this.onload = null;
+        this.rel = 'stylesheet';
+      "
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@600;700;800&display=swap"
+      />
+    </noscript>
+
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/cookie-consent.css" />
+    <link rel="stylesheet" href="/css/projects.css" />
+    <link rel="stylesheet" href="/css/reviews.css" />
+  </head>
+
+  <body class="reviews-page">
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <header>
+      <div class="container">
+        <a href="index.html#home" class="logo">
+          <img
+            src="assets/logo/logo.svg"
+            alt="Home Tech Solutions &amp; Services Logo"
+            width="980"
+            height="825"
+          />
+        </a>
+
+        <nav id="site-navigation" aria-label="Main navigation">
+          <ul>
+            <li><a href="index.html#home">Home</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="index.html#projects">Projects</a></li>
+            <li><a href="pricing.html">Pricing</a></li>
+            <li><a href="index.html#about">About</a></li>
+            <li><a href="index.html#contact">Contact</a></li>
+          </ul>
+        </nav>
+
+        <button
+          class="menu-toggle"
+          type="button"
+          aria-label="Open main navigation"
+          aria-controls="site-navigation"
+          aria-expanded="false"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <a href="index.html#contact" class="quote-button">
+          Request a Free Quote
+        </a>
+      </div>
+    </header>
+
+    <main id="main-content" class="reviews-main">
+      <section class="container reviews-heading">
+        <h1>Customer Reviews</h1>
+        <p>
+          Read what our customers say about Home Tech Solutions &amp; Services,
+          or share your own experience.
+        </p>
+        <a class="btn btn-primary" href="#leave-review">Leave a Review</a>
+      </section>
+      <section class="container" aria-labelledby="published-heading">
+        <h2 id="published-heading">Website Reviews</h2>
+        <p>
+          Reviews submitted directly to this website are moderated before
+          publication. They are not independently verified. Bark and Google
+          reviews are separate sources.
+        </p>
+        <p id="reviews-status" role="status">Loading reviews…</p>
+        <div id="website-reviews" class="website-reviews-grid"></div>
+        <button
+          id="reviews-more"
+          type="button"
+          class="btn btn-outline-dark"
+          hidden
+        >
+          Load more reviews
+        </button>
+      </section>
+      <section
+        id="leave-review"
+        class="container review-form-section"
+        aria-labelledby="leave-heading"
+      >
+        <h2 id="leave-heading">Leave a Review</h2>
+        <p>
+          Share your experience. Your review and photographs will remain private
+          until approved. Please avoid names of other people, addresses or other
+          private information.
+        </p>
+        <form id="review-form" class="review-form">
+          <label for="review-name"
+            >Customer name (required — displayed publicly)</label
+          ><input
+            id="review-name"
+            name="name"
+            maxlength="100"
+            autocomplete="name"
+            required
+          />
+          <fieldset class="review-rating">
+            <legend>Star rating (required)</legend>
+            <div class="rating-options">
+              <label
+                ><input type="radio" name="rating" value="1" required /><span
+                  aria-hidden="true"
+                  >★</span
+                ><span class="sr-only">1 star</span></label
+              ><label
+                ><input type="radio" name="rating" value="2" required /><span
+                  aria-hidden="true"
+                  >★</span
+                ><span class="sr-only">2 stars</span></label
+              ><label
+                ><input type="radio" name="rating" value="3" required /><span
+                  aria-hidden="true"
+                  >★</span
+                ><span class="sr-only">3 stars</span></label
+              ><label
+                ><input type="radio" name="rating" value="4" required /><span
+                  aria-hidden="true"
+                  >★</span
+                ><span class="sr-only">4 stars</span></label
+              ><label
+                ><input type="radio" name="rating" value="5" required /><span
+                  aria-hidden="true"
+                  >★</span
+                ><span class="sr-only">5 stars</span></label
+              >
+            </div>
+          </fieldset>
+          <label for="review-text">Your review (required)</label
+          ><textarea
+            id="review-text"
+            name="review"
+            minlength="20"
+            maxlength="2000"
+            rows="5"
+            aria-describedby="review-length"
+            required
+          ></textarea
+          ><small id="review-length">20–2,000 characters.</small>
+          <label for="review-email"
+            >Email (optional, private — for follow-up only)</label
+          ><input
+            id="review-email"
+            name="email"
+            type="email"
+            maxlength="254"
+            autocomplete="email"
+          />
+          <label for="review-category">Service category (optional)</label
+          ><select id="review-category" name="category">
+            <option value="">Choose a service</option>
+          </select>
+          <div id="review-photo-fields" hidden>
+            <label for="review-photos"
+              >Photographs of completed work (optional, up to 5)</label
+            ><input
+              id="review-photos"
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              multiple
+              aria-describedby="review-photo-help"
+            /><small id="review-photo-help"
+              >JPEG, PNG or WebP. Maximum 10 MB and 40 megapixels per
+              photograph. Photographs are moderated before publication.</small
+            >
+            <ul id="review-photo-previews" class="review-photo-previews"></ul>
+            <label class="review-check"
+              ><input id="review-photo-consent" type="checkbox" />
+              <span
+                >I confirm that I own these photographs or have permission to
+                share them, and I agree to their publication if approved.</span
+              ></label
+            >
+          </div>
+          <label class="review-check"
+            ><input name="consent" type="checkbox" required /><span
+              >I agree to my name, rating and review being displayed publicly on
+              this website if approved.</span
+            ></label
+          >
+          <p class="review-notice">
+            See our
+            <a href="/privacy#website-reviews-privacy">review privacy notice</a>
+            for moderation, photograph storage, retention and removal requests.
+            To correct or remove a review, email
+            <a href="mailto:info@hometechmayo.ie">info@hometechmayo.ie</a>.
+          </p>
+          <div class="review-honeypot" aria-hidden="true">
+            <label
+              >Leave this blank<input
+                name="website"
+                tabindex="-1"
+                autocomplete="off"
+            /></label>
+          </div>
+          <div id="review-turnstile"></div>
+          <p id="review-form-status" role="status" aria-live="polite"></p>
+          <button
+            id="review-submit"
+            type="submit"
+            class="btn btn-primary"
+            disabled
+          >
+            Submit Review
+          </button>
+        </form>
+        <div id="review-success" class="review-success" tabindex="-1" hidden>
+          <h3>Thank you for your review</h3>
+          <p>
+            We've received your review. It will be moderated before publication.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer-grid">
+        <div>
+          <h3>
+            <img
+              src="assets/logo/logo.svg"
+              alt="Home Tech Solutions &amp; Services"
+              class="footer-logo footer-logo-desktop"
+              width="980"
+              height="825"
+            />
+            <img
+              src="assets/logo/Logo_home_tech_small.svg"
+              alt="Home Tech Solutions &amp; Services"
+              class="footer-logo footer-logo-mobile"
+              width="457"
+              height="363"
+            />
+          </h3>
+          <p>
+            Professional Handyman &amp; Smart Home Services across County Mayo.
+          </p>
+        </div>
+
+        <div>
+          <h4>Contact</h4>
+          <p><a href="tel:+353833498496">083 349 8496</a></p>
+          <p><a href="mailto:info@hometechmayo.ie">info@hometechmayo.ie</a></p>
+        </div>
+
+        <div>
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="index.html#home">Home</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="index.html#projects">Projects</a></li>
+            <li><a href="pricing.html">Pricing</a></li>
+            <li><a href="index.html#about">About</a></li>
+            <li><a href="index.html#contact">Contact</a></li>
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li>
+              <a href="/privacy#analytics-cookies"
+                >Privacy &amp; cookie settings</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        © <span id="year"></span> Home Tech Solutions &amp; Services. All Rights
+        Reserved.
+      </div>
+    </footer>
+
+    <button id="backToTop" class="back-to-top" aria-label="Back to top">
+      ↑
+    </button>
+
+    <div id="whatsappWidget" class="whatsapp-widget">
+      <button id="closeWhatsapp" class="close-widget" aria-label="Close">
+        ×
+      </button>
+      <h3>👋 Need help?</h3>
+      <p>We usually reply within minutes.</p>
+      <a
+        href="https://wa.me/353833498496?text=Hi%20Home%20Tech%20Solutions!%20I'd%20like%20to%20request%20a%20free%20quote."
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn btn-primary"
+      >
+        Request a Free Quote
+      </a>
+    </div>
+
+    <a
+      href="https://wa.me/353833498496?text=Hi%20Home%20Tech%20Solutions!%20I'd%20like%20to%20request%20a%20free%20quote."
+      class="whatsapp-float"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Chat on WhatsApp"
+    >
+      <img
+        class="whatsapp-icon"
+        src="assets/icons/whatsapp.svg"
+        alt=""
+        width="38"
+        height="38"
+      />
+    </a>
+
+    <script src="js/main.js"></script>
+    <script type="module" src="/js/reviews.mjs"></script>
+  </body>
+</html>

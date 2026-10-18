@@ -1,0 +1,35 @@
+{
+  // TEMPLATE ONLY: copy to an ignored work/ config and fill IDs after approval.
+  "name": "hometech-reviews",
+  "main": "worker.mjs",
+  "compatibility_date": "2026-10-18",
+  "workers_dev": false,
+  "preview_urls": false,
+  "vars": {
+    "SITE_ORIGIN": "https://hometechmayo.ie",
+    "REVIEWS_ENABLED": "false",
+    "REVIEWS_PHOTOS_ENABLED": "false",
+    "REVIEWS_TRANSFORM_BUDGET": "3000",
+    "REVIEWS_RETENTION_ENABLED": "false",
+    "REVIEWS_FROM_EMAIL": "info@hometechmayo.ie",
+    "REVIEWS_TO_EMAIL": "info@hometechmayo.ie",
+    "ACCESS_TEAM_DOMAIN": "https://REPLACE.cloudflareaccess.com",
+    "ACCESS_AUD": "REPLACE",
+    "REVIEWS_ADMIN_EMAIL": "REPLACE",
+  },
+  "d1_databases": [
+    {
+      "binding": "REVIEWS_DB",
+      "database_name": "hometech-reviews",
+      "database_id": "REPLACE",
+      "migrations_dir": "migrations",
+    },
+  ],
+  "r2_buckets": [
+    { "binding": "REVIEWS_MEDIA", "bucket_name": "hometech-review-media" },
+  ],
+  "images": { "binding": "IMAGES" },
+  "triggers": { "crons": ["17 * * * *"] },
+  // Secrets, configured separately: REVIEWS_HASH_SECRET, BREVO_API_KEY,
+  // TURNSTILE_SECRET_KEY. TURNSTILE_SITE_KEY is a public text variable.
+}

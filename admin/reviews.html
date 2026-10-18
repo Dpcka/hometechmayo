@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Review Administration | Home Tech</title>
+
+    <meta
+      name="description"
+      content="Read customer reviews of Home Tech Solutions &amp; Services in County Mayo, or share your experience."
+    />
+
+    <meta name="author" content="Home Tech Solutions &amp; Services" />
+
+    <meta
+      property="og:title"
+      content="Customer Reviews | Home Tech Solutions &amp; Services"
+    />
+
+    <meta
+      property="og:description"
+      content="Read customer experiences of Home Tech Solutions &amp; Services in County Mayo."
+    />
+
+    <meta property="og:type" content="website" />
+
+    <meta property="og:url" content="https://hometechmayo.ie/reviews" />
+
+    <meta
+      property="og:site_name"
+      content="Home Tech Solutions &amp; Services"
+    />
+
+    <meta
+      property="og:image"
+      content="https://hometechmayo.ie/assets/hero/hero.jpg"
+    />
+
+    <meta property="og:image:width" content="2048" />
+
+    <meta property="og:image:height" content="1365" />
+
+    <meta property="og:image:alt" content="Modern home technology setup" />
+
+    <meta property="og:locale" content="en_IE" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <meta
+      name="twitter:title"
+      content="Customer Reviews | Home Tech Solutions &amp; Services"
+    />
+
+    <meta
+      name="twitter:description"
+      content="Read customer reviews of Home Tech Solutions &amp; Services, or share your experience."
+    />
+
+    <meta
+      name="twitter:image"
+      content="https://hometechmayo.ie/assets/hero/hero.jpg"
+    />
+    <link rel="icon" href="/assets/logo/logo.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/assets/logo/Logo.png" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@600;700;800&display=swap"
+      onload="
+        this.onload = null;
+        this.rel = 'stylesheet';
+      "
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@600;700;800&display=swap"
+      />
+    </noscript>
+
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/cookie-consent.css" />
+    <link rel="stylesheet" href="/css/projects.css" />
+    <link rel="stylesheet" href="/css/reviews.css" />
+    <meta name="robots" content="noindex, nofollow" />
+  </head>
+
+  <body class="reviews-page">
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <header>
+      <div class="container">
+        <a href="/index.html#home" class="logo">
+          <img
+            src="/assets/logo/logo.svg"
+            alt="Home Tech Solutions &amp; Services Logo"
+            width="980"
+            height="825"
+          />
+        </a>
+
+        <nav id="site-navigation" aria-label="Main navigation">
+          <ul>
+            <li><a href="/index.html#home">Home</a></li>
+            <li><a href="/services.html">Services</a></li>
+            <li><a href="/index.html#projects">Projects</a></li>
+            <li><a href="/pricing.html">Pricing</a></li>
+            <li><a href="/index.html#about">About</a></li>
+            <li><a href="/index.html#contact">Contact</a></li>
+          </ul>
+        </nav>
+
+        <button
+          class="menu-toggle"
+          type="button"
+          aria-label="Open main navigation"
+          aria-controls="site-navigation"
+          aria-expanded="false"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <a href="/index.html#contact" class="quote-button">
+          Request a Free Quote
+        </a>
+      </div>
+    </header>
+
+    <main id="main-content" class="reviews-main container">
+      <h1>Review Administration</h1>
+      <p>
+        Private owner workspace. Original customer text is preserved. Moderate
+        for authenticity, relevance, privacy and safety, never simply for
+        criticism or a low rating.
+      </p>
+      <p><a href="/cdn-cgi/access/logout">Sign out</a></p>
+      <p id="admin-status" role="status"></p>
+      <div class="admin-review-toolbar">
+        <label
+          >Status
+          <select id="admin-filter">
+            <option value="pending">Pending</option>
+            <option value="approved">Approved</option>
+            <option value="rejected">Rejected</option>
+            <option value="hidden">Hidden</option>
+          </select></label
+        ><button id="admin-refresh" type="button" class="btn btn-outline-dark">
+          Refresh
+        </button>
+      </div>
+      <div class="admin-review-layout">
+        <aside aria-label="Review submissions">
+          <div id="admin-list"></div>
+          <button
+            id="admin-more"
+            class="btn btn-outline-dark"
+            type="button"
+            hidden
+          >
+            Load more
+          </button>
+        </aside>
+        <section id="admin-detail" aria-label="Review editor">
+          <p>Select a review to moderate.</p>
+        </section>
+      </div>
+    </main>
+    <script type="module" src="/js/reviews-admin.mjs"></script>
+    <script src="/js/main.js"></script>
+  </body>
+</html>
