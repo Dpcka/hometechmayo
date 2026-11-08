@@ -472,17 +472,27 @@
                 marketing.
               </p>
               <p>
-                <strong>Retention policy draft for owner approval before
-                activation:</strong> unfinished uploads are removed after expiry and a
-                24-hour grace period; rejected reviews after 30 days; unmoderated
-                completed submissions after 90 days. Private photographic originals are
-                removed after 30 days and follow-up email addresses after 90 days
-                without further moderation activity. Approved public reviews, permitted
-                image derivatives and their consent and moderation records are retained
-                while published or needed to handle a correction or removal request.
-                Hidden reviews are retained for owner review and must be assessed for
-                deletion. Longer retention may be necessary to deal with a specific
-                legal obligation or dispute.
+                <strong>Approved retention defaults:</strong> incomplete uploads
+                become eligible for deletion 24 hours after creation. Rejected
+                reviews are retained for 90 days after rejection unless an active
+                dispute justifies a documented retention hold. Private photo
+                originals are retained for 30 days after approved image versions
+                are successfully published, unless needed for an investigation.
+                Moderation audit records are retained for 12 calendar months,
+                including when the associated review has already been removed.
+                Deletion runs through scheduled cleanup, normally on the next
+                hourly run; failures are retried safely.
+              </p>
+              <p>
+                Published reviews remain available while publication is justified,
+                subject to withdrawal/removal requests and periodic owner review.
+                A 90-day administrative reminder prompts this review; it does not
+                automatically delete or extend publication consent. Holds require
+                a private reason and must be reassessed when the dispute or
+                investigation ends. The retention period for completed submissions
+                awaiting moderation, hidden reviews and private follow-up email
+                addresses remains a draft decision for owner approval before
+                activation; no automatic deletion deadline is assumed for them.
               </p>
               <p>
                 To request correction, withdraw publication consent or request removal,

@@ -17,6 +17,15 @@ export async function fixture() {
       "utf8",
     ),
   );
+  sql.exec(
+    readFileSync(
+      new URL(
+        "../server/reviews/migrations/0002-retention.sql",
+        import.meta.url,
+      ),
+      "utf8",
+    ),
+  );
   function statement(query, args = []) {
     return {
       bind(...next) {
@@ -114,6 +123,7 @@ export async function fixture() {
     REVIEWS_MEDIA: bucket,
     IMAGES: images,
     REVIEWS_ENABLED: "true",
+    REVIEWS_NOTIFICATIONS_ENABLED: "true",
     REVIEWS_PHOTOS_ENABLED: "true",
     REVIEWS_HASH_SECRET: "test-only-review-secret-32-characters",
     TURNSTILE_SECRET_KEY: "fake-turnstile",

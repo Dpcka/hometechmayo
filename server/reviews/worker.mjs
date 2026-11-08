@@ -14,6 +14,8 @@ import {
 } from "./policy.mjs";
 import { authenticate } from "./auth.mjs";
 import { transformPhoto } from "./images.mjs";
+import { cleanReviewData } from "./retention.mjs";
+import { reviewReadiness } from "./readiness.mjs";
 const headers = {
   "Cache-Control": "no-store",
   "X-Content-Type-Options": "nosniff",
@@ -200,7 +202,7 @@ async function upload(request, env, review, id, source, actor) {
   const reservation = await query(
     env,
     `INSERT INTO review_images (id,review_id,source,sort_order,permission_version,permission_timestamp,permission_actor,created_at)
- SELECT ?,?,?,?,?,?,?,? WHERE (SELECT COUNT(*) FROM review_images WHERE review_id=? AND approval_status!='removed')<10
+ SELECT ?,?,?,?,?,?,?,? WHERE EXISTS(SELECT 1 FROM reviews WHERE id=? AND retention_deleting=0) AND (SELECT COUNT(*) FROM review_images WHERE review_id=? AND approval_status!='removed')<10
  AND (?='business' OR (SELECT COUNT(*) FROM review_images WHERE review_id=? AND source='customer' AND approval_status!='removed')<?)`,
     id,
     review.id,
@@ -210,6 +212,7 @@ async function upload(request, env, review, id, source, actor) {
     now,
     actor,
     now,
+    review.id,
     review.id,
     source,
     review.id,
@@ -249,7 +252,7 @@ async function upload(request, env, review, id, source, actor) {
     ).run();
     // Fail closed before processing if the local monthly budget is exhausted.
     const month = new Date().toISOString().slice(0, 7),
-      budget = Math.min(4500, Number(env.REVIEWS_TRANSFORM_BUDGET) || 3000);
+      budget = Math.min(3000, Number(env.REVIEWS_TRANSFORM_BUDGET) || 3000);
     const quota = await query(
       env,
       `INSERT INTO review_usage(scope,used) VALUES(?,3) ON CONFLICT(scope) DO UPDATE SET used=used+3 WHERE used+3<=?`,
@@ -413,6 +416,7 @@ async function finalize(env, row, fetcher) {
   });
 }
 export async function notify(env, id, fetcher = fetch) {
+  if (env.REVIEWS_NOTIFICATIONS_ENABLED !== "true") return;
   const now = Date.now(),
     reserved = await query(
       env,
@@ -577,7 +581,7 @@ async function adminDetails(env, id) {
   const images = await all(
     query(
       env,
-      "SELECT id,source,caption,sort_order,approval_status,upload_state,permission_version,permission_timestamp,width,height FROM review_images WHERE review_id=? AND approval_status!='removed' ORDER BY sort_order,id",
+      "SELECT id,source,caption,sort_order,approval_status,upload_state,permission_version,permission_timestamp,width,height,published_at FROM review_images WHERE review_id=? AND approval_status!='removed' ORDER BY sort_order,id",
       id,
     ),
   );
@@ -603,6 +607,11 @@ async function moderate(request, env, id, actor) {
       id,
     ).first();
   if (!current) throw new ReviewError("Review not found.", 404);
+  if (current.retention_deleting)
+    throw new ReviewError(
+      "A retention operation is running. Retry shortly.",
+      409,
+    );
   if (!Number.isInteger(body.version) || body.version !== current.version)
     throw new ReviewError("This review changed. Reload it before saving.", 409);
   const status = body.status;
@@ -617,6 +626,20 @@ async function moderate(request, env, id, actor) {
   if (publicText && publicText.length < 20)
     throw new ReviewError(
       "Public review text must contain at least 20 characters.",
+    );
+  if (
+    body.retentionHold !== undefined &&
+    typeof body.retentionHold !== "boolean"
+  )
+    throw new ReviewError("Invalid retention hold.");
+  const hold = body.retentionHold ?? current.retention_hold === 1,
+    holdReason = text(
+      body.retentionHoldReason ?? current.retention_hold_reason ?? "",
+      500,
+    );
+  if (hold && !holdReason)
+    throw new ReviewError(
+      "Explain the active dispute or investigation requiring retention.",
     );
   const project = body.project || null;
   if (project && !PROJECT_OPTIONS.some((p) => p.id === project))
@@ -644,7 +667,7 @@ async function moderate(request, env, id, actor) {
     statements = [
       query(
         env,
-        `UPDATE reviews SET status=?,moderation_notes=?,public_text=?,public_name=?,redaction_reason=?,linked_project_id=?,published_at=CASE WHEN ?='approved' THEN COALESCE(published_at,?) ELSE published_at END,updated_at=?,version=version+1 WHERE id=? AND version=?`,
+        `UPDATE reviews SET status=?,moderation_notes=?,public_text=?,public_name=?,redaction_reason=?,linked_project_id=?,published_at=CASE WHEN ?='approved' THEN COALESCE(published_at,?) ELSE published_at END,updated_at=?,version=version+1 WHERE id=? AND version=? AND retention_deleting=0`,
         status,
         notes,
         publicText || null,
@@ -658,6 +681,27 @@ async function moderate(request, env, id, actor) {
         current.version,
       ),
     ];
+  statements.push(
+    query(
+      env,
+      `UPDATE reviews SET rejected_at=CASE WHEN ?='rejected' THEN COALESCE(rejected_at,?) ELSE NULL END,
+    retention_hold=?,retention_hold_reason=?,retention_hold_at=CASE WHEN ?=1 THEN COALESCE(retention_hold_at,?) ELSE NULL END,
+    publication_reviewed_at=CASE WHEN ?='approved' THEN ? ELSE publication_reviewed_at END,
+    publication_review_due_at=CASE WHEN ?='approved' THEN ? ELSE publication_review_due_at END WHERE id=? AND version=?`,
+      status,
+      now,
+      hold ? 1 : 0,
+      hold ? holdReason : "",
+      hold ? 1 : 0,
+      now,
+      status,
+      now,
+      status,
+      now + 90 * 86400000,
+      id,
+      next,
+    ),
+  );
   for (const [order, image] of body.images.entries()) {
     if (!["pending", "approved", "removed"].includes(image.status))
       throw new ReviewError("Invalid photograph status.");
@@ -674,6 +718,17 @@ async function moderate(request, env, id, actor) {
       ),
     );
   }
+  if (status === "approved")
+    statements.push(
+      query(
+        env,
+        `UPDATE review_images SET published_at=COALESCE(published_at,?)
+    WHERE review_id=? AND approval_status='approved' AND upload_state='ready' AND permission_version!=''
+    AND (SELECT COUNT(*) FROM review_image_variants v WHERE v.image_id=review_images.id)=3`,
+        now,
+        id,
+      ),
+    );
   // Unique review/version event makes concurrent moderation batches roll back safely.
   statements.push(
     event(
@@ -688,6 +743,8 @@ async function moderate(request, env, id, actor) {
         to: status,
         project,
         publicEdit: Boolean(publicText || publicName),
+        retentionHold: hold,
+        retentionHoldReason: hold ? holdReason : "",
         redactionReason: reason,
         photographs: body.images.map((image, order) => ({
           id: image.id,
@@ -723,7 +780,12 @@ export async function handleReviews(request, env, fetcher = fetch) {
         consentVersion: CONSENT_VERSION,
         categories: CATEGORIES,
       });
-    if (!ready(env))
+    const adminRoute =
+      path === "/api/reviews/admin" || path.startsWith("/api/reviews/admin/");
+    if (
+      !ready(env) &&
+      !(adminRoute && env.REVIEWS_DB && env.REVIEWS_HASH_SECRET?.length >= 32)
+    )
       throw new ReviewError(
         "Website reviews are not configured yet. Please contact info@hometechmayo.ie.",
         503,
@@ -742,6 +804,24 @@ export async function handleReviews(request, env, fetcher = fetch) {
           "Reload administration before making changes.",
           403,
         );
+      if (path === "/api/reviews/admin/readiness" && method === "GET")
+        return json(await reviewReadiness(env));
+      if (path === "/api/reviews/admin/audit" && method === "GET") {
+        const reviewId = url.searchParams.get("review");
+        if (!uuid(reviewId))
+          throw new ReviewError("Choose a valid review identifier.");
+        return json({
+          events: await all(
+            query(
+              env,
+              `SELECT action,actor,notes,details_json,created_at FROM review_moderation_events WHERE review_id=?
+        UNION ALL SELECT action,actor,notes,details_json,created_at FROM review_moderation_archive WHERE review_id=? ORDER BY created_at DESC LIMIT 100`,
+              reviewId,
+              reviewId,
+            ),
+          ),
+        });
+      }
       if (path === "/api/reviews/admin/session" && method === "GET")
         return json({
           csrf: actor.csrf,
@@ -751,7 +831,8 @@ export async function handleReviews(request, env, fetcher = fetch) {
           photosEnabled: Boolean(photos(env)),
         });
       if (path === "/api/reviews/admin" && method === "GET") {
-        const status = url.searchParams.get("status") || "pending";
+        const status = url.searchParams.get("status") || "pending",
+          due = url.searchParams.get("due") === "true";
         if (!["pending", "approved", "rejected", "hidden"].includes(status))
           throw new ReviewError("Invalid status.");
         const offset = Math.max(
@@ -762,8 +843,10 @@ export async function handleReviews(request, env, fetcher = fetch) {
           reviews: await all(
             query(
               env,
-              "SELECT id,customer_name,rating,created_at,status,version FROM reviews WHERE status=? AND ingestion_state='ready' ORDER BY created_at DESC LIMIT 30 OFFSET ?",
+              "SELECT id,customer_name,rating,created_at,status,version FROM reviews WHERE status=? AND ingestion_state='ready' AND (?=0 OR publication_review_due_at IS NULL OR publication_review_due_at<=?) ORDER BY created_at DESC LIMIT 30 OFFSET ?",
               status,
+              due ? 1 : 0,
+              Date.now(),
               offset,
             ),
           ),
@@ -841,9 +924,8 @@ export async function handleReviews(request, env, fetcher = fetch) {
     );
   }
 }
-export async function maintenance(env, fetcher = fetch) {
+export async function maintenance(env, fetcher = fetch, now = Date.now()) {
   if (!env.REVIEWS_DB) return;
-  const now = Date.now();
   // Stuck sends are uncertain: do not automatically send a duplicate notification.
   await query(
     env,
@@ -857,122 +939,9 @@ export async function maintenance(env, fetcher = fetch) {
     ),
   );
   for (const row of pending) await notify(env, row.review_id, fetcher);
-  // Never erase the manifest if its private storage binding is unavailable.
-  if (!env.REVIEWS_MEDIA) return;
-  // Quarantine cleanup is bounded; never acts on quote guard or Q-SITE tables.
-  const abandoned = await all(
-    query(
-      env,
-      "SELECT id FROM reviews WHERE ingestion_state='uploading' AND upload_expires<? LIMIT 20",
-      now - 86400000,
-    ),
-  );
-  for (const row of abandoned) {
-    if (env.REVIEWS_MEDIA) {
-      for (const prefix of [`originals/${row.id}/`, `derivatives/${row.id}/`]) {
-        const objects = await env.REVIEWS_MEDIA.list({ prefix, limit: 100 });
-        for (const object of objects.objects)
-          await env.REVIEWS_MEDIA.delete(object.key);
-      }
-    }
-    await env.REVIEWS_DB.batch([
-      query(
-        env,
-        "UPDATE review_usage SET used=MAX(0,used-COALESCE((SELECT SUM(reserved_bytes) FROM review_images WHERE review_id=?),0)) WHERE scope='storage'",
-        row.id,
-      ),
-      query(
-        env,
-        "DELETE FROM reviews WHERE id=? AND ingestion_state='uploading'",
-        row.id,
-      ),
-    ]);
-  }
-  // Remove objects for removed photos and stale interrupted uploads, including partial writes.
-  const removed = await all(
-    query(
-      env,
-      "SELECT id,review_id,reserved_bytes FROM review_images WHERE approval_status='removed' OR (upload_state='uploading' AND created_at<?) LIMIT 30",
-      now - 86400000,
-    ),
-  );
-  for (const image of removed) {
-    if (!env.REVIEWS_MEDIA) continue;
-    for (const prefix of [
-      `originals/${image.review_id}/${image.id}`,
-      `derivatives/${image.review_id}/${image.id}/`,
-    ]) {
-      const objects = await env.REVIEWS_MEDIA.list({ prefix, limit: 10 });
-      for (const object of objects.objects)
-        await env.REVIEWS_MEDIA.delete(object.key);
-    }
-    await env.REVIEWS_DB.batch([
-      query(
-        env,
-        "UPDATE review_usage SET used=MAX(0,used-?) WHERE scope='storage'",
-        image.reserved_bytes,
-      ),
-      query(env, "DELETE FROM review_images WHERE id=?", image.id),
-    ]);
-  }
-  await query(
-    env,
-    "UPDATE reviews SET ip_hash=NULL WHERE created_at<? AND ip_hash IS NOT NULL",
-    now - 86400000,
-  ).run();
-  // Longer retention policy must be approved before rollout. Off by default.
-  if (env.REVIEWS_RETENTION_ENABLED === "true") {
-    const expired = await all(
-      query(
-        env,
-        "SELECT id FROM reviews WHERE (status='rejected' AND updated_at<?) OR (status='pending' AND ingestion_state='ready' AND created_at<?) LIMIT 20",
-        now - 30 * 86400000,
-        now - 90 * 86400000,
-      ),
-    );
-    for (const row of expired) {
-      if (env.REVIEWS_MEDIA) {
-        for (const prefix of [
-          `originals/${row.id}/`,
-          `derivatives/${row.id}/`,
-        ]) {
-          const objects = await env.REVIEWS_MEDIA.list({ prefix, limit: 100 });
-          for (const object of objects.objects)
-            await env.REVIEWS_MEDIA.delete(object.key);
-        }
-      }
-      await env.REVIEWS_DB.batch([
-        query(
-          env,
-          "UPDATE review_usage SET used=MAX(0,used-COALESCE((SELECT SUM(reserved_bytes) FROM review_images WHERE review_id=?),0)) WHERE scope='storage'",
-          row.id,
-        ),
-        query(env, "DELETE FROM reviews WHERE id=?", row.id),
-      ]);
-    }
-    await query(
-      env,
-      "UPDATE reviews SET customer_email='' WHERE ingestion_state='ready' AND updated_at<?",
-      now - 90 * 86400000,
-    ).run();
-    const originals = await all(
-      query(
-        env,
-        "SELECT id,storage_key FROM review_images WHERE storage_key IS NOT NULL AND created_at<? LIMIT 30",
-        now - 30 * 86400000,
-      ),
-    );
-    for (const image of originals) {
-      if (!env.REVIEWS_MEDIA) continue;
-      await env.REVIEWS_MEDIA.delete(image.storage_key);
-      await query(
-        env,
-        "UPDATE review_images SET storage_key=NULL WHERE id=?",
-        image.id,
-      ).run();
-    }
-  }
+  await cleanReviewData(env, now);
 }
+
 export default {
   fetch: handleReviews,
   scheduled(controller, env, ctx) {

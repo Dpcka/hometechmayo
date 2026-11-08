@@ -1,11 +1,12 @@
-# Website Reviews — Stage 2 implementation, NOT deployed
+# Website Reviews — Stage 3A preparation, NOT deployed
 
 Public URL after rollout: https://hometechmayo.ie/reviews
 Owner URL after rollout: https://hometechmayo.ie/admin/reviews
 
-No production resources have been created. No production migration, plan upgrade,
-real review, email, push or deployment is part of this stage. All test fixtures are
-synthetic and local. Quote Functions, quote guard, Q-SITE and HBM are independent.
+Stage 3A created the separate EU D1 hometech-reviews and applied migrations 0001
+and 0002, including migration tracking. It contains no reviews. No R2 subscription,
+Access activation, Worker/public deployment, real review, email or push was performed.
+All tests remain synthetic and local. Quote guard, Q-SITE and HBM are independent.
 
 ## Architecture and deployment units
 
@@ -30,7 +31,7 @@ Both page middleware and Worker API validate Access JWT signatures server-side.
 1. Confirm account remains Workers Free / Images Free. Never purchase Images
    storage, upgrade Workers, or enable a paid plan automatically.
 2. Create NEW D1 `hometech-reviews`; bind it ONLY to the Reviews Worker as
-   `REVIEWS_DB`. Apply `migrations/0001-reviews.sql` to this database, never to
+   `REVIEWS_DB`. Apply `migrations/0001-reviews.sql` and `migrations/0002-retention.sql` to this database, never to
    `hometech-quote-guard`, any HBM database or Supabase. Migration is additive,
    foreign keys enabled, no ALTER/DROP/UPDATE of existing quote tables.
 3. Create private R2 bucket `hometech-review-media`, preferably EU jurisdiction
@@ -42,7 +43,7 @@ Both page middleware and Worker API validate Access JWT signatures server-side.
 4. Add Worker Images binding `IMAGES`. Confirm Free transformations in the account.
    Images Free includes 5,000 unique transformations/month; over-limit requests
    fail rather than incur transformation overages. Review defaults reserve 3,000
-   transformations/month (3 WebP sizes per photo), bounded at 4,500 in code. Other
+   transformations/month (3 WebP sizes per photo), hard capped at 3,000 in code. Other
    account usage shares the provider quota. API info/decode and real output errors
    fail closed. Transform once, save WebP in R2; never transform on public reads.
 5. Cloudflare Access self-hosted application: protect BOTH
@@ -64,7 +65,9 @@ Both page middleware and Worker API validate Access JWT signatures server-side.
    across from Pages to a Worker; configure explicitly, never copy into Git.
    Existing QUOTE_* configuration and quote action must remain unchanged.
 8. Pages service binding: `REVIEWS_SERVICE` -> `hometech-reviews` Worker.
-   Keep `REVIEWS_ENABLED=false`, `REVIEWS_PHOTOS_ENABLED=false` until checks pass.
+   Keep `REVIEWS_ENABLED=false`, `REVIEWS_PHOTOS_ENABLED=false`,
+   `REVIEWS_NOTIFICATIONS_ENABLED=false` and `REVIEWS_RETENTION_ENABLED=false`
+   until the separately approved rollout. Notifications have their own kill switch.
 9. Configure hourly Cron `17 * * * *` for maintenance. Approve retention notice
    before setting `REVIEWS_RETENTION_ENABLED=true`. Never apply review cleanup to
    quote guard or Q-SITE. Do not enable longer retention deletion prematurely.
@@ -87,8 +90,9 @@ Verified against Cloudflare documentation on 19 October 2026:
 
 Images binding is Worker-specific, supports private raw byte streams and works in
 local Wrangler without paid remote processing. Local binding was tested, not only
-mocked. The actual account's enabled products/remaining quotas are NOT verified
-without dashboard authentication. Workers Free CPU/request limits still apply;
+mocked. The correct account dashboard confirms Workers Free and Images Free (0 of 5,000
+transformations used in the current period). R2 and Access still need activation;
+see STAGE3A.md. A live Images binding has not yet been provisioned or tested. Workers Free CPU/request limits still apply;
 production-like staging tests must verify headroom, especially JWT and uploads.
 No native Sharp dependency is shipped to Workers. Sharp is existing local tooling
 and the offline test decoder only.
@@ -146,14 +150,24 @@ Review; Bark/Google text is not imported. Homepage displays at most 3 approved
 website reviews. Project associations use explicit existing public project IDs,
 never name inference; existing project images/carousels are unchanged.
 
-Proposed retention (privacy.html DRAFT, owner approval required): abandoned upload
-expiry +24h grace; rejected 30d; pending completed 90d; originals 30d; private email
-90d after last moderation. Approved public material/consent/audit remains while
-published/needed. Hidden reviews require manual retention assessment. Hiding
-immediately revokes public access; removing individual photos schedules physical
-object deletion. Contact correction/removal requests via info@hometechmayo.ie,
-proportionately identify submission, hide/reject as needed, document the decision.
-No public database deletion endpoint or automatic HBM creation.
+Approved retention defaults (privacy notice remains a rollout draft): incomplete
+uploads 24 hours from creation; rejected reviews 90 days from rejection unless an
+active dispute/investigation hold applies; private originals 30 days after the
+image is successfully published with approved derivatives, unless held. Audit
+logs are retained for 12 calendar months, including in a private archive after a
+review is deleted. Published reviews are not automatically deleted; a private
+90-day assessment reminder supports periodic review and withdrawal requests.
+Pending completed reviews, hidden reviews and private email retention still need
+an explicit owner decision before rollout; no invented automatic deadline applies.
+
+The mobile admin supports reasoned retention holds and a publication-review queue.
+Cleanup claims a review before deleting objects, blocks competing moderation,
+preserves manifests when R2 fails and retries later. Each hourly queue processes
+one candidate to bound Free CPU/subrequests; monitor overdue cleanup and test
+headroom before activation. Retention deadlines are eligibility thresholds for
+the next successful sweep, not a guaranteed deletion SLA under outages/backlogs.
+Hiding immediately revokes public access; photo removal schedules physical deletion.
+Contact correction/removal requests via info@hometechmayo.ie. No automatic HBM creation.
 
 Review data never goes to GA. Existing analytics consent/lead logic is unchanged.
 New /reviews and admin do not load the analytics/consent entry point; no optional
@@ -189,3 +203,11 @@ There is no npm production build script in this static project.
   constraints, competing writes and visibility rules.
 - Pages Functions compilation and Worker dry-run bundling pass.
 - No production requests, emails, resources or deployments performed.
+
+## Stage 3A validation record
+
+126 automated tests pass, including all existing regressions and 14 added retention/
+readiness cases. Local browser checks pass at 360/390/768/1280px (admin 390/1280),
+without page errors; Brevo, Access and Turnstile are mocked. Local Wrangler applied
+both migrations. See [STAGE3A.md](STAGE3A.md) for actual infrastructure findings,
+approval gates and the Stage 3B no-go checklist. Stage 2 records above are historical.

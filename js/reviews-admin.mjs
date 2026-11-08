@@ -37,7 +37,13 @@ async function load(reset = true) {
       offset = 0;
       list.replaceChildren();
     }
-    const data = await api("?status=" + filter.value + "&offset=" + offset);
+    const data = await api(
+      "?status=" +
+        (filter.value === "due" ? "approved" : filter.value) +
+        (filter.value === "due" ? "&due=true" : "") +
+        "&offset=" +
+        offset,
+    );
     for (const review of data.reviews) {
       const button = element(
         "button",
@@ -167,6 +173,48 @@ function render() {
     review.moderation_notes,
     { type: "textarea" },
   ).maxLength = 2000;
+  const retention = element("fieldset");
+  retention.append(element("legend", "", "Retention and publication review"));
+  const holdLabel = element("label", "review-check"),
+    holdInput = element("input");
+  holdInput.type = "checkbox";
+  holdInput.name = "retentionHold";
+  holdInput.checked = review.retention_hold === 1;
+  holdLabel.append(
+    holdInput,
+    element(
+      "span",
+      "",
+      "Keep private records for an active dispute or investigation",
+    ),
+  );
+  retention.append(holdLabel);
+  field(
+    retention,
+    "Reason for retention hold (private; required when checked)",
+    "retentionHoldReason",
+    review.retention_hold_reason,
+    { type: "textarea", rows: 2 },
+  ).maxLength = 500;
+  retention.append(
+    element(
+      "small",
+      "",
+      "Saving an approved review confirms publication remains justified and sets a 90-day review reminder. Holds do not automatically expire; reassess and release them when the dispute or investigation ends.",
+    ),
+  );
+  if (review.publication_review_due_at)
+    retention.append(
+      element(
+        "p",
+        "",
+        "Publication review due: " +
+          new Date(review.publication_review_due_at).toLocaleDateString(
+            "en-IE",
+          ),
+      ),
+    );
+  form.append(retention);
   const privacy = element("details");
   privacy.append(
     element("summary", "", "Privacy or safety edits (preserve the original)"),
@@ -420,6 +468,7 @@ async function save(form, rerender = true) {
       method: "POST",
       body: JSON.stringify({
         ...data,
+        retentionHold: form.elements.retentionHold.checked,
         version: current.review.version,
         images: images.map((i) => ({
           id: i.id,

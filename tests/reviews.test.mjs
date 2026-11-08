@@ -585,7 +585,7 @@ test("expired upload tokens, foreign sessions and unfinished reviews cannot be p
     ).status,
     403,
   );
-  f.sql.prepare("UPDATE reviews SET upload_expires=0").run();
+  f.sql.prepare("UPDATE reviews SET upload_expires=0,created_at=0").run();
   assert.equal((await s.finish()).status, 410);
   await maintenance(f.env, f.fetcher);
   assert.equal(f.sql.prepare("SELECT COUNT(*) AS n FROM reviews").get().n, 0);
@@ -716,7 +716,10 @@ test("longer retention remains opt-in and operates only on reviews data", async 
   const f = await fixture(),
     s = await submit(f, valid({ email: "private@example.test" }));
   await s.finish();
-  f.sql.prepare("UPDATE reviews SET created_at=0,updated_at=0").run();
+  await f.mutate(s.id, moderation({ status: "rejected" }));
+  f.sql
+    .prepare("UPDATE reviews SET created_at=0,updated_at=0,rejected_at=0")
+    .run();
   await maintenance(f.env, f.fetcher);
   assert.equal(f.sql.prepare("SELECT COUNT(*) AS n FROM reviews").get().n, 1);
   f.env.REVIEWS_RETENTION_ENABLED = "true";

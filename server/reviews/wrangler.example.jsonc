@@ -9,6 +9,8 @@
     "SITE_ORIGIN": "https://hometechmayo.ie",
     "REVIEWS_ENABLED": "false",
     "REVIEWS_PHOTOS_ENABLED": "false",
+    "REVIEWS_NOTIFICATIONS_ENABLED": "false",
+    "REVIEWS_STORAGE_BUDGET_BYTES": "536870912",
     "REVIEWS_TRANSFORM_BUDGET": "3000",
     "REVIEWS_RETENTION_ENABLED": "false",
     "REVIEWS_FROM_EMAIL": "info@hometechmayo.ie",
