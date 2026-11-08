@@ -134,7 +134,10 @@ export async function fixture() {
     REVIEWS_TO_EMAIL: "info@hometechmayo.ie",
     ACCESS_TEAM_DOMAIN: `https://test-${crypto.randomUUID()}.cloudflareaccess.com`,
     ACCESS_AUD: "test-audience",
-    REVIEWS_ADMIN_EMAIL: "owner@example.test",
+    REVIEWS_ADMIN_EMAILS: JSON.stringify([
+      "owner@example.test",
+      "owner-two@example.test",
+    ]),
   };
   const calls = { mail: [], turnstile: 0 };
   let mailFails = false,
@@ -165,7 +168,7 @@ export async function fixture() {
         aud: [env.ACCESS_AUD],
         exp: Math.floor(Date.now() / 1000) + 3600,
         sub: "owner-test",
-        email: env.REVIEWS_ADMIN_EMAIL,
+        email: JSON.parse(env.REVIEWS_ADMIN_EMAILS)[0],
         ...overrides,
       });
     const signature = await crypto.subtle.sign(

@@ -53,7 +53,7 @@ Both page middleware and Worker API validate Access JWT signatures server-side.
    allowance in the account. Verify HTML `.html` variants are protected too.
 6. Set the following on BOTH Pages and the Worker:
    `ACCESS_TEAM_DOMAIN=https://YOUR-TEAM.cloudflareaccess.com`, `ACCESS_AUD`,
-   `REVIEWS_ADMIN_EMAIL`, secret `REVIEWS_HASH_SECRET` (random >=32 characters).
+   `REVIEWS_ADMIN_EMAILS` (JSON array of exactly two approved owner emails), secret `REVIEWS_HASH_SECRET` (random >=32 characters).
    Pages needs these for page middleware, Worker for API auth and CSRF.
 7. Worker-only variables: `SITE_ORIGIN=https://hometechmayo.ie`,
    `TURNSTILE_SITE_KEY`, `REVIEWS_FROM_EMAIL=info@hometechmayo.ie`,
@@ -68,9 +68,11 @@ Both page middleware and Worker API validate Access JWT signatures server-side.
    Keep `REVIEWS_ENABLED=false`, `REVIEWS_PHOTOS_ENABLED=false`,
    `REVIEWS_NOTIFICATIONS_ENABLED=false` and `REVIEWS_RETENTION_ENABLED=false`
    until the separately approved rollout. Notifications have their own kill switch.
-9. Configure hourly Cron `17 * * * *` for maintenance. Approve retention notice
-   before setting `REVIEWS_RETENTION_ENABLED=true`. Never apply review cleanup to
-   quote guard or Q-SITE. Do not enable longer retention deletion prematurely.
+9. Keep `triggers.crons=[]` during controlled preparation. All cleanup is gated by
+   `REVIEWS_RETENTION_ENABLED=true`; disabled retention performs no cleanup writes,
+   including unfinished uploads and removed photos. Notification maintenance is
+   independently gated by `REVIEWS_NOTIFICATIONS_ENABLED=true`. Schedule `17 * * * *`
+   only after separate cleanup approval. Never apply Reviews cleanup to quote guard.
 10. Validate Access, private R2, transformations and server-side permissions using
     isolated staging data. Then enable `REVIEWS_ENABLED=true`; enable photos only
     after real binding validation. These switches do not enable anything paid.
@@ -211,3 +213,13 @@ readiness cases. Local browser checks pass at 360/390/768/1280px (admin 390/1280
 without page errors; Brevo, Access and Turnstile are mocked. Local Wrangler applied
 both migrations. See [STAGE3A.md](STAGE3A.md) for actual infrastructure findings,
 approval gates and the Stage 3B no-go checklist. Stage 2 records above are historical.
+
+## Controlled preparation — 8 November 2026
+
+See [DEPLOYMENT-CHECKLIST.md](DEPLOYMENT-CHECKLIST.md). The prepared R2 binding
+uses EU jurisdiction, Cron is absent, and every feature switch remains false.
+Both approved owner addresses remain in the existing Access policy. Pages and
+Worker use the same REVIEWS_ADMIN_EMAILS JSON array of exactly those two emails.
+JWT verification, issuer/audience/expiry, exact email membership, Origin and CSRF
+remain mandatory. All other addresses are denied; malformed configuration fails closed.
+No production policy/settings/secrets were changed in this preparation.

@@ -307,7 +307,9 @@ test("owner authentication requires a valid signed Access JWT, correct audience,
     (
       await f.call("/admin", {
         headers: {
-          "Cf-Access-Authenticated-User-Email": f.env.REVIEWS_ADMIN_EMAIL,
+          "Cf-Access-Authenticated-User-Email": JSON.parse(
+            f.env.REVIEWS_ADMIN_EMAILS,
+          )[0],
         },
       })
     ).status,
@@ -473,6 +475,7 @@ test("image removal revokes public access, cleanup removes original/derivative o
   );
   assert.equal((await f.call()).data.reviews[0].images[0].id, b);
   assert.equal((await f.call(`/images/${a}/480`)).status, 404);
+  f.env.REVIEWS_RETENTION_ENABLED = "true";
   await maintenance(f.env, f.fetcher);
   assert.equal(f.objects.size, 4);
   assert.equal(
@@ -587,6 +590,7 @@ test("expired upload tokens, foreign sessions and unfinished reviews cannot be p
   );
   f.sql.prepare("UPDATE reviews SET upload_expires=0,created_at=0").run();
   assert.equal((await s.finish()).status, 410);
+  f.env.REVIEWS_RETENTION_ENABLED = "true";
   await maintenance(f.env, f.fetcher);
   assert.equal(f.sql.prepare("SELECT COUNT(*) AS n FROM reviews").get().n, 0);
 });

@@ -4,13 +4,31 @@ const decode = (part) =>
   Uint8Array.from(atob(part.replace(/-/g, "+").replace(/_/g, "/")), (c) =>
     c.charCodeAt(0),
   );
+// One shared parser for Pages middleware, Worker authorization and readiness.
+// Configuration must explicitly contain exactly two distinct email addresses.
+export function administratorEmails(env) {
+  try {
+    const values = JSON.parse(env.REVIEWS_ADMIN_EMAILS);
+    if (!Array.isArray(values) || values.length !== 2) return [];
+    if (values.some((v) => typeof v !== "string")) return [];
+    const emails = values.map((v) => v.trim().toLowerCase());
+    if (
+      emails.some((v) => !/^[a-z0-9._+-]+@[a-z0-9-]+(?:\.[a-z0-9-]+)+$/.test(v))
+    )
+      return [];
+    return new Set(emails).size === 2 ? emails : [];
+  } catch {
+    return [];
+  }
+}
 export async function authenticate(request, env, fetcher = fetch) {
   try {
-    const issuer = env.ACCESS_TEAM_DOMAIN;
+    const issuer = env.ACCESS_TEAM_DOMAIN,
+      administrators = administratorEmails(env);
     if (
       !/^https:\/\/[a-z0-9-]+\.cloudflareaccess\.com$/.test(issuer || "") ||
       !env.ACCESS_AUD ||
-      !env.REVIEWS_ADMIN_EMAIL
+      administrators.length !== 2
     )
       throw Error();
     const token = request.headers.get("Cf-Access-Jwt-Assertion") || "";
@@ -62,7 +80,7 @@ export async function authenticate(request, env, fetcher = fetch) {
       !Number.isFinite(payload.exp) ||
       payload.exp <= now ||
       (payload.nbf && payload.nbf > now) ||
-      payload.email?.toLowerCase() !== env.REVIEWS_ADMIN_EMAIL.toLowerCase() ||
+      !administrators.includes(payload.email?.toLowerCase()) ||
       !payload.sub
     )
       throw Error();

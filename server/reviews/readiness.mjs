@@ -1,3 +1,4 @@
+import { administratorEmails } from "./auth.mjs";
 // Read-only checks. Never returns secret values, customer records or private keys.
 const required = {
   reviews: [
@@ -54,7 +55,7 @@ export async function reviewReadiness(env) {
     ) &&
     env.ACCESS_AUD &&
     env.ACCESS_AUD !== "REPLACE" &&
-    /^[^\s<>@]+@[^\s<>@]+\.[A-Za-z]{2,}$/.test(env.REVIEWS_ADMIN_EMAIL || "") &&
+    administratorEmails(env).length === 2 &&
     env.REVIEWS_HASH_SECRET?.length >= 32,
   );
   const bindings = {

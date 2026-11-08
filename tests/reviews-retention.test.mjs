@@ -1,14 +1,15 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { fixture, valid, submit, png, moderation } from "./reviews-fixture.mjs";
-import { maintenance } from "../server/reviews/worker.mjs";
-import { auditCutoff } from "../server/reviews/retention.mjs";
+import worker, { maintenance } from "../server/reviews/worker.mjs";
+import { auditCutoff, cleanReviewData } from "../server/reviews/retention.mjs";
 const DAY = 86400000;
 const row = (f) => f.sql.prepare("SELECT * FROM reviews").get();
 test("incomplete uploads expire at 24h from creation, not upload-token expiry plus a grace day", async () => {
   const f = await fixture(),
     s = await submit(f),
     created = row(f).created_at;
+  f.env.REVIEWS_RETENTION_ENABLED = "true";
   await maintenance(f.env, f.fetcher, created + DAY - 1);
   assert.ok(row(f));
   await maintenance(f.env, f.fetcher, created + DAY);
@@ -301,4 +302,61 @@ test("cleanup failure retains the manifest and releases the lock for a safe retr
   f.env.REVIEWS_MEDIA.delete = original;
   await maintenance(f.env, f.fetcher, Date.now() + 91 * DAY);
   assert.equal(row(f), undefined);
+});
+
+test("disabled retention performs no cleanup database or storage operations even if invoked directly", async () => {
+  for (const value of [undefined, "false", "TRUE", true]) {
+    const env = {
+      REVIEWS_RETENTION_ENABLED: value,
+      REVIEWS_NOTIFICATIONS_ENABLED: "false",
+      REVIEWS_DB: {
+        prepare() {
+          throw Error("Database must not be touched");
+        },
+      },
+      REVIEWS_MEDIA: {
+        list() {
+          throw Error("Storage must not be touched");
+        },
+      },
+    };
+    await cleanReviewData(env);
+    await maintenance(env, () => {
+      throw Error("No network allowed");
+    });
+    let scheduled = false;
+    worker.scheduled({}, env, {
+      waitUntil() {
+        scheduled = true;
+      },
+    });
+    assert.equal(scheduled, false);
+  }
+});
+
+test("disabled cleanup preserves overdue uploads, removed photos, IP hashes and stale notification state", async () => {
+  const f = await fixture();
+  f.env.REVIEWS_NOTIFICATIONS_ENABLED = "false";
+  f.env.REVIEWS_RETENTION_ENABLED = "false";
+  const s = await submit(f, valid({ photoCount: 1, photoConsent: true }));
+  await s.upload(await png());
+  f.sql
+    .prepare(
+      "UPDATE reviews SET created_at=0,retention_deleting=1,retention_deleting_at=0",
+    )
+    .run();
+  f.sql
+    .prepare("UPDATE review_images SET approval_status='removed',created_at=0")
+    .run();
+  const before = [...f.sql.prepare("SELECT * FROM reviews").all()];
+  const imagesBefore = [...f.sql.prepare("SELECT * FROM review_images").all()];
+  const keys = [...f.objects.keys()];
+  await maintenance(f.env, f.fetcher, Date.now() + 400 * DAY);
+  assert.deepEqual(f.sql.prepare("SELECT * FROM reviews").all(), before);
+  assert.deepEqual(
+    f.sql.prepare("SELECT * FROM review_images").all(),
+    imagesBefore,
+  );
+  assert.deepEqual([...f.objects.keys()], keys);
+  assert.equal(f.calls.mail.length, 0);
 });

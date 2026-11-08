@@ -83,27 +83,27 @@ async function removeReview(env, id, now, reason) {
   }
 }
 export async function cleanReviewData(env, now = Date.now()) {
+  // The retention switch gates every cleanup write, including interrupted uploads.
+  if (env.REVIEWS_RETENTION_ENABLED !== "true") return;
   // One candidate per cleanup queue per invocation keeps Free CPU/subrequest
   // usage bounded. Monitor overdue counts; never upgrade the plan automatically.
-  const enabled = env.REVIEWS_RETENTION_ENABLED === "true";
   await query(
     env,
     "UPDATE reviews SET retention_deleting=0,retention_deleting_at=NULL WHERE retention_deleting=1 AND retention_deleting_at<?",
     now - 3600000,
   ).run();
-  if (enabled)
-    await env.REVIEWS_DB.batch([
-      query(
-        env,
-        "DELETE FROM review_moderation_events WHERE created_at<=?",
-        auditCutoff(now),
-      ),
-      query(
-        env,
-        "DELETE FROM review_moderation_archive WHERE created_at<=?",
-        auditCutoff(now),
-      ),
-    ]);
+  await env.REVIEWS_DB.batch([
+    query(
+      env,
+      "DELETE FROM review_moderation_events WHERE created_at<=?",
+      auditCutoff(now),
+    ),
+    query(
+      env,
+      "DELETE FROM review_moderation_archive WHERE created_at<=?",
+      auditCutoff(now),
+    ),
+  ]);
   if (!env.REVIEWS_MEDIA) return;
   const abandoned = await all(
     query(
@@ -150,7 +150,6 @@ export async function cleanReviewData(env, now = Date.now()) {
     "UPDATE reviews SET ip_hash=NULL WHERE created_at<=? AND ip_hash IS NOT NULL",
     now - DAY,
   ).run();
-  if (!enabled) return;
   const rejected = await all(
     query(
       env,

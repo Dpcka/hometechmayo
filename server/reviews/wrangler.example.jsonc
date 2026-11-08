@@ -7,6 +7,7 @@
   "preview_urls": false,
   "vars": {
     "SITE_ORIGIN": "https://hometechmayo.ie",
+    "TURNSTILE_SITE_KEY": "REPLACE_WITH_EXISTING_PUBLIC_SITE_KEY",
     "REVIEWS_ENABLED": "false",
     "REVIEWS_PHOTOS_ENABLED": "false",
     "REVIEWS_NOTIFICATIONS_ENABLED": "false",
@@ -17,7 +18,7 @@
     "REVIEWS_TO_EMAIL": "info@hometechmayo.ie",
     "ACCESS_TEAM_DOMAIN": "https://REPLACE.cloudflareaccess.com",
     "ACCESS_AUD": "REPLACE",
-    "REVIEWS_ADMIN_EMAIL": "REPLACE",
+    "REVIEWS_ADMIN_EMAILS": "[\"REPLACE_FIRST_OWNER_EMAIL\",\"REPLACE_SECOND_OWNER_EMAIL\"]",
   },
   "d1_databases": [
     {
@@ -28,10 +29,14 @@
     },
   ],
   "r2_buckets": [
-    { "binding": "REVIEWS_MEDIA", "bucket_name": "hometech-review-media" },
+    {
+      "binding": "REVIEWS_MEDIA",
+      "bucket_name": "hometech-review-media",
+      "jurisdiction": "eu",
+    },
   ],
   "images": { "binding": "IMAGES" },
-  "triggers": { "crons": ["17 * * * *"] },
+  "triggers": { "crons": [] },
   // Secrets, configured separately: REVIEWS_HASH_SECRET, BREVO_API_KEY,
   // TURNSTILE_SECRET_KEY. TURNSTILE_SITE_KEY is a public text variable.
 }

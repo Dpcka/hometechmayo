@@ -926,25 +926,32 @@ export async function handleReviews(request, env, fetcher = fetch) {
 }
 export async function maintenance(env, fetcher = fetch, now = Date.now()) {
   if (!env.REVIEWS_DB) return;
-  // Stuck sends are uncertain: do not automatically send a duplicate notification.
-  await query(
-    env,
-    "UPDATE review_notification_outbox SET state='failed',last_error='Delivery uncertain; check Brevo before retrying.' WHERE state='sending' AND attempted_at<?",
-    now - 3600000,
-  ).run();
-  const pending = await all(
-    query(
+  if (env.REVIEWS_NOTIFICATIONS_ENABLED === "true") {
+    // Stuck sends are uncertain: do not automatically send a duplicate notification.
+    await query(
       env,
-      "SELECT review_id FROM review_notification_outbox WHERE state='pending' LIMIT 10",
-    ),
-  );
-  for (const row of pending) await notify(env, row.review_id, fetcher);
+      "UPDATE review_notification_outbox SET state='failed',last_error='Delivery uncertain; check Brevo before retrying.' WHERE state='sending' AND attempted_at<?",
+      now - 3600000,
+    ).run();
+    const pending = await all(
+      query(
+        env,
+        "SELECT review_id FROM review_notification_outbox WHERE state='pending' LIMIT 10",
+      ),
+    );
+    for (const row of pending) await notify(env, row.review_id, fetcher);
+  }
   await cleanReviewData(env, now);
 }
 
 export default {
   fetch: handleReviews,
   scheduled(controller, env, ctx) {
+    if (
+      env.REVIEWS_RETENTION_ENABLED !== "true" &&
+      env.REVIEWS_NOTIFICATIONS_ENABLED !== "true"
+    )
+      return;
     ctx.waitUntil(maintenance(env));
   },
 };
