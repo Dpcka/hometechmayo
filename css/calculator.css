@@ -204,3 +204,10 @@
  .quote-received .wizard-fields .calc-summary {position:relative;top:auto;}
  #quote-status {scroll-margin-top:calc(var(--quote-summary-top,118px) + 78px);padding-bottom:env(safe-area-inset-bottom);}
 }
+
+/* Reserve the wizard footprint before its module loads; no animated shimmer. */
+.calculator-loading {min-height:1200px; color:#555; font-size:14px;}
+.calculator-loading[hidden] {display:none;}
+.calculator-loading-cards {display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; max-width:640px; margin-top:110px;}
+.calculator-loading-cards span {height:170px; background:#fff; border:1px solid #ddd; border-radius:10px;}
+@media(max-width:600px) {.calculator-loading-cards {grid-template-columns:1fr;} .calculator-loading-cards span {height:140px;}}

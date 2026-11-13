@@ -75,7 +75,7 @@ const sleep = ms => new Promise(resolve=>setTimeout(resolve,ms));
  }
  // Initial refusal and no analytics before an affirmative choice.
  const first=await context();const p=await first.ctx.newPage();
- await p.goto(origin+'/pricing.html?utm_source=google&utm_medium=cpc&utm_campaign=mayo&email=private%40example.com&utm_term=0831234567&gclid=secret#private',{referer:'https://www.google.ie/search?q=private%40example.com',waitUntil:'networkidle'});
+ await p.goto(origin+'/pricing?utm_source=google&utm_medium=cpc&utm_campaign=mayo&email=private%40example.com&utm_term=0831234567&gclid=secret#private',{referer:'https://www.google.ie/search?q=private%40example.com',waitUntil:'networkidle'});
  assert.equal(first.scripts.length,0);assert.equal(first.hits.length,0);
  assert.deepEqual(await first.ctx.cookies(),[]);
  assert.equal(await p.evaluate(KEY=>localStorage.getItem(KEY),KEY),null);
@@ -86,7 +86,7 @@ const sleep = ms => new Promise(resolve=>setTimeout(resolve,ms));
  await p.waitForFunction(()=>Array.from(window.dataLayer||[]).some(c=>c[1]==='page_view'));await sleep(80);
  assert.equal(first.scripts.length,1);assert.equal(pageviewCount(first),1);
  assert.equal(first.hits[0].params.campaign_source,'google');assert.equal(first.hits[0].params.campaign_medium,'cpc');assert.equal(first.hits[0].params.campaign_name,'mayo');
- assert.equal(first.hits[0].params.page_location,'https://hometechmayo.ie/pricing.html');
+ assert.equal(first.hits[0].params.page_location,'https://hometechmayo.ie/pricing');
  assert.equal(first.hits[0].params.page_referrer,'https://www.google.ie/');
  assert.equal(JSON.stringify(first.hits).includes('private'),false);assert.equal(JSON.stringify(first.hits).includes('0831234567'),false);
  assert.ok((await first.ctx.cookies()).some(c=>c.name==='htss_ga'));
@@ -144,7 +144,7 @@ const sleep = ms => new Promise(resolve=>setTimeout(resolve,ms));
  }
  const refused=await context(record(false));await quoteSetup(refused);let refusedCalls=0;
  await refused.ctx.route('**/api/quote',r=>{refusedCalls++;return r.fulfill({json:{ok:true,reference:'HT-SYNTHETIC',acknowledgement:false}})});
- const rp=await refused.ctx.newPage();await rp.goto(origin+'/quote.html?category=wifi',{waitUntil:'networkidle'});await fillQuote(rp);
+ const rp=await refused.ctx.newPage();await rp.goto(origin+'/quote?category=wifi',{waitUntil:'networkidle'});await fillQuote(rp);
  // Opening/closing Cookie settings must preserve a partly completed form.
  await settings(rp);await rp.locator('#cookie-cancel').click();assert.equal(await rp.locator('input[name=name]').inputValue(),'Private Person');
  await rp.locator('#quote-submit').click();await rp.locator('#quote-status').filter({hasText:'HT-SYNTHETIC'}).waitFor();
@@ -153,7 +153,7 @@ const sleep = ms => new Promise(resolve=>setTimeout(resolve,ms));
  assert.equal(leadCount(refused),0,'never backfill a lead that occurred without consent');await refused.ctx.close();
  const allowed=await context(record(true));await quoteSetup(allowed);let posts=0,sent;
  await allowed.ctx.route('**/api/quote',r=>{posts++;sent=r.request().postDataJSON();return r.fulfill(posts===1?{status:503,json:{error:'Synthetic failure'}}:posts===2?{json:{ok:false,error:'Synthetic rejection'}}:{json:{ok:true,reference:'HT-PRIVATE-REFERENCE',acknowledgement:false,duplicate:true}})});
- const ap=await allowed.ctx.newPage();await ap.goto(origin+'/quote.html?category=wifi&email=private@example.com',{waitUntil:'networkidle'});await fillQuote(ap);
+ const ap=await allowed.ctx.newPage();await ap.goto(origin+'/quote?category=wifi&email=private@example.com',{waitUntil:'networkidle'});await fillQuote(ap);
  await ap.locator('#quote-submit').click();await ap.locator('#quote-status').filter({hasText:'Synthetic failure'}).waitFor();assert.equal(leadCount(allowed),0);
  await ap.locator('#quote-submit:not(:disabled)').waitFor();await ap.locator('#quote-submit').click();await ap.locator('#quote-status').filter({hasText:'Synthetic rejection'}).waitFor();assert.equal(leadCount(allowed),0);
  await ap.locator('#quote-submit:not(:disabled)').waitFor();await ap.locator('#quote-submit').click();await ap.locator('#quote-status').filter({hasText:'HT-PRIVATE-REFERENCE'}).waitFor();await sleep(80);

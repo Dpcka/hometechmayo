@@ -10,10 +10,10 @@ export const DEBUG_KEY = 'htss_ga_debug';
 export const COOKIE_PREFIX = 'htss';
 const PAGES = {
   '/': ['/', 'Home Tech Mayo'], '/index.html': ['/', 'Home Tech Mayo'],
-  '/services': ['/services.html', 'Services'], '/services.html': ['/services.html', 'Services'],
-  '/pricing': ['/pricing.html', 'Pricing'], '/pricing.html': ['/pricing.html', 'Pricing'],
-  '/quote': ['/quote.html', 'Request a Quote'], '/quote/': ['/quote.html', 'Request a Quote'], '/quote.html': ['/quote.html', 'Request a Quote'],
-  '/privacy': ['/privacy.html', 'Privacy Policy'], '/privacy.html': ['/privacy.html', 'Privacy Policy'],
+  '/services': ['/services', 'Services'], '/services.html': ['/services', 'Services'],
+  '/pricing': ['/pricing', 'Pricing'], '/pricing.html': ['/pricing', 'Pricing'],
+  '/quote': ['/quote', 'Request a Quote'], '/quote/': ['/quote', 'Request a Quote'], '/quote.html': ['/quote', 'Request a Quote'],
+  '/privacy': ['/privacy', 'Privacy Policy'], '/privacy.html': ['/privacy', 'Privacy Policy'],
   '/404': ['/404.html', 'Page Not Found'], '/404.html': ['/404.html', 'Page Not Found']
 };
 // Only these exact, non-personal campaign labels may enter Analytics. Extend

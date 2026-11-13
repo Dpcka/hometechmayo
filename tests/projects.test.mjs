@@ -21,7 +21,7 @@ test("project catalogue uses stable unique IDs, keeps the two existing projects 
     [1, 3, 2, 4],
   );
   assert.equal(PROJECTS[1].images.length, 1);
-  assert.equal(PROJECTS[2].relatedService, "pricing.html#pricing-furniture");
+  assert.equal(PROJECTS[2].relatedService, "/pricing#pricing-furniture");
   for (const p of PROJECTS)
     for (const image of p.images) {
       assert.ok(image.alt && image.width && image.height);
@@ -79,10 +79,10 @@ test("every project uses shared actions, valid service links, and only verified 
   assert.deepEqual(
     PROJECTS.map((p) => p.relatedService),
     [
-      "pricing.html#pricing-ventilation",
-      "pricing.html#pricing-furniture",
-      "pricing.html#pricing-furniture",
-      "pricing.html#pricing-furniture",
+      "/pricing#pricing-ventilation",
+      "/pricing#pricing-furniture",
+      "/pricing#pricing-furniture",
+      "/pricing#pricing-furniture",
     ],
   );
   for (const project of PROJECTS) {

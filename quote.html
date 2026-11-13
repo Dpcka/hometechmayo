@@ -33,7 +33,7 @@
 
     <meta
       property="og:url"
-      content="https://hometechmayo.ie/quote.html"
+      content="https://hometechmayo.ie/quote"
     />
 
     <meta property="og:site_name" content="Home Tech Solutions &amp; Services" />
@@ -71,7 +71,7 @@
       content="https://hometechmayo.ie/assets/hero/hero.jpg"
     />
 
-    <link rel="canonical" href="https://hometechmayo.ie/quote.html" />
+    <link rel="canonical" href="https://hometechmayo.ie/quote" />
 
     <link rel="icon" href="assets/logo/logo.svg" type="image/svg+xml" />
 
@@ -101,7 +101,7 @@
 
     <header>
       <div class="container">
-        <a href="index.html#home" class="logo">
+        <a href="/#home" class="logo">
           <img
             src="assets/logo/logo.svg"
             alt="Home Tech Solutions & Services Logo"
@@ -112,17 +112,17 @@
 
         <nav id="site-navigation" aria-label="Main navigation">
           <ul>
-            <li><a href="index.html#home">Home</a></li>
+            <li><a href="/#home">Home</a></li>
 
-            <li><a href="services.html">Services</a></li>
+            <li><a href="/services">Services</a></li>
 
-            <li><a href="index.html#projects">Projects</a></li>
+            <li><a href="/#projects">Projects</a></li>
 
-            <li><a href="pricing.html">Pricing</a></li>
+            <li><a href="/pricing">Pricing</a></li>
 
-            <li><a href="index.html#about">About</a></li>
+            <li><a href="/#about">About</a></li>
 
-            <li><a href="index.html#contact">Contact</a></li>
+            <li><a href="/#contact">Contact</a></li>
           </ul>
         </nav>
 
@@ -138,7 +138,7 @@
           <span></span>
         </button>
 
-        <a href="index.html#contact" class="quote-button">
+        <a href="/#contact" class="quote-button">
           Request a Free Quote
         </a>
       </div>
@@ -147,7 +147,7 @@
     <main id="main-content">
       <section class="quote-intro" aria-labelledby="quote-title">
         <div class="container">
-          <a href="pricing.html" class="quote-back-link">← Back to starting prices</a>
+          <a href="/pricing" class="quote-back-link">← Back to starting prices</a>
           <p class="pricing-eyebrow">Home Tech Solutions &amp; Services · County Mayo</p>
           <h1 id="quote-title">Get an estimate. Plan your next job.</h1>
           <p>Choose your services, check your estimate and tell us how to reach you.</p>
@@ -156,6 +156,8 @@
       <section id="quote-calculator" class="calculator" aria-label="Quote calculator">
         <div class="container wizard-shell">
           <noscript><p class="calc-warning">Please enable JavaScript to use the calculator, or <a href="mailto:info@hometechmayo.ie">email us for a quote</a>.</p></noscript>
+          <div id="calculator-loading" class="calculator-loading" role="status"><p>Loading services and estimate…</p><div class="calculator-loading-cards" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div></div>
+          <noscript><style>.calculator-loading {display:none}</style></noscript>
           <div id="wizard-content" hidden>
             <nav class="wizard-progress" aria-label="Quote progress">
               <ol>
@@ -217,7 +219,7 @@
                         <label class="calc-field"><span>Additional materials information (optional)</span><textarea name="materialsInformation" maxlength="1000" rows="2"></textarea></label>
                       </div>
                       <label class="calc-honeypot" aria-hidden="true">Leave this empty<input name="website" tabindex="-1" autocomplete="off" /></label>
-                      <label class="calc-consent"><input name="consent" type="checkbox" required /><span>I acknowledge the <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a> and agree to my details being used to respond to this quote request (required).</span></label>
+                      <label class="calc-consent"><input name="consent" type="checkbox" required /><span>I acknowledge the <a href="/privacy" target="_blank" rel="noopener">Privacy Policy</a> and agree to my details being used to respond to this quote request (required).</span></label>
                       <div id="quote-turnstile"></div>
                       <p id="quote-status" class="calc-status" role="status" tabindex="-1">Checking online quote availability…</p>
                     </div>
@@ -278,19 +280,19 @@
           <h4>Quick Links</h4>
 
           <ul>
-            <li><a href="index.html#home">Home</a></li>
+            <li><a href="/#home">Home</a></li>
 
-            <li><a href="services.html">Services</a></li>
+            <li><a href="/services">Services</a></li>
 
-            <li><a href="index.html#projects">Projects</a></li>
+            <li><a href="/#projects">Projects</a></li>
 
-            <li><a href="pricing.html">Pricing</a></li>
+            <li><a href="/pricing">Pricing</a></li>
 
-            <li><a href="index.html#about">About</a></li>
+            <li><a href="/#about">About</a></li>
 
-            <li><a href="index.html#contact">Contact</a></li>
+            <li><a href="/#contact">Contact</a></li>
 
-            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="/privacy">Privacy Policy</a></li>
             <li><button type="button" class="cookie-settings" data-cookie-settings hidden>Cookie settings</button></li>
           </ul>
         </div>

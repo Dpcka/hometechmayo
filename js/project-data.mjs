@@ -20,7 +20,7 @@ const consoleImage = (number, alt, portrait = false) => ({
 export const PROJECTS = [
   {
     id: "bathroom-ventilation",
-    relatedService: "pricing.html#pricing-ventilation",
+    relatedService: "/pricing#pricing-ventilation",
     title: "Bathroom Ventilation Upgrade",
     category: "Ventilation",
     description:
@@ -42,7 +42,7 @@ export const PROJECTS = [
   },
   {
     id: "furniture-assembly",
-    relatedService: "pricing.html#pricing-furniture",
+    relatedService: "/pricing#pricing-furniture",
     title: "Furniture Assembly",
     category: "Furniture Assembly",
     description:
@@ -66,7 +66,7 @@ export const PROJECTS = [
     extendedDescription:
       "The flat-pack furniture was assembled, checked and positioned in the customer's chosen location.",
     result: "A neatly assembled wooden console table, ready for everyday use.",
-    relatedService: "pricing.html#pricing-furniture",
+    relatedService: "/pricing#pricing-furniture",
     images: [
       consoleImage(
         1,
@@ -96,7 +96,7 @@ export const PROJECTS = [
     "completionDate": "2026-11",
     "description": "Complete furniture assembly across two residential properties in Westport, Co. Mayo, prepared for long-term rental.",
     "extendedDescription": "The project involved assembling and positioning 14 furniture items from JYSK, including two wardrobes, two dining tables, six dining chairs, two TV units and two coffee tables.\n\nAll furniture was carefully assembled, aligned and checked for stability and functionality. Additional adjustments were also carried out on an existing wardrobe.\n\nThe project was completed over two days, providing a comprehensive furniture assembly service for both properties.",
-    "relatedService": "pricing.html#pricing-furniture",
+    "relatedService": "/pricing#pricing-furniture",
     "websiteReviewAssociation": false,
     "testimonial": {
       "text": "Excellent service and very good workmanship for flat pack furniture assembly.",

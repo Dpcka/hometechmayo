@@ -32,14 +32,14 @@ test('consent is versioned, expires and invalid/future storage is denied',()=>{
 });
 test('pending attribution preserves only known UTM values and referral origins',()=>{
  const data=landingContext('https://hometechmayo.ie/quote?category=furniture&utm_source=google&utm_medium=cpc&utm_campaign=mayo&utm_content=private@example.com&utm_term=0831234567&name=Secret&gclid=private#email=private', 'https://www.google.ie/search?q=Secret+Person&email=private');
- assert.deepEqual(data,{page_location:'https://hometechmayo.ie/quote.html',page_title:'Request a Quote',page_referrer:'https://www.google.ie/',campaign_source:'google',campaign_medium:'cpc',campaign_name:'mayo'});
+ assert.deepEqual(data,{page_location:'https://hometechmayo.ie/quote',page_title:'Request a Quote',page_referrer:'https://www.google.ie/',campaign_source:'google',campaign_medium:'cpc',campaign_name:'mayo'});
  assert.equal(Object.isFrozen(data),true);
 });
 test('unknown labels, duplicate UTM keys and private referrers are never forwarded',()=>{
  const data=landingContext('https://hometechmayo.ie/private@example.com?utm_source=private@example.com&utm_medium=email&utm_campaign=0831234567&utm_source=google','https://customer-name.example/job/private@example.com');
  assert.equal(data.page_location,'https://hometechmayo.ie/404.html');assert.equal(data.page_referrer,'');assert.equal(data.campaign_name,undefined);assert.equal(data.campaign_source,'external-referral');assert.equal(data.campaign_medium,'referral');
  assert.equal(safePage('/unknown-secret').page_title,'Page Not Found');
- const same=landingContext('https://hometechmayo.ie/quote.html','https://hometechmayo.ie/pricing?email=private#secret');assert.equal(same.page_referrer,'https://hometechmayo.ie/pricing.html');
+ const same=landingContext('https://hometechmayo.ie/quote.html','https://hometechmayo.ie/pricing?email=private#secret');assert.equal(same.page_referrer,'https://hometechmayo.ie/pricing');
 });
 test('event parameters only accept fixed names and enumeration values',()=>{
  assert.equal(eventParameters('form_submit'),null);assert.equal(eventParameters('quote_interaction',{action:'private@example.com'}),null);

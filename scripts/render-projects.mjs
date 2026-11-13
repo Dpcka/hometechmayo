@@ -30,7 +30,7 @@ export function renderProjectCards() {
                 <p>${escape(project.description)}</p>
                 ${project.testimonial ? `<figure class="project-testimonial"><blockquote><p>${escape(project.testimonial.text)}</p></blockquote><figcaption><span aria-label="${project.testimonial.rating} out of 5 stars">${"★".repeat(project.testimonial.rating)}</span> · ${escape(project.testimonial.author)}, ${escape(project.testimonial.location)} · <a href="${escape(project.testimonial.url)}" target="_blank" rel="noopener noreferrer">${escape(project.testimonial.source)} review</a></figcaption></figure>` : ""}
                 <div class="project-actions">
-                  <a class="project-service-link" href="${escape(project.relatedService || "quote.html")}">Request a Similar Service</a>
+                  <a class="project-service-link" href="${escape(project.relatedService || "/quote")}">Request a Similar Service</a>
                   ${workDetails.length ? `<details class="project-work-details"><summary>Work details</summary>${workDetails.map((detail) => `<p>${escape(detail)}</p>`).join("")}</details>` : ""}
                 </div>
               </div>

@@ -48,7 +48,7 @@ test('Pricing contains starting cards and links but no inline calculator', () =>
 test('new quote utility page has metadata without changing the existing sitemap', () => {
  const quote = read('quote.html');
  assert.match(quote, /<title>Get a Quote in Mayo/);
- assert.match(quote, /rel="canonical" href="https:\/\/hometechmayo.ie\/quote.html"/);
+ assert.match(quote, /rel="canonical" href="https:\/\/hometechmayo.ie\/quote"/);
  assert.match(quote, /name="robots" content="noindex, follow"/);
  assert.equal(read('sitemap.xml').includes('quote.html'), false);
  assert.equal([...quote.matchAll(/class="wizard-step"/g)].length, 3);

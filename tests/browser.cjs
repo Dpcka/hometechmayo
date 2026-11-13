@@ -37,14 +37,14 @@ const origin = 'http://127.0.0.1:8788';
  await go('/pricing.html');
  assert.equal(await page.locator('#quote-form').count(), 0);
  assert.equal(await page.locator('#starting-prices .pricing-card').count(), 6);
- const urls = await page.locator('a[href^="quote.html?category="]').evaluateAll(nodes => [...new Set(nodes.map(n => n.getAttribute('href')))]);
+ const urls = await page.locator('a[href^="/quote?category="]').evaluateAll(nodes => [...new Set(nodes.map(n => n.getAttribute('href')))]);
  assert.equal(urls.length, 17);
  await page.locator('.pricing-card-title a').first().focus(); await page.keyboard.press('Enter');
- await page.waitForURL('**/quote.html?category=furniture');
+ await page.waitForURL('**/quote?category=furniture');
  assert.equal(await page.locator('#service-category').inputValue(), 'furniture');
  // All entry links select the intended category, rather than adding unwanted work.
  for (const url of urls) {
-  await go('/' + url);
+  await go(url);
   const id = new URL(url, origin).searchParams.get('category');
   await page.locator('#service-category option').first().waitFor({state:'attached'});
   assert.equal(await page.locator('#service-category').inputValue(), id);
@@ -155,7 +155,7 @@ const origin = 'http://127.0.0.1:8788';
  await page.setViewportSize({width:390,height:844}); await page.locator('.menu-toggle').click();
  assert.equal(await page.locator('.menu-toggle').getAttribute('aria-expanded'),'true');
  await page.keyboard.press('Escape'); assert.equal(await page.locator('.menu-toggle').getAttribute('aria-expanded'),'false');
- await go('/pricing.html#quote-calculator'); await page.waitForURL('**/quote.html');
+ await go('/pricing.html#quote-calculator'); await page.waitForURL('**/quote');
  const noJS = await browser.newContext({javaScriptEnabled:false});
  const noJSPage = await noJS.newPage(); await noJSPage.goto(origin+'/quote.html');
  assert.equal(await noJSPage.locator('noscript p.calc-warning').isVisible(),true);

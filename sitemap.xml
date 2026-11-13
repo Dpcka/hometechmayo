@@ -4,12 +4,15 @@
     <loc>https://hometechmayo.ie/</loc>
   </url>
   <url>
-    <loc>https://hometechmayo.ie/services.html</loc>
+    <loc>https://hometechmayo.ie/services</loc>
   </url>
   <url>
-    <loc>https://hometechmayo.ie/pricing.html</loc>
+    <loc>https://hometechmayo.ie/pricing</loc>
   </url>
   <url>
-    <loc>https://hometechmayo.ie/privacy.html</loc>
+    <loc>https://hometechmayo.ie/privacy</loc>
+  </url>
+  <url>
+    <loc>https://hometechmayo.ie/reviews</loc>
   </url>
 </urlset>

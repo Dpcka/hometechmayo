@@ -104,6 +104,7 @@
         "@id": "https://hometechmayo.ie/#business",
         "name": "Home Tech Solutions & Services",
         "url": "https://hometechmayo.ie/",
+        "logo": "https://hometechmayo.ie/assets/logo/Logo.png",
         "telephone": "+353833498496",
         "email": "info@hometechmayo.ie",
         "description": "Handyman and home technology services including furniture assembly, TV wall mounting, ventilation, Wi-Fi and networking, smart home setup and general handyman work across County Mayo.",
@@ -119,46 +120,98 @@
               "@type": "Offer",
               "itemOffered": {
                 "@type": "Service",
-                "name": "Furniture Assembly"
+                "name": "Furniture Assembly",
+                "provider": {
+                  "@id": "https://hometechmayo.ie/#business"
+                },
+                "areaServed": {
+                  "@type": "AdministrativeArea",
+                  "name": "County Mayo, Ireland"
+                },
+                "url": "https://hometechmayo.ie/services#furniture-assembly"
               }
             },
             {
               "@type": "Offer",
               "itemOffered": {
                 "@type": "Service",
-                "name": "TV Wall Mounting"
+                "name": "TV Wall Mounting",
+                "provider": {
+                  "@id": "https://hometechmayo.ie/#business"
+                },
+                "areaServed": {
+                  "@type": "AdministrativeArea",
+                  "name": "County Mayo, Ireland"
+                },
+                "url": "https://hometechmayo.ie/services#tv-wall-mounting"
               }
             },
             {
               "@type": "Offer",
               "itemOffered": {
                 "@type": "Service",
-                "name": "Ventilation"
+                "name": "Ventilation",
+                "provider": {
+                  "@id": "https://hometechmayo.ie/#business"
+                },
+                "areaServed": {
+                  "@type": "AdministrativeArea",
+                  "name": "County Mayo, Ireland"
+                },
+                "url": "https://hometechmayo.ie/services#ventilation"
               }
             },
             {
               "@type": "Offer",
               "itemOffered": {
                 "@type": "Service",
-                "name": "Wi-Fi & Networking"
+                "name": "Wi-Fi & Networking",
+                "provider": {
+                  "@id": "https://hometechmayo.ie/#business"
+                },
+                "areaServed": {
+                  "@type": "AdministrativeArea",
+                  "name": "County Mayo, Ireland"
+                },
+                "url": "https://hometechmayo.ie/services#wifi-networking"
               }
             },
             {
               "@type": "Offer",
               "itemOffered": {
                 "@type": "Service",
-                "name": "Smart Home"
+                "name": "Smart Home",
+                "provider": {
+                  "@id": "https://hometechmayo.ie/#business"
+                },
+                "areaServed": {
+                  "@type": "AdministrativeArea",
+                  "name": "County Mayo, Ireland"
+                },
+                "url": "https://hometechmayo.ie/services#smart-home"
               }
             },
             {
               "@type": "Offer",
               "itemOffered": {
                 "@type": "Service",
-                "name": "General Handyman"
+                "name": "General Handyman",
+                "provider": {
+                  "@id": "https://hometechmayo.ie/#business"
+                },
+                "areaServed": {
+                  "@type": "AdministrativeArea",
+                  "name": "County Mayo, Ireland"
+                },
+                "url": "https://hometechmayo.ie/services#general-handyman"
               }
             }
           ]
-        }
+        },
+        "sameAs": [
+          "https://www.bark.com/en/ie/company/home-tech-solutions-amp-services/2MMmoA/",
+          "https://www.facebook.com/people/Home-Tech-Solutions-Services/61591953425431/"
+        ]
       }
     </script>
     <link rel="stylesheet" href="css/reviews.css" />
@@ -182,11 +235,11 @@
           <ul>
             <li><a href="#home" aria-current="page">Home</a></li>
 
-            <li><a href="services.html">Services</a></li>
+            <li><a href="/services">Services</a></li>
 
             <li><a href="#projects">Projects</a></li>
 
-            <li><a href="pricing.html">Pricing</a></li>
+            <li><a href="/pricing">Pricing</a></li>
 
             <li><a href="#about">About</a></li>
 
@@ -245,7 +298,7 @@
           </p>
 
           <div class="hero-buttons">
-            <a href="quote.html" class="btn btn-primary">
+            <a href="/quote" class="btn btn-primary">
               Request a Free Quote
             </a>
 
@@ -270,7 +323,7 @@
           </p>
 
           <div class="services-grid">
-            <a class="service-card" href="pricing.html#pricing-furniture">
+            <a class="service-card" href="/pricing#pricing-furniture">
               <h3>Furniture Assembly</h3>
 
               <p>
@@ -282,7 +335,7 @@
               <span class="service-pricing-action">View prices <span aria-hidden="true">→</span></span>
             </a>
 
-            <a class="service-card" href="pricing.html#pricing-tv-mounting">
+            <a class="service-card" href="/pricing#pricing-tv-mounting">
               <h3>TV Wall Mounting</h3>
 
               <p>
@@ -294,7 +347,7 @@
               <span class="service-pricing-action">View prices <span aria-hidden="true">→</span></span>
             </a>
 
-            <a class="service-card" href="pricing.html#pricing-ventilation">
+            <a class="service-card" href="/pricing#pricing-ventilation">
               <h3>Ventilation</h3>
 
               <p>
@@ -306,7 +359,7 @@
               <span class="service-pricing-action">View prices <span aria-hidden="true">→</span></span>
             </a>
 
-            <a class="service-card" href="pricing.html#pricing-wifi">
+            <a class="service-card" href="/pricing#pricing-wifi">
               <h3>Wi-Fi &amp; Networking</h3>
 
               <p>
@@ -318,7 +371,7 @@
               <span class="service-pricing-action">View prices <span aria-hidden="true">→</span></span>
             </a>
 
-            <a class="service-card" href="pricing.html#pricing-smart-home">
+            <a class="service-card" href="/pricing#pricing-smart-home">
               <h3>Smart Home</h3>
 
               <p>
@@ -330,7 +383,7 @@
               <span class="service-pricing-action">View prices <span aria-hidden="true">→</span></span>
             </a>
 
-            <a class="service-card" href="pricing.html#pricing-handyman">
+            <a class="service-card" href="/pricing#pricing-handyman">
               <h3>General Handyman</h3>
 
               <p>
@@ -343,7 +396,7 @@
             </a>
           </div>
           <p class="service-preview-note">Starting labour prices; materials and travel may be additional. Minimum labour €50 per visit.</p>
-          <a class="btn btn-primary" href="pricing.html">View all services &amp; prices</a>
+          <a class="btn btn-primary" href="/pricing">View all services &amp; prices</a>
         </div>
 </section>
 
@@ -382,7 +435,7 @@
               workmanship and honest pricing.
             </p>
 
-            <a href="quote.html" class="btn btn-primary">
+            <a href="/quote" class="btn btn-primary">
               Request a Free Quote
             </a>
           </div>
@@ -418,7 +471,7 @@
                 <p>Complete installation of a rigid duct ventilation system with external vent and professional finishing.</p>
 
                 <div class="project-actions">
-                  <a class="project-service-link" href="pricing.html#pricing-ventilation">Request a Similar Service</a>
+                  <a class="project-service-link" href="/pricing#pricing-ventilation">Request a Similar Service</a>
 
                 </div>
               </div>
@@ -437,7 +490,7 @@
                 <p>Professional flat-pack furniture assembly completed efficiently with great attention to detail.</p>
 
                 <div class="project-actions">
-                  <a class="project-service-link" href="pricing.html#pricing-furniture">Request a Similar Service</a>
+                  <a class="project-service-link" href="/pricing#pricing-furniture">Request a Similar Service</a>
 
                 </div>
               </div>
@@ -456,7 +509,7 @@
                 <p>Assembly of a 160 cm wooden console table supplied by the customer, completed and positioned in their hallway.</p>
 
                 <div class="project-actions">
-                  <a class="project-service-link" href="pricing.html#pricing-furniture">Request a Similar Service</a>
+                  <a class="project-service-link" href="/pricing#pricing-furniture">Request a Similar Service</a>
                   <details class="project-work-details"><summary>Work details</summary><p>The flat-pack furniture was assembled, checked and positioned in the customer&#39;s chosen location.</p><p>A neatly assembled wooden console table, ready for everyday use.</p></details>
                 </div>
               </div>
@@ -475,7 +528,7 @@
                 <p>Complete furniture assembly across two residential properties in Westport, Co. Mayo, prepared for long-term rental.</p>
                 <figure class="project-testimonial"><blockquote><p>Excellent service and very good workmanship for flat pack furniture assembly.</p></blockquote><figcaption><span aria-label="5 out of 5 stars">★★★★★</span> · Finbar, Westport · <a href="https://www.bark.com/en/ie/company/home-tech-solutions-amp-services/2MMmoA/" target="_blank" rel="noopener noreferrer">Bark review</a></figcaption></figure>
                 <div class="project-actions">
-                  <a class="project-service-link" href="pricing.html#pricing-furniture">Request a Similar Service</a>
+                  <a class="project-service-link" href="/pricing#pricing-furniture">Request a Similar Service</a>
                   <details class="project-work-details"><summary>Work details</summary><p>The project involved assembling and positioning 14 furniture items from JYSK, including two wardrobes, two dining tables, six dining chairs, two TV units and two coffee tables.</p><p>All furniture was carefully assembled, aligned and checked for stability and functionality. Additional adjustments were also carried out on an existing wardrobe.</p><p>The project was completed over two days, providing a comprehensive furniture assembly service for both properties.</p></details>
                 </div>
               </div>
@@ -693,7 +746,7 @@
                 <div class="faq-answer-inner">
                   <p>
                     We provide handyman and home technology services across
-                    County Mayo. Travel requirements may vary depending on the
+                    County Mayo, including Castlebar, Ballina, Westport and Foxford. Travel requirements may vary depending on the
                     location and size of the job.
                   </p>
                 </div>
@@ -827,7 +880,7 @@
                     Yes. Small repairs, installations and maintenance jobs are
                     welcome. A minimum visit charge may apply depending on the
                     job and location. See the
-                    <a href="pricing.html">Pricing</a> page for current starting
+                    <a href="/pricing">Pricing</a> page for current starting
                     prices.
                   </p>
                 </div>
@@ -930,14 +983,14 @@
             <div class="contact-card">
               <h3><svg class="icon icon-contact" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2" /><circle cx="12" cy="10" r="2.5" fill="none" stroke="currentColor" stroke-width="2" /></svg> Service Area</h3>
 
-              <p>County Mayo, Ireland</p>
+              <p>County Mayo, Ireland — Castlebar, Ballina, Westport, Foxford and surrounding areas.</p>
             </div>
           </div>
 
           <p class="contact-handler-note">Phone and email links open your device’s calling or email app. If no app opens, copy the details below.</p>
           <p id="contact-copy-status" class="contact-copy-status" role="status" aria-live="polite"></p>
           <div class="contact-buttons">
-            <a class="btn btn-primary" href="quote.html">Request a Free Quote</a>
+            <a class="btn btn-primary" href="/quote">Request a Free Quote</a>
             <a
               class="btn btn-primary"
               href="https://wa.me/353833498496?text=Hi%20Home%20Tech%20Solutions!%0A%0AI'd%20like%20to%20request%20a%20free%20quote."
@@ -1000,17 +1053,17 @@
             <ul>
               <li><a href="#home">Home</a></li>
 
-              <li><a href="services.html">Services</a></li>
+              <li><a href="/services">Services</a></li>
 
               <li><a href="#projects">Projects</a></li>
 
-              <li><a href="pricing.html">Pricing</a></li>
+              <li><a href="/pricing">Pricing</a></li>
 
               <li><a href="#about">About</a></li>
 
               <li><a href="#contact">Contact</a></li>
 
-              <li><a href="privacy.html">Privacy Policy</a></li>
+              <li><a href="/privacy">Privacy Policy</a></li>
             <li><button type="button" class="cookie-settings" data-cookie-settings hidden>Cookie settings</button></li>
             </ul>
           </div>

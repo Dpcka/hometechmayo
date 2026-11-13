@@ -6,7 +6,7 @@ const home=readFileSync('index.html','utf8');
 test('existing project titles, descriptions and cover images are preserved; Hero remains unchanged',()=>{
  const previous=execFileSync('git',['show','5d0dd3929ac626756494e695f13fa6aef7d4a837:index.html'],{encoding:'utf8'});
  const section=(s,id)=>s.match(new RegExp(`<section id="${id}"[\\s\\S]*?<\\/section>`))[0].replace(/\r\n/g,'\n');
- assert.equal(section(home,'home'),section(previous,'home'));
+ assert.equal(section(home,'home'),section(previous,'home').replaceAll('href="quote.html"','href="/quote"').replaceAll('href="pricing.html"','href="/pricing"'));
  const oldProjects=section(previous,'projects');
  for(const title of ['Bathroom Ventilation Upgrade','Furniture Assembly'])assert.ok(home.includes(`<h3>${title}</h3>`));
  for(const path of ['assets/projects/PXL_20260713_151848763-800.webp','assets/projects/about-800.webp'])assert.ok(home.includes(path)&&oldProjects.includes(path));
@@ -21,7 +21,7 @@ test('hero is responsive with explicit dimensions and approved navigation',()=>{
 });
 test('service cards point to existing unique Pricing anchors',()=>{
  const pricing=readFileSync('pricing.html','utf8');
- const cards=home.match(/<a class="service-card" href="pricing.html#pricing-[^"]+">/g);
+ const cards=home.match(/<a class="service-card" href="\/pricing#pricing-[^"]+">/g);
  assert.equal(cards.length,6);
  for(const card of cards){const anchor=card.match(/#([^"]+)/)[1];assert.equal(pricing.split(`id="${anchor}"`).length-1,1);}
 });

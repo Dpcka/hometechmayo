@@ -17,7 +17,7 @@ const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
   assert.equal(await page.locator('.hero-media img').evaluate(n=>getComputedStyle(n).objectFit),'cover');
   assert.equal(await page.locator('.hero-content').evaluate(n=>getComputedStyle(n).textAlign),'center');
   await page.screenshot({path:`${dir}/home-${width}.png`,fullPage:true});
-  assert.equal(await page.locator('.hero-buttons a').first().getAttribute('href'),'quote.html');
+  assert.equal(await page.locator('.hero-buttons a').first().getAttribute('href'),'/quote');
   assert.equal(await page.locator('.contact-card-main[href="tel:+353833498496"]').count(),1);
   assert.equal(await page.locator('.contact-card-main[href="mailto:info@hometechmayo.ie"]').count(),1);
   await page.locator('[data-copy-contact="email"]').click();
@@ -25,7 +25,7 @@ const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
   assert.equal(await page.evaluate(()=>navigator.clipboard.readText()),'info@hometechmayo.ie');
   const cards=await page.locator('#services a.service-card').evaluateAll(nodes=>nodes.map(n=>n.getAttribute('href')));
   assert.equal(cards.length,6);
-  for(const href of cards){await page.goto('http://127.0.0.1:8788/'+href);assert.equal(await page.locator(new URL(page.url()).hash).count(),1);await page.reload();assert.equal(await page.locator(new URL(page.url()).hash).count(),1);}
+  for(const href of cards){await page.goto(new URL(href,'http://127.0.0.1:8788/').href);assert.equal(await page.locator(new URL(page.url()).hash).count(),1);await page.reload();assert.equal(await page.locator(new URL(page.url()).hash).count(),1);}
   await page.goto('http://127.0.0.1:8788/');await page.locator('#services a.service-card').first().click();await page.goBack();assert.equal(new URL(page.url()).pathname,'/');
   assert.deepEqual(errors,[]);console.log(`PASS ${width}px: image, overflow, hero (${dimensions.hero}px), contact, copy, deep links, refresh and Back`);await ctx.close();
  }

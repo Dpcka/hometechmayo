@@ -52,7 +52,7 @@ function rows(hit) {
    const cdp=await ctx.newCDPSession(p);
    await cdp.send('Emulation.setFocusEmulationEnabled',{enabled:true});
    await p.bringToFront();
-   await p.goto(origin+'/quote.html?category=wifi&utm_source=google&utm_medium=cpc&utm_campaign=mayo&email=private%40example.com&phone=0831234567&gclid=SYNTHETIC_PRIVATE_CLICK&q=SYNTHETIC_PRIVATE_SEARCH#SYNTHETIC_PRIVATE_HASH',
+   await p.goto(origin+'/quote?category=wifi&utm_source=google&utm_medium=cpc&utm_campaign=mayo&email=private%40example.com&phone=0831234567&gclid=SYNTHETIC_PRIVATE_CLICK&q=SYNTHETIC_PRIVATE_SEARCH#SYNTHETIC_PRIVATE_HASH',
     {referer:'https://www.google.ie/search?q=SYNTHETIC_PRIVATE_REF',waitUntil:'networkidle'});
    assert.equal(hits.length,0);assert.equal(tagHeaders.length,0);
    if(width===390) {
@@ -118,7 +118,7 @@ function rows(hit) {
     engagementEvents:fields.filter(f=>f.en==='user_engagement').map(f=>({event:f.en,page_location:f.dl,page_referrer:f.dr,engagement_time_msec:f._et})),
     sessionFields:fields.filter(f=>f._ss==='1').map(f=>({event:f.en,session_start:f._ss,page_location:f.dl,page_referrer:f.dr,hasSessionId:!!f.sid,sessionNumber:f.sct})),
     pageReferrers:[...new Set(fields.map(f=>f.dr).filter(Boolean))],
-    defaultContextSafe:fields.every(f=>(!f.dl||f.dl==='https://hometechmayo.ie/quote.html')&&(!f.dr||f.dr==='https://www.google.ie/')),
+    defaultContextSafe:fields.every(f=>(!f.dl||f.dl==='https://hometechmayo.ie/quote')&&(!f.dr||f.dr==='https://www.google.ie/')),
     unsafeParameterKeys:[...new Set(leaking)],
     knownPersonalHashKeys:[...new Set(fields.flatMap(f=>Object.entries(f).filter(([,v])=>personalHashes.some(hash=>decode(v).toLowerCase().includes(hash))).map(([key])=>key)))],
     exposedSyntheticMarkers:[...new Set(fields.flatMap(f=>Object.values(f)).flatMap(v=>markers.filter(m=>decode(v).includes(m))))],

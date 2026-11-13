@@ -471,4 +471,5 @@ form.addEventListener('submit', async event => {
   }
 });
 renderResults(); refresh(); loadConfig();
+document.querySelector('#calculator-loading').hidden = true;
 document.querySelector('#wizard-content').hidden = false;

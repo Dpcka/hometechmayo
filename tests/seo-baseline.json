@@ -21,7 +21,7 @@
     "<meta\n      name=\"twitter:description\"\n      content=\"Professional handyman services including furniture assembly, TV mounting, ventilation, Wi-Fi and smart home setup across County Mayo.\"\n    />",
     "<meta\n      name=\"twitter:image\"\n      content=\"https://hometechmayo.ie/assets/hero/hero.jpg\"\n    />",
     "<link rel=\"canonical\" href=\"https://hometechmayo.ie/\" />",
-    "<script type=\"application/ld+json\">\n      {\n        \"@context\": \"https://schema.org\",\n        \"@type\": \"LocalBusiness\",\n        \"@id\": \"https://hometechmayo.ie/#business\",\n        \"name\": \"Home Tech Solutions & Services\",\n        \"url\": \"https://hometechmayo.ie/\",\n        \"telephone\": \"+353833498496\",\n        \"email\": \"info@hometechmayo.ie\",\n        \"description\": \"Handyman and home technology services including furniture assembly, TV wall mounting, ventilation, Wi-Fi and networking, smart home setup and general handyman work across County Mayo.\",\n        \"areaServed\": {\n          \"@type\": \"AdministrativeArea\",\n          \"name\": \"County Mayo, Ireland\"\n        },\n        \"hasOfferCatalog\": {\n          \"@type\": \"OfferCatalog\",\n          \"name\": \"Home services\",\n          \"itemListElement\": [\n            {\n              \"@type\": \"Offer\",\n              \"itemOffered\": {\n                \"@type\": \"Service\",\n                \"name\": \"Furniture Assembly\"\n              }\n            },\n            {\n              \"@type\": \"Offer\",\n              \"itemOffered\": {\n                \"@type\": \"Service\",\n                \"name\": \"TV Wall Mounting\"\n              }\n            },\n            {\n              \"@type\": \"Offer\",\n              \"itemOffered\": {\n                \"@type\": \"Service\",\n                \"name\": \"Ventilation\"\n              }\n            },\n            {\n              \"@type\": \"Offer\",\n              \"itemOffered\": {\n                \"@type\": \"Service\",\n                \"name\": \"Wi-Fi & Networking\"\n              }\n            },\n            {\n              \"@type\": \"Offer\",\n              \"itemOffered\": {\n                \"@type\": \"Service\",\n                \"name\": \"Smart Home\"\n              }\n            },\n            {\n              \"@type\": \"Offer\",\n              \"itemOffered\": {\n                \"@type\": \"Service\",\n                \"name\": \"General Handyman\"\n              }\n            }\n          ]\n        }\n      }\n    </script>"
+    "<script type=\"application/ld+json\">\n      {\n        \"@context\": \"https://schema.org\",\n        \"@type\": \"LocalBusiness\",\n        \"@id\": \"https://hometechmayo.ie/#business\",\n        \"name\": \"Home Tech Solutions & Services\",\n        \"url\": \"https://hometechmayo.ie/\",\n        \"logo\": \"https://hometechmayo.ie/assets/logo/Logo.png\",\n        \"telephone\": \"+353833498496\",\n        \"email\": \"info@hometechmayo.ie\",\n        \"description\": \"Handyman and home technology services including furniture assembly, TV wall mounting, ventilation, Wi-Fi and networking, smart home setup and general handyman work across County Mayo.\",\n        \"areaServed\": {\n          \"@type\": \"AdministrativeArea\",\n          \"name\": \"County Mayo, Ireland\"\n        },\n        \"hasOfferCatalog\": {\n          \"@type\": \"OfferCatalog\",\n          \"name\": \"Home services\",\n          \"itemListElement\": [\n            {\n              \"@type\": \"Offer\",\n              \"itemOffered\": {\n                \"@type\": \"Service\",\n                \"name\": \"Furniture Assembly\",\n                \"provider\": {\n                  \"@id\": \"https://hometechmayo.ie/#business\"\n                },\n                \"areaServed\": {\n                  \"@type\": \"AdministrativeArea\",\n                  \"name\": \"County Mayo, Ireland\"\n                },\n                \"url\": \"https://hometechmayo.ie/services#furniture-assembly\"\n              }\n            },\n            {\n              \"@type\": \"Offer\",\n              \"itemOffered\": {\n                \"@type\": \"Service\",\n                \"name\": \"TV Wall Mounting\",\n                \"provider\": {\n                  \"@id\": \"https://hometechmayo.ie/#business\"\n                },\n                \"areaServed\": {\n                  \"@type\": \"AdministrativeArea\",\n                  \"name\": \"County Mayo, Ireland\"\n                },\n                \"url\": \"https://hometechmayo.ie/services#tv-wall-mounting\"\n              }\n            },\n            {\n              \"@type\": \"Offer\",\n              \"itemOffered\": {\n                \"@type\": \"Service\",\n                \"name\": \"Ventilation\",\n                \"provider\": {\n                  \"@id\": \"https://hometechmayo.ie/#business\"\n                },\n                \"areaServed\": {\n                  \"@type\": \"AdministrativeArea\",\n                  \"name\": \"County Mayo, Ireland\"\n                },\n                \"url\": \"https://hometechmayo.ie/services#ventilation\"\n              }\n            },\n            {\n              \"@type\": \"Offer\",\n              \"itemOffered\": {\n                \"@type\": \"Service\",\n                \"name\": \"Wi-Fi & Networking\",\n                \"provider\": {\n                  \"@id\": \"https://hometechmayo.ie/#business\"\n                },\n                \"areaServed\": {\n                  \"@type\": \"AdministrativeArea\",\n                  \"name\": \"County Mayo, Ireland\"\n                },\n                \"url\": \"https://hometechmayo.ie/services#wifi-networking\"\n              }\n            },\n            {\n              \"@type\": \"Offer\",\n              \"itemOffered\": {\n                \"@type\": \"Service\",\n                \"name\": \"Smart Home\",\n                \"provider\": {\n                  \"@id\": \"https://hometechmayo.ie/#business\"\n                },\n                \"areaServed\": {\n                  \"@type\": \"AdministrativeArea\",\n                  \"name\": \"County Mayo, Ireland\"\n                },\n                \"url\": \"https://hometechmayo.ie/services#smart-home\"\n              }\n            },\n            {\n              \"@type\": \"Offer\",\n              \"itemOffered\": {\n                \"@type\": \"Service\",\n                \"name\": \"General Handyman\",\n                \"provider\": {\n                  \"@id\": \"https://hometechmayo.ie/#business\"\n                },\n                \"areaServed\": {\n                  \"@type\": \"AdministrativeArea\",\n                  \"name\": \"County Mayo, Ireland\"\n                },\n                \"url\": \"https://hometechmayo.ie/services#general-handyman\"\n              }\n            }\n          ]\n        },\n        \"sameAs\": [\n          \"https://www.bark.com/en/ie/company/home-tech-solutions-amp-services/2MMmoA/\",\n          \"https://www.facebook.com/people/Home-Tech-Solutions-Services/61591953425431/\"\n        ]\n      }\n    </script>"
   ],
   "pricing.html": [
     "<meta charset=\"UTF-8\" />",
@@ -33,7 +33,7 @@
     "<meta\n      property=\"og:title\"\n      content=\"Handyman Prices in Mayo | Home Tech Solutions & Services\"\n    />",
     "<meta\n      property=\"og:description\"\n      content=\"View clear starting prices for common home improvement and smart home services across County Mayo.\"\n    />",
     "<meta property=\"og:type\" content=\"website\" />",
-    "<meta\n      property=\"og:url\"\n      content=\"https://hometechmayo.ie/pricing.html\"\n    />",
+    "<meta\n      property=\"og:url\"\n      content=\"https://hometechmayo.ie/pricing\"\n    />",
     "<meta property=\"og:site_name\" content=\"Home Tech Solutions &amp; Services\" />",
     "<meta\n      property=\"og:image\"\n      content=\"https://hometechmayo.ie/assets/hero/hero.jpg\"\n    />",
     "<meta property=\"og:image:width\" content=\"2048\" />",
@@ -44,7 +44,7 @@
     "<meta\n      name=\"twitter:title\"\n      content=\"Handyman Prices in Mayo | Home Tech Solutions &amp; Services\"\n    />",
     "<meta\n      name=\"twitter:description\"\n      content=\"View starting prices for furniture assembly, TV mounting, ventilation, Wi-Fi, smart home setup and general handyman services across County Mayo.\"\n    />",
     "<meta\n      name=\"twitter:image\"\n      content=\"https://hometechmayo.ie/assets/hero/hero.jpg\"\n    />",
-    "<link rel=\"canonical\" href=\"https://hometechmayo.ie/pricing.html\" />"
+    "<link rel=\"canonical\" href=\"https://hometechmayo.ie/pricing\" />"
   ],
   "services.html": [
     "<meta charset=\"UTF-8\" />",
@@ -56,7 +56,7 @@
     "<meta\n      property=\"og:title\"\n      content=\"Handyman Services in Mayo | Home Tech Solutions &amp; Services\"\n    />",
     "<meta\n      property=\"og:description\"\n      content=\"Reliable handyman, home improvement and home technology services across County Mayo.\"\n    />",
     "<meta property=\"og:type\" content=\"website\" />",
-    "<meta\n      property=\"og:url\"\n      content=\"https://hometechmayo.ie/services.html\"\n    />",
+    "<meta\n      property=\"og:url\"\n      content=\"https://hometechmayo.ie/services\"\n    />",
     "<meta property=\"og:site_name\" content=\"Home Tech Solutions &amp; Services\" />",
     "<meta\n      property=\"og:image\"\n      content=\"https://hometechmayo.ie/assets/hero/hero.jpg\"\n    />",
     "<meta property=\"og:image:width\" content=\"2048\" />",
@@ -67,7 +67,7 @@
     "<meta\n      name=\"twitter:title\"\n      content=\"Handyman Services in Mayo | Home Tech Solutions &amp; Services\"\n    />",
     "<meta\n      name=\"twitter:description\"\n      content=\"Furniture assembly, TV mounting, ventilation, Wi-Fi, smart home setup and general handyman services across County Mayo.\"\n    />",
     "<meta\n      name=\"twitter:image\"\n      content=\"https://hometechmayo.ie/assets/hero/hero.jpg\"\n    />",
-    "<link rel=\"canonical\" href=\"https://hometechmayo.ie/services.html\" />"
+    "<link rel=\"canonical\" href=\"https://hometechmayo.ie/services\" />"
   ],
   "privacy.html": [
     "<meta charset=\"UTF-8\" />",
@@ -78,7 +78,7 @@
     "<meta\n      property=\"og:title\"\n      content=\"Privacy Policy | Home Tech Solutions &amp; Services\"\n    />",
     "<meta\n      property=\"og:description\"\n      content=\"Learn how Home Tech Solutions &amp; Services handles personal information when you contact us or use our website.\"\n    />",
     "<meta property=\"og:type\" content=\"website\" />",
-    "<meta\n      property=\"og:url\"\n      content=\"https://hometechmayo.ie/privacy.html\"\n    />",
+    "<meta\n      property=\"og:url\"\n      content=\"https://hometechmayo.ie/privacy\"\n    />",
     "<meta property=\"og:site_name\" content=\"Home Tech Solutions &amp; Services\" />",
     "<meta\n      property=\"og:image\"\n      content=\"https://hometechmayo.ie/assets/hero/hero.jpg\"\n    />",
     "<meta property=\"og:image:width\" content=\"2048\" />",
@@ -89,8 +89,8 @@
     "<meta\n      name=\"twitter:title\"\n      content=\"Privacy Policy | Home Tech Solutions &amp; Services\"\n    />",
     "<meta\n      name=\"twitter:description\"\n      content=\"Read the Home Tech Solutions &amp; Services privacy policy and learn how personal information is handled when contacting us or using our website.\"\n    />",
     "<meta\n      name=\"twitter:image\"\n      content=\"https://hometechmayo.ie/assets/hero/hero.jpg\"\n    />",
-    "<link rel=\"canonical\" href=\"https://hometechmayo.ie/privacy.html\" />"
+    "<link rel=\"canonical\" href=\"https://hometechmayo.ie/privacy\" />"
   ],
   "robots.txt": "User-agent: *\nAllow: /\n\nSitemap: https://hometechmayo.ie/sitemap.xml\n",
-  "sitemap.xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n  <url>\n    <loc>https://hometechmayo.ie/</loc>\n  </url>\n  <url>\n    <loc>https://hometechmayo.ie/services.html</loc>\n  </url>\n  <url>\n    <loc>https://hometechmayo.ie/pricing.html</loc>\n  </url>\n  <url>\n    <loc>https://hometechmayo.ie/privacy.html</loc>\n  </url>\n</urlset>\n"
+  "sitemap.xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n  <url>\n    <loc>https://hometechmayo.ie/</loc>\n  </url>\n  <url>\n    <loc>https://hometechmayo.ie/services</loc>\n  </url>\n  <url>\n    <loc>https://hometechmayo.ie/pricing</loc>\n  </url>\n  <url>\n    <loc>https://hometechmayo.ie/privacy</loc>\n  </url>\n  <url>\n    <loc>https://hometechmayo.ie/reviews</loc>\n  </url>\n</urlset>\n"
 }
