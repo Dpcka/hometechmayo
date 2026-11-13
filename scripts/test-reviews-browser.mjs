@@ -353,6 +353,15 @@ try {
         .filter({ hasText: "Moderation saved" })
         .waitFor();
     }
+    // Exercise real local owner removal on phone and desktop with Cron/retention off.
+    f.env.REVIEWS_RETENTION_ENABLED = "false";
+    const photoControl = page.locator("select[name^=photo-]").first();
+    const removedId = (await photoControl.getAttribute("name")).slice("photo-".length);
+    await photoControl.selectOption("removed");
+    await page.getByRole("button", { name: "Save moderation" }).click();
+    await page.locator("#admin-status").filter({ hasText: "Moderation saved" }).waitFor();
+    assert.ok(![...f.objects.keys()].some(key => key.includes(removedId)));
+    assert.equal((await fetch(base + `/api/reviews/images/${removedId}/480`)).status, 404);
     await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
     await page.screenshot({
       path: resolve(output, `reviews-admin-${width}.png`),

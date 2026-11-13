@@ -448,11 +448,16 @@
                 category to receive, moderate and, if approved, publish your review.
                 An optional email address is used privately for review-related
                 follow-up and is never displayed publicly or used for marketing.
-                Photograph uploads and review email notifications are currently disabled.
+                You may optionally upload up to five photographs of completed work.
+                Reviews without photographs are welcome. Review email notifications
+                remain disabled.
               </p>
               <p>
                 We rely on your consent to receive and publish your review. The
-                publication checkbox is unchecked by default, and we record its
+                publication checkbox and separate photograph-permission checkbox are
+                unchecked by default. Photographs are optional and require your
+                confirmation that you own them or have permission to share them.
+                We record each consent's
                 notice version and timestamp. You may withdraw consent at any time
                 by emailing <a href="mailto:info@hometechmayo.ie">info@hometechmayo.ie</a>,
                 without affecting the lawfulness of processing before withdrawal.
@@ -469,12 +474,23 @@
                 abusive content. Low ratings or criticism alone are not grounds for
                 rejection. Original text is kept privately while the review is
                 retained; any public edit for privacy or safety is identified.
+                Photographs need separate administrator approval as well as approval
+                of their associated review before publication. Approved images may
+                be displayed with the review and its valid project association.
                 Please avoid other people's personal details, addresses or sensitive
                 information. A display name is sufficient; email is optional.
               </p>
               <p>
                 Cloudflare provides hosting, the private Reviews database,
                 administrator access protection and Turnstile spam protection.
+                Original photographs and optimised derivatives are stored in a private
+                Cloudflare R2 bucket in the EU. Cloudflare Images processes uploads
+                to validate them and create responsive WebP copies. Metadata,
+                including EXIF/GPS location, is removed from public copies; private
+                originals can still contain metadata and are never served publicly.
+                Only approved derivatives are available through access-controlled
+                review image endpoints. Please check photographs for faces, documents,
+                addresses and other private details before uploading.
                 Security processing includes Turnstile verification and keyed hashes
                 of IP addresses and submission identifiers for rate limiting and
                 duplicate prevention. These records are not anonymous merely because
@@ -492,7 +508,12 @@
                 are kept for up to 90 days after rejection. Private email addresses
                 are deleted with the associated review, and we assess whether they
                 can be deleted earlier for approved reviews. Incomplete submissions
-                become eligible for deletion after 24 hours. Limited moderation audit
+                become eligible for deletion after 24 hours, including unfinished photo
+                uploads. Photographs follow the retention period of their associated
+                review. Private originals are removed within 30 days after successful
+                publication of approved derivatives, unless a documented investigation
+                requires them. Approved derivatives remain only while publication is
+                justified. Limited moderation audit
                 records are kept for up to 12 calendar months. Information required
                 for an active dispute or legal obligation may be retained separately
                 only as necessary, with a documented reason and periodic reassessment.
@@ -505,9 +526,19 @@
                 the monthly review. An approved review can first be hidden to stop
                 public display; hiding is not deletion. The administrator then removes
                 the review and its associated private email and submission records
-                from the Reviews database, retaining only justified, limited audit or
+                from the Reviews database and associated originals and derivatives from
+                private R2 storage, retaining only justified, limited audit or
                 dispute records. Unneeded private email and security data are also
-                assessed during this review. There is no active scheduled retention
+                assessed during this review. Selecting Remove photograph and saving in
+                the secure administration interface immediately revokes access and
+                requests physical deletion of that photograph's original and all
+                derivatives. A failed deletion is reported for manual retry; hiding
+                alone does not erase stored files. The monthly review also checks
+                private originals approaching their 30-day deadline and incomplete
+                uploads eligible for removal, arranging maintenance before deadlines.
+                Provider backup retention can delay complete erasure from backups;
+                copies already downloaded by others cannot be recalled.
+                There is no active scheduled retention
                 or automatic deletion service. Automated retention requires a separate
                 approval and implementation.
               </p>

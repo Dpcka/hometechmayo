@@ -581,7 +581,7 @@ async function adminDetails(env, id) {
   const images = await all(
     query(
       env,
-      "SELECT id,source,caption,sort_order,approval_status,upload_state,permission_version,permission_timestamp,width,height,published_at FROM review_images WHERE review_id=? AND approval_status!='removed' ORDER BY sort_order,id",
+      "SELECT id,source,caption,sort_order,approval_status,upload_state,permission_version,permission_timestamp,width,height,published_at FROM review_images WHERE review_id=? AND (approval_status!='removed' OR reserved_bytes>0) ORDER BY sort_order,id",
       id,
     ),
   );
@@ -653,7 +653,7 @@ async function moderate(request, env, id, actor) {
   const stored = await all(
     query(
       env,
-      "SELECT id FROM review_images WHERE review_id=? AND approval_status!='removed'",
+      "SELECT id,approval_status,upload_state FROM review_images WHERE review_id=? AND (approval_status!='removed' OR reserved_bytes>0)",
       id,
     ),
   );
@@ -662,6 +662,15 @@ async function moderate(request, env, id, actor) {
     stored.some((i) => !body.images.some((s) => s.id === i.id))
   )
     throw new ReviewError("Photographs changed. Reload before saving.", 409);
+  for (const image of body.images) {
+    const previous = stored.find((item) => item.id === image.id);
+    if (previous.approval_status === "removed" && image.status !== "removed")
+      throw new ReviewError("A removed photograph cannot be restored. Retry its deletion.", 409);
+    if (image.status === "removed" && previous.upload_state !== "ready")
+      throw new ReviewError("Wait for photograph processing to finish before removing it.", 409);
+    if (image.status === "removed" && (hold || current.retention_hold))
+      throw new ReviewError("Review the documented retention hold before deleting photographs.", 409);
+  }
   const next = current.version + 1,
     now = Date.now(),
     statements = [
@@ -763,7 +772,42 @@ async function moderate(request, env, id, actor) {
   }
   if (!changed(results[0]))
     throw new ReviewError("This review changed. Reload it before saving.", 409);
+  // Commit publication revocation first. Physical deletion is explicit owner work,
+  // independent of the disabled scheduled retention switch.
+  for (const image of body.images.filter((item) => item.status === "removed"))
+    await deleteRemovedPhoto(env, id, image.id, actor);
   return json({ ok: true, ...(await adminDetails(env, id)) });
+}
+async function deleteRemovedPhoto(env, reviewId, imageId, actor) {
+  const image = await query(env,
+    "SELECT reserved_bytes FROM review_images WHERE id=? AND review_id=? AND approval_status='removed'",
+    imageId, reviewId).first();
+  if (!image || !image.reserved_bytes) return;
+  try {
+    if (!env.REVIEWS_MEDIA) throw Error("Missing private storage binding");
+    // Exact server-owned namespace; never use a customer-provided object path.
+    await env.REVIEWS_MEDIA.delete(`originals/${reviewId}/${imageId}`);
+    let cursor;
+    do {
+      const page = await env.REVIEWS_MEDIA.list({
+        prefix: `derivatives/${reviewId}/${imageId}/`, limit: 100, cursor,
+      });
+      for (const object of page.objects) await env.REVIEWS_MEDIA.delete(object.key);
+      cursor = page.truncated ? page.cursor : undefined;
+      if (page.truncated && !cursor) throw Error("Incomplete storage listing");
+    } while (cursor);
+    await env.REVIEWS_DB.batch([
+      query(env, "UPDATE review_usage SET used=MAX(0,used-COALESCE((SELECT reserved_bytes FROM review_images WHERE id=? AND review_id=? AND approval_status='removed'),0)) WHERE scope='storage'", imageId, reviewId),
+      query(env, "DELETE FROM review_image_variants WHERE image_id=? AND EXISTS(SELECT 1 FROM review_images WHERE id=? AND review_id=? AND approval_status='removed')", imageId, imageId, reviewId),
+      query(env, "UPDATE review_images SET storage_key=NULL,reserved_bytes=0 WHERE id=? AND review_id=? AND approval_status='removed'", imageId, reviewId),
+      event(env, reviewId, "photo_deleted", actor, "Private original and derivatives deleted.", crypto.randomUUID(), { imageId }),
+    ]);
+  } catch {
+    // Keep manifest, tombstone and quota reservation for an idempotent manual retry.
+    await event(env, reviewId, "photo_deletion_failed", actor,
+      "Photo hidden; physical deletion incomplete. Owner retry required.", crypto.randomUUID(), { imageId }).run();
+    throw new ReviewError("Moderation saved and photograph hidden, but physical deletion is incomplete. Reload the review and save with Remove photograph selected to retry.", 503);
+  }
 }
 export async function handleReviews(request, env, fetcher = fetch) {
   try {

@@ -114,3 +114,26 @@ References:
 https://developers.cloudflare.com/pages/functions/bindings/#service-bindings
 https://developers.cloudflare.com/pages/functions/bindings/#secrets
 https://developers.cloudflare.com/r2/reference/data-location/#using-jurisdictions-from-workers
+
+
+## Optional photograph launch — 13 November 2026
+
+- Preserve notification=false, retention=false, Cron=[], private Worker URLs.
+- Confirm existing EU REVIEWS_MEDIA bucket has r2.dev disabled and no custom
+  domains. Wrangler read-only r2 bucket dev-url get / domain list with -J eu can
+  verify this if MCP lacks permissions. Check bucket info and D1 review_usage
+  storage before launch; retain 512 MiB / 3,000 monthly transformation limits.
+- Manual Remove photograph + Save now revokes publication before physical R2
+  deletion. Failures return 503, retain hidden manifest/quota, and require owner
+  reload/save retry. A success clears object references and reservation; no Cron
+  or enabled retention is needed. Retention holds must be reviewed separately.
+- Deploy tested Worker code with photos=false first. Deploy updated privacy page
+  and admin UI through main/Pages. Verify the public notice before photos=true.
+- Verify public config, optional photo selector and unchecked permission, maximum
+  5 photos / 10 MB, responsive gallery and protected administration. Do not create
+  real production tests/reviews or upload synthetic customer photos.
+- Monthly manual operations cover R2 originals, derivatives, unfinished uploads,
+  expiry, withdrawal and failed deletion retries: see MANUAL-RETENTION.md.
+- Application tests use local SQLite/R2 and image decoding with mocked email and
+  Turnstile. A controlled real customer submission remains an owner action;
+  do not claim production image ingestion has been exercised by smoke checks.

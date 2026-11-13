@@ -380,6 +380,11 @@ function setDisabled(form, value) {
 function renderImages(container) {
   container.replaceChildren();
   for (const [at, image] of images.entries()) {
+    if (image.status === "removed") {
+      const retry = element("p", "admin-image", "Photograph hidden; physical deletion needs retry. Save moderation to retry deletion.");
+      container.append(retry);
+      continue;
+    }
     const box = element("div", "admin-image"),
       preview = element("button");
     preview.type = "button";
