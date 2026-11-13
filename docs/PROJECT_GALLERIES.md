@@ -23,3 +23,25 @@ Browser QA: start the repository's local static preview on port 8788, set `PLAYW
 Every card uses the same generated category/description/actions structure. Service links are required in the data for the current projects; the renderer falls back to the existing general quote page for a future project without a suitable service link. Optional Work details are generated only from supplied extended descriptions/results. The shared flex action area aligns links per grid row, while single-column cards retain natural content height and do not reserve empty details rows.
 
 `node tests/browser-project-touch-autoplay.cjs` checks touch resumption, dot-free cards, keyboard navigation, viewer closing and reduced-motion support at 360/390/768/1280px. Set `PROJECT_TEST_URL` when using a different local port.
+
+## Westport furniture assembly — November 2026
+
+One project, `westport-furniture-assembly`, covers the two properties for the same
+customer. The owner's edited ZIP supplies 11 photos: four living-room, four dining
+and three bedroom views. Living_Room_01 is the cover. No stock or generated images.
+Run `node scripts/prepare-westport-images.cjs <extracted-edited-photo-directory>`
+to reproduce the 33 WebP variants and images.json manifest. The original ZIP is
+untouched and retained outside Git; only metadata-free optimized assets are served.
+Widths are 480, 800 and the original width (1481 landscape / 843 portrait), with
+quality 82, no upscaling, no colour retouching and no AI changes.
+
+The full owner-approved description remains in Work details. Completion month is
+shown without inventing a day. The project's stable homepage anchor, descriptive
+alt text and generated ItemList metadata describe the same single portfolio item.
+The supplied five-star quote is labelled Finbar, Westport — Bark review. It is not
+imported into Website Reviews and has no aggregate-rating search markup.
+
+`websiteReviewAssociation: false` keeps this new portfolio entry outside the three
+existing D1 project association IDs. The homepage skips an unsupported association
+lookup; the shared Reviews options keep their existing allowlist. No migration,
+customer record change, Worker deployment or new review publication is needed.

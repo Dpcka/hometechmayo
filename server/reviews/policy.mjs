@@ -3,7 +3,10 @@ import { PROJECTS } from "../../js/project-data.mjs";
 export const CONSENT_VERSION = "reviews-2026-10-19-v1";
 export const MAX_BYTES = 10 * 1024 * 1024;
 export const CATEGORIES = QUOTE_CATEGORIES;
-export const PROJECT_OPTIONS = PROJECTS.map(({ id, title }) => ({ id, title }));
+// Keep existing database associations; a portfolio addition does not migrate D1.
+export const PROJECT_OPTIONS = PROJECTS.filter(
+  (project) => project.websiteReviewAssociation !== false,
+).map(({ id, title }) => ({ id, title }));
 export class ReviewError extends Error {
   constructor(message, status = 400) {
     super(message);

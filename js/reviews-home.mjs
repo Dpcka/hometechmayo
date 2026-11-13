@@ -19,7 +19,8 @@ if (section) {
 const cards = document.querySelectorAll("[data-project-id]");
 for (const card of cards) {
   const id = card.dataset.projectId;
-  if (!id) continue;
+  // New portfolio entries may not have an authorised Reviews database association.
+  if (!id || card.dataset.websiteReviewAssociation === "disabled") continue;
   try {
     const response = await fetch(
       "/api/reviews?limit=1&project=" + encodeURIComponent(id),

@@ -256,3 +256,16 @@ html.project-viewer-open {
     transform: none;
   }
 }
+
+.project-testimonial {
+  margin: 16px 0 0;
+  padding: 12px 14px;
+  border-left: 3px solid var(--accent);
+  background: #fafafa;
+  border-radius: 6px;
+}
+.project-testimonial blockquote { margin: 0; }
+.project-testimonial p { font-size: 14px; line-height: 1.6; }
+.project-testimonial figcaption { margin-top: 8px; font-size: 12px; line-height: 1.6; }
+.project-testimonial figcaption span { color: var(--accent-contrast); }
+.project-testimonial a { color: inherit; text-underline-offset: 3px; }

@@ -5,14 +5,15 @@ import { execFileSync } from "node:child_process";
 import sharp from "sharp";
 import { PROJECTS } from "../js/project-data.mjs";
 test("project catalogue uses stable unique IDs, keeps the two existing projects and console photo order", () => {
-  assert.equal(PROJECTS.length, 3);
-  assert.equal(new Set(PROJECTS.map((p) => p.id)).size, 3);
+  assert.equal(PROJECTS.length, 4);
+  assert.equal(new Set(PROJECTS.map((p) => p.id)).size, 4);
   assert.deepEqual(
     PROJECTS.map((p) => p.title),
     [
       "Bathroom Ventilation Upgrade",
       "Furniture Assembly",
       "Wayfair Console Table Assembly",
+      "Complete Furniture Assembly – Two Residential Properties in Westport",
     ],
   );
   assert.deepEqual(
@@ -81,12 +82,13 @@ test("every project uses shared actions, valid service links, and only verified 
       "pricing.html#pricing-ventilation",
       "pricing.html#pricing-furniture",
       "pricing.html#pricing-furniture",
+      "pricing.html#pricing-furniture",
     ],
   );
   for (const project of PROJECTS) {
     const card = html.match(
       new RegExp(
-        `<article class="project-card" data-project-id="${project.id}">[\\s\\S]*?<\\/article>`,
+        `<article class="project-card" data-project-id="${project.id}"[^>]*>[\\s\\S]*?<\\/article>`,
       ),
     )[0];
     assert.equal((card.match(/class="project-actions"/g) || []).length, 1);
@@ -99,4 +101,32 @@ test("every project uses shared actions, valid service links, and only verified 
   }
   assert.equal(PROJECTS[0].extendedDescription, undefined);
   assert.equal(PROJECTS[1].extendedDescription, undefined);
+});
+
+test("Westport is one 11-photo project with approved details, separate Bark attribution and search metadata", () => {
+  const project = PROJECTS.find(p => p.id === "westport-furniture-assembly");
+  const html = readFileSync("index.html", "utf8");
+  assert.equal(project.images.length, 11);
+  assert.equal(project.completionDate, "2026-11");
+  assert.equal(project.location, "Westport, Co. Mayo, Ireland");
+  assert.match(project.images[0].src, /living-room-overview/);
+  assert.match(project.extendedDescription, /14 furniture items from JYSK/);
+  assert.match(project.extendedDescription, /two days/);
+  assert.equal(project.testimonial.author, "Finbar");
+  assert.equal(project.testimonial.source, "Bark");
+  assert.equal(project.testimonial.rating, 5);
+  assert.equal(project.websiteReviewAssociation, false);
+  assert.equal((html.match(/data-project-id="westport-furniture-assembly"/g) || []).length, 1);
+  assert.ok(html.includes('id="project-westport-furniture-assembly"'));
+  assert.ok(html.includes('<time datetime="2026-11">November 2026</time>'));
+  const metadata = JSON.parse(html.match(/id="project-portfolio-data">(.*?)<\/script>/s)[1]);
+  const item = metadata.itemListElement.find(i => i.item.name === project.title).item;
+  assert.equal(item.image.length, 11);
+  assert.equal(item.url, "https://hometechmayo.ie/#project-westport-furniture-assembly");
+  assert.equal(item.aggregateRating, undefined);
+});
+
+test("adding the Westport portfolio does not expand existing Reviews database associations", async () => {
+  const { PROJECT_OPTIONS } = await import("../server/reviews/policy.mjs");
+  assert.deepEqual(PROJECT_OPTIONS.map(p => p.id), ["bathroom-ventilation", "furniture-assembly", "wayfair-console-table"]);
 });
