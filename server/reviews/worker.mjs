@@ -945,7 +945,10 @@ export async function maintenance(env, fetcher = fetch, now = Date.now()) {
 }
 
 export default {
-  fetch: handleReviews,
+  // Keep Cloudflare ExecutionContext separate from the injectable HTTP client.
+  fetch(request, env) {
+    return handleReviews(request, env);
+  },
   scheduled(controller, env, ctx) {
     if (
       env.REVIEWS_RETENTION_ENABLED !== "true" &&
