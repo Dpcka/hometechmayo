@@ -15,14 +15,6 @@ function syncEnvironment() {
 document.addEventListener("visibilitychange", syncEnvironment);
 reducedMotion.addEventListener("change", syncEnvironment);
 export const wrapIndex = (index, count) => ((index % count) + count) % count;
-const button = (label, text, className) => {
-  const b = document.createElement("button");
-  b.type = "button";
-  b.className = className;
-  b.setAttribute("aria-label", label);
-  b.textContent = text;
-  return b;
-};
 function watchImage(img, message) {
   const failed = () => {
     message.hidden = false;
@@ -166,7 +158,6 @@ for (const [cardOrder, card] of [
     previousLayer,
     fade,
     generation = 0;
-  const dots = [];
   const clearFade = () => {
     fade?.cancel();
     fade = undefined;
@@ -257,43 +248,30 @@ for (const [cardOrder, card] of [
         "aria-label",
         `View photos: ${project.title}, photo ${index + 1} of ${project.images.length}`,
       );
-      dots.forEach((dot, i) => {
-        if (i === index) dot.setAttribute("aria-current", "true");
-        else dot.removeAttribute("aria-current");
-      });
     },
   };
   if (project.images.length > 1) {
     photo.setAttribute("role", "group");
     photo.setAttribute("aria-roledescription", "carousel");
     photo.setAttribute("aria-label", project.title);
-    const pagination = document.createElement("div");
-    pagination.className = "project-photo-dots";
-    pagination.setAttribute("role", "group");
-    pagination.setAttribute("aria-label", `Choose photo: ${project.title}`);
-    project.images.forEach((item, i) => {
-      const dot = button(
-        `Show photo ${i + 1} of ${project.images.length}: ${project.title}`,
-        "",
-        "project-photo-dot",
-      );
-      if (i === 0) dot.setAttribute("aria-current", "true");
-      dot.addEventListener("click", () => state.setIndex(i));
-      dot.addEventListener("keydown", (event) => {
-        if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
-          event.preventDefault();
-          const target = wrapIndex(
-            i + (event.key === "ArrowRight" ? 1 : -1),
-            dots.length,
-          );
-          dots[target].focus();
-          state.setIndex(target);
-        }
-      });
-      dots.push(dot);
-      pagination.append(dot);
+    const instructions = document.createElement("span");
+    instructions.id = `project-photo-help-${project.id}`;
+    instructions.className = "sr-only";
+    instructions.textContent =
+      "Use Left and Right arrow keys to change photographs, or swipe. Press Enter to open the full-size viewer with previous and next controls.";
+    photo.append(instructions);
+    link.setAttribute("aria-describedby", instructions.id);
+    link.setAttribute("aria-keyshortcuts", "ArrowLeft ArrowRight");
+    link.setAttribute(
+      "aria-label",
+      `View photos: ${project.title}, photo 1 of ${project.images.length}`,
+    );
+    link.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+        event.preventDefault();
+        state.setIndex(index + (event.key === "ArrowRight" ? 1 : -1));
+      }
     });
-    photo.append(pagination);
     clock = createAutoplay({
       stagger: cardOrder * 850,
       advance: () => {
@@ -310,19 +288,24 @@ for (const [cardOrder, card] of [
     if (reducedMotion.matches) clock.pause("reduced");
     if (matchMedia("(hover: hover)").matches && card.matches(":hover"))
       clock.pause("hover");
-    if (photo.contains(document.activeElement)) clock.pause("focus");
+    // Touch/click focus can remain after a gesture or viewer close. Only
+    // keyboard-visible focus should keep autoplay paused until focus leaves.
+    const syncFocus = () => {
+      const active = document.activeElement;
+      photo.contains(active) && active.matches(":focus-visible")
+        ? clock.pause("focus")
+        : clock.resume("focus");
+    };
+    syncFocus();
     card.addEventListener("pointerenter", (event) => {
       if (event.pointerType !== "touch") clock.pause("hover");
     });
     card.addEventListener("pointerleave", (event) => {
       if (event.pointerType !== "touch") clock.resume("hover");
     });
-    photo.addEventListener("focusin", () => clock.pause("focus"));
-    photo.addEventListener("focusout", () =>
-      queueMicrotask(() => {
-        if (!photo.contains(document.activeElement)) clock.resume("focus");
-      }),
-    );
+    photo.addEventListener("focusin", syncFocus);
+    photo.addEventListener("focusout", () => queueMicrotask(syncFocus));
+    photo.addEventListener("keydown", syncFocus);
     card.addEventListener("pointerdown", () => clock.pause("interaction"));
     document.addEventListener("pointerup", () => clock.resume("interaction"));
     document.addEventListener("pointercancel", () =>

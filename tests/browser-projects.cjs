@@ -32,42 +32,23 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
       bath = page.locator('[data-project-id="bathroom-ventilation"]'),
       single = page.locator('[data-project-id="furniture-assembly"]'),
       viewer = page.locator(".project-viewer");
+    await page.waitForFunction(() => document.querySelector('[data-project-id="wayfair-console-table"] .project-photo-open').hasAttribute("aria-keyshortcuts"));
     async function activePosition(card) {
-      return card
-        .locator(".project-photo-dots")
-        .evaluate(
-          (n) =>
-            `${[...n.children].findIndex((b) => b.hasAttribute("aria-current")) + 1} / ${n.children.length}`,
-        );
+      const match = (await card.locator(".project-photo-open").getAttribute("aria-label")).match(/photo (\d+) of (\d+)/);
+      return `${match[1]} / ${match[2]}`;
     }
-    async function nextDot(card) {
-      const position = await card
-        .locator(".project-photo-dot")
-        .evaluateAll((nodes) =>
-          nodes.findIndex((n) => n.hasAttribute("aria-current")),
-        );
-      const count = await card.locator(".project-photo-dot").count();
-      await card
-        .locator(".project-photo-dot")
-        .nth((position + 1) % count)
-        .click();
+    async function nextPhoto(card) {
+      await card.locator(".project-photo-open").focus();
+      await page.keyboard.press("ArrowRight");
     }
-    async function previousDot(card) {
-      const position = await card
-        .locator(".project-photo-dot")
-        .evaluateAll((nodes) =>
-          nodes.findIndex((n) => n.hasAttribute("aria-current")),
-        );
-      const count = await card.locator(".project-photo-dot").count();
-      await card
-        .locator(".project-photo-dot")
-        .nth((position + count - 1) % count)
-        .click();
+    async function previousPhoto(card) {
+      await card.locator(".project-photo-open").focus();
+      await page.keyboard.press("ArrowLeft");
     }
     assert.equal(
       await page
         .locator(
-          ".project-photo-prev,.project-photo-next,.project-photo-counter",
+          ".project-photo-prev,.project-photo-next,.project-photo-counter,.project-photo-dots,.project-photo-dot",
         )
         .count(),
       0,
@@ -89,7 +70,7 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
       !photos.some((url) => /console-table-[234]-/.test(url)),
       "only selected image is loaded initially",
     );
-    await nextDot(consoleCard);
+    await nextPhoto(consoleCard);
     assert.equal(await activePosition(consoleCard), "2 / 4");
     assert.match(
       await consoleCard
@@ -98,15 +79,14 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
       /console-table-3-/,
     );
     assert.equal(await activePosition(bath), "1 / 2");
-    await nextDot(bath);
+    await nextPhoto(bath);
     assert.equal(await activePosition(bath), "2 / 2");
     assert.equal(await activePosition(consoleCard), "2 / 4");
-    await previousDot(consoleCard);
+    await previousPhoto(consoleCard);
     assert.equal(await activePosition(consoleCard), "1 / 4");
-    await consoleCard.locator(".project-photo-dot").nth(3).focus();
-    await page.keyboard.press("Enter");
+    await previousPhoto(consoleCard);
     assert.equal(await activePosition(consoleCard), "4 / 4");
-    await consoleCard.locator(".project-photo-open").click();
+    await page.keyboard.press("Enter");
     await viewer.waitFor({ state: "visible" });
     assert.equal(
       await viewer.locator("h2").innerText(),
@@ -326,8 +306,8 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
     // An unavailable image retains navigation and an accessible explanation.
     await page.route("**/console-table-2-*.webp", (r) => r.abort());
     await page.reload({ waitUntil: "networkidle" });
-    await nextDot(consoleCard);
-    await nextDot(consoleCard);
+    await nextPhoto(consoleCard);
+    await nextPhoto(consoleCard);
     await consoleCard
       .locator(".project-image-error")
       .waitFor({ state: "visible" });

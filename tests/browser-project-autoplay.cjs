@@ -54,12 +54,8 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
       single = page.locator('[data-project-id="furniture-assembly"]');
     const image = (card) =>
       card.locator(".project-photo-open > img:not(.project-photo-previous)");
-    const position = (card) =>
-      card
-        .locator(".project-photo-dot")
-        .evaluateAll((nodes) =>
-          nodes.findIndex((n) => n.hasAttribute("aria-current")),
-        );
+    const position = async (card) => Number((await card.locator(".project-photo-open").getAttribute("aria-label")).match(/photo (\d+) of/)[1]) - 1;
+    await page.waitForFunction(() => document.querySelector('[data-project-id="wayfair-console-table"] .project-photo-open').hasAttribute("aria-keyshortcuts"));
     await page.clock.runFor(20000);
     assert.equal(await position(consoleCard), 0);
     assert.ok(
@@ -114,7 +110,7 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
     await page.clock.runFor(11000);
     assert.equal(await position(consoleCard), current, "hover pauses autoplay");
     await page.mouse.move(2, 2);
-    await consoleCard.locator(".project-photo-dot").first().focus();
+    await consoleCard.locator(".project-photo-open").focus();
     current = await position(consoleCard);
     await page.clock.runFor(11000);
     assert.equal(await position(consoleCard), current, "focus pauses autoplay");
@@ -175,7 +171,8 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
       0,
     );
     const next = (current + 1) % 4;
-    await consoleCard.locator(".project-photo-dot").nth(next).click();
+    await consoleCard.locator(".project-photo-open").focus();
+    await page.keyboard.press("ArrowRight");
     await image(consoleCard).evaluate((n) => n.decode());
     assert.equal(
       await position(consoleCard),
