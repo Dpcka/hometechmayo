@@ -22,6 +22,7 @@ const mockTag = `(() => {
 })();`;
 const sleep = ms => new Promise(resolve=>setTimeout(resolve,ms));
 (async()=>{
+ const {VERSION:catalogueVersion}=await import('../js/pricing-catalogue.mjs');
  const browser=await chromium.launch({channel:'msedge',headless:true});
  const errors=[];
  async function context(consent,extra={},verifiedFixture=true) {
@@ -128,7 +129,7 @@ const sleep = ms => new Promise(resolve=>setTimeout(resolve,ms));
  const deniedStorage=await context();await deniedStorage.ctx.addInitScript(()=>{const get=Storage.prototype.getItem,set=Storage.prototype.setItem;Storage.prototype.getItem=function(k){if(k==='htss_cookie_consent'||k==='htss_ga_debug')throw new Error('blocked');return get.call(this,k)};Storage.prototype.setItem=function(k,v){if(k==='htss_cookie_consent'||k==='htss_ga_debug')throw new Error('blocked');return set.call(this,k,v)};});
  const dp=await deniedStorage.ctx.newPage();await dp.goto(origin+'/pricing.html',{waitUntil:'networkidle'});await dp.locator('[data-choice=reject]').click();assert.equal(await dp.locator('.cookie-banner').isVisible(),false);assert.equal(deniedStorage.scripts.length,0);await deniedStorage.ctx.close();
  async function quoteSetup(b) {
-  await b.ctx.route('**/api/quote-config',r=>r.fulfill({json:{enabled:true,siteKey:'test-public-key',version:'2026-10-16.1'}}));
+  await b.ctx.route('**/api/quote-config',r=>r.fulfill({json:{enabled:true,siteKey:'test-public-key',version:catalogueVersion}}));
   await b.ctx.route('https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit',r=>r.fulfill({contentType:'text/javascript',body:`window.turnstile={render:(el,c)=>{window.testWidget=c;setTimeout(()=>c.callback('synthetic-token'),10);return 'test';},reset:()=>setTimeout(()=>window.testWidget.callback('synthetic-token'),10)};`}));
  }
  async function fillQuote(page) {

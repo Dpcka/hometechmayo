@@ -49,6 +49,21 @@ test('authoritative itemised business mail only, optional email absent', async (
  assert.equal(r.status, 200); const result = await r.json(); assert.equal(result.ok, true); assert.match(result.reference, /^HT-/); assert.equal(p.mails.length, 1);
  assert.equal(p.mails[0].to[0].email, 'info@hometechmayo.ie'); assert.match(p.mails[0].textContent, /€50.00/); assert.ok(p.mails[0].htmlContent.includes('Order summary')); assert.ok(p.mails[0].textContent);
 });
+
+test('new repair services are recalculated server-side and retain Q-SITE references with mocked delivery', async () => {
+ for (const [id,options,area,expected] of [
+  ['pc-diagnostics',{location:'dropoff'},'Westport','€40.00'],
+  ['pc-diagnostics',{location:'onsite'},'Westport','€60.00'],
+  ['pc-ram',{},'Castlebar','€50.00']
+ ]) {
+  const p=provider(),env=environment(true);
+  const body=payload({area,total:1,items:[{id,options,quantity:1,materials:'yes',price:1}]});
+  const response=await handleQuote({request:request(body),env},p.fetcher);
+  assert.equal(response.status,200);assert.match((await response.json()).reference,/^Q-SITE-\d{4}-\d{4,}$/);
+  assert.equal(p.mails.length,1);assert.ok(p.mails[0].textContent.includes(`Estimated known total: ${expected}`));
+  assert.match(p.mails[0].textContent,id==='pc-diagnostics'?/waived only when a repair is confirmed/:/Replacement memory/);
+ }
+});
 test('customer acknowledgement only when email supplied; no unsafe HTML', async () => {
  const p = provider(); const r = await handleQuote({request: request(payload({email: 'customer@example.com', name: '<script>test</script>'})), env: environment()}, p.fetcher);
  assert.equal((await r.json()).acknowledgement, true); assert.equal(p.mails.length, 2); assert.equal(p.mails[0].replyTo.email, 'customer@example.com'); assert.equal(p.mails[1].to[0].email, 'customer@example.com'); assert.ok(p.mails[0].htmlContent.includes('Order summary')); assert.ok(p.mails[0].textContent);

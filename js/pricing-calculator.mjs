@@ -150,7 +150,7 @@ function renderMaterials() {
     const input = select(Object.entries(MATERIALS), item.materials);
     input.dataset.materials = item.id;
     field(row, service.name, input);
-    if (service.includedMaterials) row.append(el('p', 'Standard thermal paste is included. Replacement parts require confirmation.', 'calc-note'));
+    if (service.includedMaterials) row.append(el('p', service.materialsNote || 'Standard thermal paste is included. Replacement parts require confirmation.', 'calc-note'));
     input.addEventListener('change', () => {item.materials = input.value; refresh();});
     materialChoices.append(row);
   }
@@ -297,9 +297,10 @@ else window.addEventListener('resize', updateSummaryOffset);
 function renderEstimate(node, estimate, final = false) {
   const body = node.querySelector('.cart-body');
   node.querySelector('.cart-count').textContent = `${basket.size} service${basket.size === 1 ? '' : 's'}`;
-  node.querySelector('.cart-total-label').textContent = area.value ? 'Estimated known total' : 'Known labour · travel pending';
+  const dropoff = estimate?.lines.some(line => line.id === 'pc-diagnostics' && line.options.location === 'dropoff');
+  node.querySelector('.cart-total-label').textContent = (area.value || dropoff) ? 'Estimated known total' : 'Known labour · travel pending';
   const amount = node.querySelector('.estimate-amount');
-  const incomplete = estimate && (estimate.incomplete || !area.value);
+  const incomplete = estimate && (estimate.incomplete || (!area.value && !dropoff));
   amount.textContent = estimate ? `${money(estimate.total)}${incomplete ? '+' : ''}` : '—';
   let table = body.querySelector('.cart-table');
   if (!table) {
@@ -376,10 +377,12 @@ function renderEstimate(node, estimate, final = false) {
   for (const [label, value] of [
     ['Labour', money(estimate.labour)], [`Discount (${estimate.discountPercent}%)`, `−${money(estimate.discount)}`],
     ['Minimum labour adjustment', money(estimate.minimumAdjustment)],
-    [area.value ? `Travel · ${estimate.area}` : 'Travel', !area.value ? 'Choose area in step 2' : estimate.travel === null ? 'Custom Quote — excluded' : money(estimate.travel)],
+    [estimate.lines.some(line => line.id === 'pc-diagnostics' && line.options.location === 'dropoff') ? 'Travel · customer drop-off' : area.value ? `Travel · ${estimate.area}` : 'Travel', !area.value && !dropoff ? 'Choose area in step 2' : estimate.travel === null ? 'Custom Quote — excluded' : money(estimate.travel)],
     ['Materials', estimate.lines.some(line => line.materialUnknown) ? 'Unconfirmed costs excluded' : 'Customer supplied / included']
   ]) totals.append(el('dt', label), el('dd', value));
   breakdown.append(totals);
+  if (estimate.lines.some(line => line.id === 'pc-diagnostics')) breakdown.append(el('p', BY_ID.get('pc-diagnostics').note, 'cart-note'));
+  if (estimate.lines.some(line => line.id === 'pc-ram')) breakdown.append(el('p', BY_ID.get('pc-ram').note, 'cart-note'));
   if (estimate.customOnly) breakdown.append(el('p', 'Labour needs a Custom Quote; minimum €50 per visit.', 'cart-note'));
   if (incomplete) breakdown.append(el('p', '+ excludes custom work, unknown materials and/or unconfirmed travel. Quote means Custom Quote, not zero-cost work.', 'cart-note'));
   breakdown.append(el('p', 'Unit and line prices include selected options, before discounts. Indicative only; one visit, subject to confirmation.', 'cart-note'));

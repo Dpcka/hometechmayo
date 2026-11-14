@@ -11,7 +11,7 @@ const serviceLabel = line => `${line.name} × ${line.quantity}${line.unit === 'h
 const lineAmount = line => line.customWork && !line.known ? 'Custom Quote' : `${money(line.known)}${line.customWork ? '+' : ''}`;
 const totalAmount = estimate => estimate.customOnly && !estimate.total ? 'Custom Quote' : `${money(estimate.total)}${estimate.incomplete ? '+' : ''}`;
 const materialLabel = estimate => estimate.lines.some(line => line.materialUnknown) ? 'Unconfirmed costs excluded' : 'Customer supplied / included';
-const notice = 'Indicative estimate for one visit, subject to confirmation. This is not a confirmed quotation or booking. Additional visits have their own €50 minimum labour charge and travel.';
+const notice = 'Indicative estimate for one visit, subject to confirmation. This is not a confirmed quotation or booking. On-site visits have a €50 minimum labour charge plus travel. Customer drop-off diagnostics are €40 standalone, waived if repair proceeds; travel and replacement parts are not automatically waived.';
 const exclusions = 'Custom work, unconfirmed materials and/or unknown travel are not included. The known total is not a complete quotation.';
 export function receivedLabel(receivedAt) {
   return `${new Intl.DateTimeFormat('en-IE', {timeZone:'Europe/Dublin', day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:false, timeZoneName:'short'}).format(new Date(receivedAt))} (Europe/Dublin)`;
@@ -31,7 +31,7 @@ function totalRows(estimate, customer = false) {
     ['Labour subtotal',money(estimate.labour)],
     ...(!customer || estimate.discount ? [[`Discount (${estimate.discountPercent}%)`,`−${money(estimate.discount)}`]] : []),
     ...(estimate.minimumAdjustment ? [['Minimum labour adjustment',money(estimate.minimumAdjustment)]] : []),
-    [`Travel · ${estimate.area} (once per visit)`,estimate.travel === null ? 'Custom Quote — excluded' : money(estimate.travel)],
+    [estimate.lines.some(line=>line.id==='pc-diagnostics'&&line.options.location==='dropoff')?'Travel · customer drop-off':`Travel · ${estimate.area} (once per visit)`,estimate.travel === null ? 'Custom Quote — excluded' : money(estimate.travel)],
     ['Materials',materialLabel(estimate)]
   ];
 }

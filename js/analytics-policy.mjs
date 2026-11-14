@@ -11,6 +11,11 @@ export const COOKIE_PREFIX = 'htss';
 const PAGES = {
   '/': ['/', 'Home Tech Mayo'], '/index.html': ['/', 'Home Tech Mayo'],
   '/services': ['/services', 'Services'], '/services.html': ['/services', 'Services'],
+  '/services/furniture-assembly': ['/services/furniture-assembly', 'Furniture Assembly'], '/services/furniture-assembly.html': ['/services/furniture-assembly', 'Furniture Assembly'],
+  '/services/handyman': ['/services/handyman', 'Handyman Services'], '/services/handyman.html': ['/services/handyman', 'Handyman Services'],
+  '/services/tv-mounting': ['/services/tv-mounting', 'TV Mounting'], '/services/tv-mounting.html': ['/services/tv-mounting', 'TV Mounting'],
+  '/services/wifi-home-networking': ['/services/wifi-home-networking', 'Wi-Fi & Home Networking'], '/services/wifi-home-networking.html': ['/services/wifi-home-networking', 'Wi-Fi & Home Networking'],
+  '/services/computer-laptop-repair': ['/services/computer-laptop-repair', 'Computer & Laptop Repair'], '/services/computer-laptop-repair.html': ['/services/computer-laptop-repair', 'Computer & Laptop Repair'],
   '/pricing': ['/pricing', 'Pricing'], '/pricing.html': ['/pricing', 'Pricing'],
   '/quote': ['/quote', 'Request a Quote'], '/quote/': ['/quote', 'Request a Quote'], '/quote.html': ['/quote', 'Request a Quote'],
   '/privacy': ['/privacy', 'Privacy Policy'], '/privacy.html': ['/privacy', 'Privacy Policy'],

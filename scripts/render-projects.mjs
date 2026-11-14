@@ -25,7 +25,7 @@ export function renderProjectCards() {
               </div>
               <div class="project-content">
                 <h3>${escape(project.title)}</h3>
-                ${project.category ? `<p class="project-meta">${escape(project.category)}${project.location ? ` · ${escape(project.location)}` : ""}</p>` : ""}
+                ${project.category ? `<p class="project-meta">${project.category === "Furniture Assembly" ? '<a href="/services/furniture-assembly">Furniture Assembly</a>' : escape(project.category)}${project.location ? ` · ${escape(project.location)}` : ""}</p>` : ""}
                 ${completion}
                 <p>${escape(project.description)}</p>
                 ${project.testimonial ? `<figure class="project-testimonial"><blockquote><p>${escape(project.testimonial.text)}</p></blockquote><figcaption><span aria-label="${project.testimonial.rating} out of 5 stars">${"★".repeat(project.testimonial.rating)}</span> · ${escape(project.testimonial.author)}, ${escape(project.testimonial.location)} · <a href="${escape(project.testimonial.url)}" target="_blank" rel="noopener noreferrer">${escape(project.testimonial.source)} review</a></figcaption></figure>` : ""}

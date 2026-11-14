@@ -16,6 +16,12 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
       );
       localStorage.setItem("whatsappClosed", "true");
     });
+    await context.route("**/*", route => {
+      const url=new URL(route.request().url());
+      if(url.origin!=="http://127.0.0.1:8788")return route.abort();
+      if(url.pathname==='/api/reviews')return route.fulfill({json:{reviews:[]}});
+      return route.continue();
+    });
     const page = await context.newPage(),
       errors = [],
       photos = [];
@@ -301,7 +307,7 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
     );
     assert.equal(
       await consoleCard.locator(".project-service-link").getAttribute("href"),
-      "pricing.html#pricing-furniture",
+      "/pricing#pricing-furniture",
     );
     // An unavailable image retains navigation and an accessible explanation.
     await page.route("**/console-table-2-*.webp", (r) => r.abort());

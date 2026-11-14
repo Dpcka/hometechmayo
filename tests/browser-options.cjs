@@ -7,6 +7,7 @@ const {chromium} = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
  const {CATALOGUE, calculate, money} = await import('../js/pricing-catalogue.mjs');
  const browser = await chromium.launch({channel:'msedge',headless:true});
  const page = await browser.newPage({viewport:{width:1280,height:900}});
+ await page.addInitScript(()=>localStorage.setItem('htss_cookie_consent',JSON.stringify({version:1,analytics:false,savedAt:Date.now()})));
  const errors=[];page.on('pageerror', e=>errors.push(e.message));
  await page.route('https://www.googletagmanager.com/**',r=>r.abort());
  await page.route('https://www.google-analytics.com/**',r=>r.abort());
@@ -46,7 +47,7 @@ const {chromium} = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
   }
   if (service.note) assert.equal(await dialog.locator('#service-editor-note').innerText(),service.note);
   const estimate=calculate([{id:service.id,quantity:1,materials:'unsure',options:configured}],'Castlebar');
-  assert.equal(await activeCart().locator('.estimate-amount').innerText(),`${money(estimate.total)}+`);
+  assert.equal(await activeCart().locator('.estimate-amount').innerText(),`${money(estimate.total)}${estimate.incomplete ? '+' : ''}`);
   await done();
   assert.equal(await row(service.id).locator('.cart-service-edit').evaluate(n=>n===document.activeElement),true);
   await row(service.id).locator('[data-quantity-direction="1"]').isEnabled().then(async enabled=>{

@@ -4,6 +4,7 @@ const {chromium} = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
 (async()=>{
  const browser = await chromium.launch({channel:'msedge',headless:true});
  const page = await browser.newPage({viewport:{width:1280,height:900}});
+ await page.addInitScript(()=>localStorage.setItem('htss_cookie_consent',JSON.stringify({version:1,analytics:false,savedAt:Date.now()})));
  const errors=[]; page.on('pageerror', e=>errors.push(e.message));
  await page.goto('http://127.0.0.1:8788/quote.html?category=furniture',{waitUntil:'networkidle'});
  const add=async(name,query,quantity)=>{

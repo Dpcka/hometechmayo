@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 const read=p=>readFileSync(new URL('../'+p,import.meta.url),'utf8');
 test('public canonicals and sitemap use the same clean apex URLs',()=>{
- const paths=['','services','pricing','privacy','reviews'];
+ const paths=['','services','pricing','privacy','reviews',...['furniture-assembly','handyman','tv-mounting','wifi-home-networking','computer-laptop-repair'].map(p=>'services/'+p)];
  const urls=[...read('sitemap.xml').matchAll(/<loc>([^<]+)<\/loc>/g)].map(m=>m[1]);
  assert.deepEqual(urls,paths.map(p=>'https://hometechmayo.ie/'+p));
  for(const p of paths){const html=read((p||'index')+'.html'); assert.ok(html.includes(`rel="canonical" href="https://hometechmayo.ie/${p}"`)); assert.equal(/href="(?:index|services|pricing|privacy|quote|reviews)\.html/.test(html),false);}

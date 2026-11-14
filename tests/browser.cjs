@@ -5,9 +5,11 @@ const fs = require('node:fs');
 const {chromium} = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const origin = 'http://127.0.0.1:8788';
 (async () => {
+ const {VERSION:catalogueVersion}=await import('../js/pricing-catalogue.mjs');
  fs.mkdirSync('work', {recursive:true});
  const browser = await chromium.launch({channel:'msedge', headless:true});
  const page = await browser.newPage({viewport:{width:1280, height:900}});
+ await page.addInitScript(()=>localStorage.setItem('htss_cookie_consent',JSON.stringify({version:1,analytics:false,savedAt:Date.now()})));
  const errors = [];
  page.on('pageerror', error => errors.push(error.message));
  page.on('console', message => {if (/Invalid regular expression/.test(message.text())) errors.push(message.text());});
@@ -93,7 +95,7 @@ const origin = 'http://127.0.0.1:8788';
  await nextQuote(); assert.equal(await page.locator('input[name=name]').inputValue(),'Retained details');
  await layoutChecks(3);
  // Live mail is deliberately not used: simulate the public configuration and widget.
- await page.route('**/api/quote-config', route => route.fulfill({json:{enabled:true,siteKey:'mock-public-key',version:'2026-10-16.1'}}));
+ await page.route('**/api/quote-config', route => route.fulfill({json:{enabled:true,siteKey:'mock-public-key',version:catalogueVersion}}));
  await page.route('https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit', route => route.fulfill({contentType:'text/javascript',body:`window.widgetRenderCount=0;window.turnstile={render:(el,c)=>{window.widgetRenderCount++;window.mockOptions=c;setTimeout(()=>c.callback('mock-token'),10);return 'widget';},remove:()=>{window.widgetRemoved=true;},reset:()=>setTimeout(()=>window.mockOptions.callback('mock-token'),10)};`}));
  let calls = 0, mode = 'failure', sent;
  await page.route('**/api/quote', route => {calls++; sent=route.request().postDataJSON();return route.fulfill(mode==='failure'?{status:503,json:{error:'Test service unavailable'}}:{json:{ok:true,reference:'Q-SITE-2026-0001',acknowledgement:false}});});
@@ -132,6 +134,7 @@ const origin = 'http://127.0.0.1:8788';
  await qty('tv-mount').focus(); await page.keyboard.press('Enter'); assert.equal(calls,0,'Enter in Qty must not send the form');
  await page.setViewportSize({width:390,height:844});
  const finalCart=page.locator('#final-summary');
+ await page.waitForFunction(()=>!document.querySelector('#final-summary .cart-disclosure').open);
  assert.ok((await finalCart.boundingBox()).height<85,'collapsed mobile cart must be compact');
  await finalCart.locator('summary').click();
  assert.equal(await finalCart.evaluate(n=>getComputedStyle(n).position),'relative','expanded cart must not cover form fields');

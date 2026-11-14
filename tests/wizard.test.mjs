@@ -10,7 +10,7 @@ const attrs = source => Object.fromEntries([...source.matchAll(/([\w-]+)="([^"]*
 test('all 17 category links map to unchanged catalogue categories', () => {
  assert.deepEqual(QUOTE_CATEGORIES.map(c => c.name), CATEGORIES);
  assert.equal(new Set(QUOTE_CATEGORIES.map(c => c.id)).size, 17);
- assert.equal(CATALOGUE.length, 46);
+ assert.equal(CATALOGUE.length, 48);
  for (const category of QUOTE_CATEGORIES) {
   assert.equal(categoryById(category.id), category);
   assert.ok(pricing.includes(`href="${quoteLink(category.id)}"`), category.id);
@@ -19,7 +19,7 @@ test('all 17 category links map to unchanged catalogue categories', () => {
 });
 test('every starting price agrees with the authoritative catalogue or visit minimum', () => {
  const rows = [...pricing.matchAll(/<li class="pricing-row"([^>]*)>([\s\S]*?)<\/li>/g)];
- assert.equal(rows.length, 32);
+ assert.equal(rows.length, 35);
  for (const [, raw, body] of rows) {
   const data = attrs(raw);
   const displayed = body.match(/<strong class="pricing-price">([^<]+)<\/strong>/)[1];

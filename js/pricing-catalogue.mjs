@@ -1,6 +1,11 @@
 // All money is integer cents. Sources: existing pricing.html unless overridden by
 // the owner's approved calculator rules (16 October 2026). Never infer a rate.
-export const VERSION = '2026-10-16.1';
+export const VERSION = '2026-11-13.1';
+// Owner-approved repair rates, shared by calculator and service-page renderer.
+export const APPROVED_REPAIR_PRICING = {
+  diagnostics: {label: 'Computer diagnostics — standalone', cents: 4000, from: false, waivedIfRepairProceeds: true, note: 'Waived if you proceed with the repair.'},
+  ram: {label: 'RAM replacement — labour', cents: 4000, from: true, note: 'Replacement memory is charged separately where applicable.'}
+};
 export const AREAS = {Straide: 0, Foxford: 0, Castlebar: 0, Ballina: 1000, Westport: 1000, Other: null};
 export const MATERIALS = {yes: 'Yes, I have all the required materials.', no: 'No, please supply the materials.', unsure: "I’m not sure what materials are needed."};
 export const CATEGORIES = ['Furniture Assembly', 'TV Wall Mounting', 'General Handyman', 'Outdoor Assembly & Installation', 'Computer & Laptop Repair', 'Wi-Fi & Home Networking', 'Smart Home Installation', 'Property Maintenance & Minor Repairs', 'Flooring Installation & Repairs', 'Kitchen Installation & Fitting', 'Shelving & Storage Solutions', 'Doors, Locks & Hardware', 'Bathroom Installation & Accessories', 'Ventilation & Extractor Fan Installation', 'Blinds, Curtains & Window Accessories', 'Furniture Modification & Custom Fitting', 'Wall Panels & Decorative Installation'];
@@ -30,6 +35,16 @@ export const CATALOGUE = [
   fixed('handyman-full', 2, 'Full-day — up to 8 hours', 32000, {kind: 'package', discountEligible: false, countsForDiscount: false, source: 'Owner-approved calculator rules, 16 October 2026', options: {extraHours: {label: 'Additional general handyman hours (€45/hour)', number: true, price: 4500, discountEligible: false, countsForDiscount: false}}, note: 'Book a package explicitly. Do not add fixed jobs for work already covered by these hours.'}),
   custom('outdoor-assembly', 3, 'Outdoor furniture / equipment assembly', {options: outdoor}),
   custom('outdoor-seasonal', 3, 'Seasonal assembly package', {options: outdoor, note: 'Package contents and any included anchoring, disassembly or reassembly will be confirmed together. No automatic discount.'}),
+  fixed('pc-diagnostics', 4, 'Computer Diagnostics', APPROVED_REPAIR_PRICING.diagnostics.cents, {
+    source: 'Owner-approved diagnostics rules, 13 November 2026', discountEligible: false, countsForDiscount: false,
+    includedMaterials: true, materialsNote: 'Diagnostics does not include replacement parts.',
+    options: {location: choice('Diagnostic appointment', [pick('onsite', 'On-site — €50 minimum labour per visit, plus travel'), pick('dropoff', 'Customer drop-off / delivery — €40 standalone, no travel')])},
+    note: 'The separate €40 diagnostic fee is waived only when a repair is confirmed. No waiver is deducted automatically. On-site work retains the overall €50 visit minimum; travel and replacement parts are not waived. Diagnostics and repair covering the same work are not charged twice. Arrange drop-off in advance; estimate it separately from on-site services.'
+  }),
+  fixed('pc-ram', 4, 'RAM Replacement — labour', APPROVED_REPAIR_PRICING.ram.cents, {
+    source: 'Owner-approved RAM rules, 13 November 2026',
+    note: 'From €40 labour, subject to device compatibility and access. Replacement memory supplied by Home Tech is charged separately; no unknown memory price is included. A standalone on-site visit has a €50 minimum labour charge, plus travel; the minimum is an adjustment, not a second labour fee.'
+  }),
   fixed('pc-troubleshoot', 4, 'PC troubleshooting', 5000),
   hourly('pc-malware', 4, 'Virus & malware removal (minimum €50)', 5000),
   hourly('pc-software', 4, 'Advanced software troubleshooting', 5000),
@@ -118,20 +133,23 @@ export function calculate(items, area) {
     unknown ||= customWork || materialUnknown;
     return {id: s.id, name: s.name, quantity: q, unit: s.unit || (s.kind === 'hourly' ? 'hours' : 'items'), kind: s.kind, materials, options: selectedOptions, optionLabels: labels, known, discountBase, customWork, materialUnknown, note: s.note || ''};
   });
+  const dropoff = lines.some(line => line.id === 'pc-diagnostics' && line.options.location === 'dropoff');
+  if (dropoff && lines.length !== 1) throw new Error('Estimate customer drop-off diagnostics separately from on-site services. The repair scope and diagnostic waiver are confirmed by Home Tech.');
+  if (seen.has('pc-diagnostics') && seen.has('pc-troubleshoot')) throw new Error('Choose diagnostics or PC troubleshooting for the same assessment, not both. Any separate repair scope must be confirmed.');
   if (seen.has('handyman-half') && seen.has('handyman-full') || seen.has('handyman-hour') && (seen.has('handyman-half') || seen.has('handyman-full'))) throw new Error('Choose one handyman hourly/package option per visit; use package additional hours for extra time.');
   if (seen.has('outdoor-assembly') && seen.has('outdoor-seasonal')) throw new Error('Choose outdoor assembly or a seasonal package, not both for the same work.');
   const discountPercent = eligibleUnits >= 11 ? 10 : eligibleUnits >= 6 ? 5 : 0;
   const discount = round(eligibleLabour * discountPercent / 100);
   // A custom-only job has no known labour; its €50 minimum remains a condition,
   // not a fabricated price for unknown work.
-  const minimumAdjustment = labour > 0 ? Math.max(0, 5000 - (labour - discount)) : 0;
-  const travel = items.length ? AREAS[area] : 0;
+  const minimumAdjustment = !dropoff && labour > 0 ? Math.max(0, 5000 - (labour - discount)) : 0;
+  const travel = dropoff ? 0 : items.length ? AREAS[area] : 0;
   const total = labour - discount + minimumAdjustment + (travel ?? 0);
   return {version: VERSION, lines, area, eligibleUnits, eligibleLabour, labour, discountPercent, discount, minimumAdjustment, travel, materials: 0, total, incomplete: unknown || (items.length > 0 && travel === null), customOnly: items.length > 0 && labour === 0};
 }
 export function estimateText(e) {
   return [
-    'Indicative estimate only — subject to confirmation. One visit; additional visits each have their own €50 minimum and travel.',
+    'Indicative estimate only — subject to confirmation. On-site visits have a €50 minimum labour charge plus travel; customer drop-off diagnostics are €40 standalone, waived if repair proceeds.',
     ...e.lines.map(l => `${l.name} × ${l.quantity} ${l.unit}: ${l.customWork ? 'Custom Quote; known portion ' : 'from '}${money(l.known)}\n  ${MATERIALS[l.materials]}${l.materialUnknown ? ' — materials not included in total' : ''}\n  ${l.optionLabels.join('; ')}${l.note ? '\n  ' + l.note : ''}`),
     `Labour before discount: ${money(e.labour)}`,
     `Eligible main units: ${e.eligibleUnits}; eligible labour: ${money(e.eligibleLabour)}`,
