@@ -75,7 +75,7 @@ ${header.replace('href="/#contact" class="quote-button"',`href="${quote(page)}" 
       <section class="landing-final" aria-labelledby="contact-title"><div class="container"><h2 id="contact-title">${escape(COMMON.finalTitle)}</h2><p>${escape(COMMON.finalText)}</p>${actions(page)}<p class="landing-email"><a href="mailto:info@hometechmayo.ie">info@hometechmayo.ie</a> <button type="button" class="contact-copy" data-copy-contact="email" hidden>Copy email</button></p><p id="contact-copy-status" class="contact-copy-status" role="status" aria-live="polite"></p></div></section>
       <section class="landing-related container landing-section" aria-labelledby="related-title"><h2 id="related-title">Other ways we can help</h2><div>${related}</div><a href="/services">Browse all services</a></section>
     </main>
-${landingTail.replace('    <script src="js/main.js"></script>','    <script type="module" src="/js/contact-actions.mjs"></script>\n    <script src="js/main.js"></script>')}`);
+${landingTail.replace('    <script src="js/main.js"></script>','    <script type="module" src="/js/contact-actions.mjs"></script>\n    <script src="js/main.js"></script>')}`).replace(/[ \t]+$/gm,'');
 }
 export function renderContentReview(){
  let md='# Service landing pages — complete content review\n\nOwner-approved publication content. Generate production HTML with --publish; check it with --publish --check.\n\nAuthoritative catalogue version: '+VERSION+'. Prices are starting labour prices, not complete quotes.\n\n';
@@ -92,7 +92,7 @@ export function renderContentReview(){
   for(const [q,a] of p.faqs)md+=`**${q}**\n\n${a}\n\n`;
   md+=`### ${COMMON.finalTitle}\n\n${COMMON.finalText}\n\nEmail: info@hometechmayo.ie (with Copy email fallback). Same Quote/WhatsApp/Call actions as above.\n\nRelated services: ${SERVICE_PAGES.filter(v=>v!==p).map(v=>v.name).join('; ')}. Also links to /services and /pricing.\n\nSearch-language ideas (not search-volume claims): ${p.phrases.join('; ')}.\n\n---\n\n`;
  }
- return md;
+ return md.trimEnd()+'\n';
 }
 if(process.argv[1]===fileURLToPath(import.meta.url)){
  const check=process.argv.includes('--check'),publish=process.argv.includes('--publish');
