@@ -1,11 +1,11 @@
-import {buildEnquiry,canonical} from './intake-contract.mjs';
-import {preflight,seal,unseal,getEnquiry,captureStatements,finalize,delivery,claimDelivery,finishDelivery} from './enquiry-store.mjs';
+import {buildEnquiry,canonical,assertEnquiry} from './intake-contract.mjs';
+import {preflight,seal,unseal,getEnquiry,captureStatements,finalize,delivery,claimDelivery,finishDelivery,markDeliveryStarted} from './enquiry-store.mjs';
 import {checkNumberingSchema,assignPublicReference,publicReference} from './quote-numbering.mjs';
 import {createQuoteEmails} from './quote-emails.mjs';
 const reply=(body,status=200)=>Response.json(body,{status,headers:{'Cache-Control':'no-store','X-Content-Type-Options':'nosniff'}});
 const conflict=reference=>reply({error:'This request is processing or delivery is uncertain. Contact us with this reference; do not submit again.',reference},409);
 async function continueEnquiry(env,row,sendMail,fetcher){
- const payload=await unseal(env,row);
+ const payload=assertEnquiry(await unseal(env,row),row);
  const reference=row.external_reference || await assignPublicReference(env.QUOTE_GUARD,row.request_key,row.received_at);
  await finalize(env,row,reference,Boolean(payload.contacts.email));
  const emails=createQuoteEmails({customer:{...payload.contacts,description:payload.description,availability:payload.availability_preferences,materialsInformation:payload.materials_information},estimate:payload.estimate_snapshot,reference,receivedAt:row.received_at,version:payload.pricing_catalogue_version},env);
@@ -14,11 +14,12 @@ async function continueEnquiry(env,row,sendMail,fetcher){
  if(!duplicate){
   const claim=await claimDelivery(env,row.request_key,'BUSINESS_EMAIL');
   if(!claim)return conflict(reference);
+  if(!await markDeliveryStarted(env,claim))return conflict(reference);
   try{await sendMail(env,emails.business,fetcher);}catch{
    await finishDelivery(env,claim,false);
    return reply({error:'Delivery could not be confirmed. Your request is stored; contact us with this reference and do not submit again.',reference},502);
   }
-  await finishDelivery(env,claim,true);
+  if(!await finishDelivery(env,claim,true))throw new Error('LEASE_LOST');
  }
  // Legacy guard is only a compatibility mirror, never the authoritative receipt.
  await env.QUOTE_GUARD.prepare("UPDATE quote_guard SET status='sent' WHERE request_key=?").bind(row.request_key).run();
@@ -28,9 +29,9 @@ async function continueEnquiry(env,row,sendMail,fetcher){
   acknowledgement=ack.state==='SENT';
   if(ack.state==='READY'){
    const claim=await claimDelivery(env,row.request_key,'CUSTOMER_ACK');
-   if(claim){
+   if(claim&&await markDeliveryStarted(env,claim)){
     let accepted=false;try{await sendMail(env,emails.acknowledgement,fetcher);accepted=true;}catch{}
-    await finishDelivery(env,claim,accepted);acknowledgement=accepted;
+    acknowledgement=await finishDelivery(env,claim,accepted)&&accepted;
    }
   }
  }
@@ -44,7 +45,7 @@ export async function handleDurableQuote({request,env,body,validated,fetcher,sen
   const key=await digest(env.QUOTE_HASH_SECRET,body.requestId);
   const hash=await digest(env.QUOTE_HASH_SECRET,canonical({validated,items:body.items,area:body.area}));
   let row=await getEnquiry(env,key);
-  if(row){if(row.payload_hash!==hash)return reply({error:'This request identifier was already used for different details. Reload the page.'},409);reference=row.external_reference||row.internal_reference;return await continueEnquiry(env,row,sendMail,fetcher);}
+  if(row){if(row.payload_hash!==hash)return reply({error:'This request identifier was already used for different details. Reload the page.'},409);reference=row.external_reference||row.internal_reference;if(env.QUOTE_DURABLE_ENABLED!=='true'){const sent=await delivery(env,key,'BUSINESS_EMAIL'),ack=await delivery(env,key,'CUSTOMER_ACK');return sent?.state==='SENT'?reply({ok:true,reference,acknowledgement:ack?.state==='SENT',duplicate:true}):conflict(reference);}return await continueEnquiry(env,row,sendMail,fetcher);}
   const receipt=await env.QUOTE_GUARD.prepare('SELECT payload_hash,external_reference FROM enquiry_receipts WHERE source_id=? AND request_key=?').bind(env.INTAKE_SOURCE_ID,key).first();
   if(receipt)return conflict(receipt.external_reference);
   // Existing email-only reservations are never reconstructed or resent.
@@ -55,6 +56,7 @@ export async function handleDurableQuote({request,env,body,validated,fetcher,sen
    reference=await publicReference(env.QUOTE_GUARD,key)||previous.reference;
    return previous.status==='sent'?reply({ok:true,reference,acknowledgement:previous.ack===1,duplicate:true}):conflict(reference);
   }
+  if(env.QUOTE_DURABLE_ENABLED!=='true')return reply({error:'Durable capture is paused; please contact us directly.'},503);
   const token=body.turnstileToken;
   if(typeof token!=='string'||!token.trim()||token.length>2048)return reply({error:'Security verification required.'},400);
   const verification=await fetcher('https://challenges.cloudflare.com/turnstile/v0/siteverify',{method:'POST',headers:{'Content-Type':'application/json'},signal:AbortSignal.timeout(8000),body:JSON.stringify({secret:env.TURNSTILE_SECRET_KEY,response:token,remoteip:request.headers.get('CF-Connecting-IP')||undefined})});

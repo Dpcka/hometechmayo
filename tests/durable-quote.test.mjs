@@ -5,8 +5,8 @@ import {DatabaseSync} from 'node:sqlite';
 import {handleQuote} from '../server/quote.mjs';
 import {VERSION} from '../js/pricing-catalogue.mjs';
 import {unseal} from '../server/enquiry-store.mjs';
-function setup(){
- const sql=new DatabaseSync(':memory:');sql.exec('PRAGMA foreign_keys=ON');for(const file of ['quote-guard.sql','migrations/0001-website-quote-numbering.sql','migrations/0002-website-enquiry-storage.sql'])sql.exec(readFileSync(new URL('../server/'+file,import.meta.url),'utf8'));
+export function setup(){
+ const sql=new DatabaseSync(':memory:');sql.exec('PRAGMA foreign_keys=ON');for(const file of ['quote-guard.sql','migrations/0001-website-quote-numbering.sql','migrations/0002-website-enquiry-storage.sql','migrations/0003-enquiry-lease-safety.sql'])sql.exec(readFileSync(new URL('../server/'+file,import.meta.url),'utf8'));
  const state={sql,fault:null,mails:[],mode:'ok'};
  const prepare=query=>{let args=[];const stmt={bind(...values){args=values;return stmt;},first:async()=>sql.prepare(query).get(...args),run:async()=>({meta:{changes:Number(sql.prepare(query).run(...args).changes)}}),execute:()=>({meta:{changes:Number(sql.prepare(query).run(...args).changes)}}),query};return stmt;};
  const db={prepare,batch:async statements=>{if(state.fault&&statements.some(s=>s.query.includes(state.fault))){state.fault=null;throw new Error('synthetic crash');}sql.exec('BEGIN');try{const r=statements.map(s=>s.execute());sql.exec('COMMIT');return r;}catch(e){sql.exec('ROLLBACK');throw e;}}};
@@ -36,8 +36,8 @@ test('guard cleanup cannot remove durable payload or reuse its Q-SITE',async()=>
  const s=setup();const a=await(await s.call()).json();s.sql.exec('DELETE FROM quote_guard');assert.equal(s.count('quote_public_references'),0);const b=await(await s.call()).json();assert.equal(b.reference,a.reference);assert.equal(s.shared.mails.length,1);assert.equal(s.sql.prepare('SELECT last_sequence FROM quote_reference_counters').get().last_sequence,1);
 });
 test('legacy sent and uncertain requests remain compatible without inventing payload',async()=>{
- const s=setup();s.env.QUOTE_DURABLE_ENABLED='false';const a=await(await s.call()).json();s.env.QUOTE_DURABLE_ENABLED='true';const b=await(await s.call()).json();assert.equal(a.reference,b.reference);assert.equal(b.duplicate,true);assert.equal(s.count('website_enquiries'),0);assert.equal(s.shared.mails.length,1);
- const t=setup();t.env.QUOTE_DURABLE_ENABLED='false';t.shared.mode='fail';await t.call();t.env.QUOTE_DURABLE_ENABLED='true';assert.equal((await t.call()).status,409);assert.equal(t.shared.mails.length,1);
+ const s=setup();s.env.QUOTE_DURABLE_ENABLED='false';delete s.env.INTAKE_SOURCE_ID;const a=await(await s.call()).json();s.env.QUOTE_DURABLE_ENABLED='true';s.env.INTAKE_SOURCE_ID='synthetic';const b=await(await s.call()).json();assert.equal(a.reference,b.reference);assert.equal(b.duplicate,true);assert.equal(s.count('website_enquiries'),0);assert.equal(s.shared.mails.length,1);
+ const t=setup();t.env.QUOTE_DURABLE_ENABLED='false';delete t.env.INTAKE_SOURCE_ID;t.shared.mode='fail';await t.call();t.env.QUOTE_DURABLE_ENABLED='true';t.env.INTAKE_SOURCE_ID='synthetic';assert.equal((await t.call()).status,409);assert.equal(t.shared.mails.length,1);
 });
 test('missing crypto key fails closed before reservation and mail',async()=>{
  const s=setup();delete s.env.INTAKE_ENCRYPTION_KEYS;assert.equal((await s.call()).status,503);assert.equal(s.count('quote_guard'),0);assert.equal(s.shared.mails.length,0);
@@ -50,7 +50,7 @@ test('concurrent changed payload cannot overwrite the winning encrypted record',
  const s=setup();const r=await Promise.all([s.call(),s.call({...s.body,name:'Other synthetic'})]);assert.ok(r.some(x=>x.status===200));assert.ok(r.some(x=>x.status===409));assert.equal(s.count('website_enquiries'),1);assert.equal(s.count('quote_public_references'),1);assert.equal(s.shared.mails.length,1);
 });
 test('crash recording provider acceptance remains conservative, no duplicate mail',async()=>{
- const s=setup();s.shared.fault='UPDATE enquiry_outbox SET state=';assert.equal((await s.call()).status,502);assert.equal(s.shared.mails.length,1);assert.equal((await s.call()).status,409);assert.equal(s.shared.mails.length,1);assert.equal(s.count('website_enquiries'),1);
+ const s=setup();s.shared.fault='UPDATE enquiry_outbox SET state=?,delivery_state=';assert.equal((await s.call()).status,502);assert.equal(s.shared.mails.length,1);assert.equal((await s.call()).status,409);assert.equal(s.shared.mails.length,1);assert.equal(s.count('website_enquiries'),1);
 });
 test('customer acknowledgement failure preserves business success and is never resent',async()=>{
  const s=setup();s.body.email='customer@example.invalid';s.shared.mode='ackFail';const base=s.call;
@@ -59,4 +59,7 @@ test('customer acknowledgement failure preserves business success and is never r
 });
 test('ciphertext tampering fails closed without mail replay or sensitive error output',async()=>{
  const s=setup();s.shared.fault='INSERT INTO quote_reference_counters';await s.call();s.sql.exec("UPDATE website_enquiries SET encrypted_payload='{}'");const r=await s.call();assert.equal(r.status,502);assert.ok(!JSON.stringify(await r.json()).includes(s.body.name));assert.equal(s.shared.mails.length,0);
+});
+test('rollback flag retains durable receipt after guard cleanup and cannot send new email-only requests',async()=>{
+ const s=setup();const a=await(await s.call()).json();s.sql.exec('DELETE FROM quote_guard');s.env.QUOTE_DURABLE_ENABLED='false';const b=await(await s.call()).json();assert.equal(b.reference,a.reference);assert.equal(s.shared.mails.length,1);assert.equal((await s.call({...s.body,requestId:crypto.randomUUID()})).status,503);
 });
