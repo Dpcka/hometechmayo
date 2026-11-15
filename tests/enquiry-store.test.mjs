@@ -19,6 +19,6 @@ test('missing/invalid key fails closed; rotation retains old decryption keys',as
 test('additive schema has no cascade from guard and unique delivery identity',()=>{
  const db=new DatabaseSync(':memory:');db.exec('PRAGMA foreign_keys=ON');db.exec(readFileSync(new URL('../server/quote-guard.sql',import.meta.url),'utf8'));db.exec(readFileSync(new URL('../server/migrations/0002-website-enquiry-storage.sql',import.meta.url),'utf8'));
  db.prepare("INSERT INTO website_enquiries VALUES(?,?,?,1,?,?,1,?,NULL,'RECEIVED')").run('key','source','hash','encrypted','v1','internal');
- db.exec('DELETE FROM quote_guard');assert.equal(db.prepare('SELECT count(*) n FROM website_enquiries').get().n,1);
+ db.exec(readFileSync(new URL('../server/migrations/0003-enquiry-lease-safety.sql',import.meta.url),'utf8'));db.exec('DELETE FROM quote_guard');assert.equal(db.prepare('SELECT count(*) n FROM website_enquiries').get().n,1);
  db.prepare("INSERT INTO enquiry_outbox(id,request_key,destination,created_at) VALUES('one','key','HBM',1)").run();assert.throws(()=>db.prepare("INSERT INTO enquiry_outbox(id,request_key,destination,created_at) VALUES('two','key','HBM',1)").run());db.close();
 });
