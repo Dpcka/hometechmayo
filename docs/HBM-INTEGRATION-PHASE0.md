@@ -1,0 +1,13 @@
+# Phase 0 / Phase 1 verification record - 15 November 2026
+
+Baseline local HEADs: Desktop cb1904c218601f7a731921e8a184031d4eee80d5; Mobile 3ea8479b053fc5375b0f631d8471655d7ea9a365; Website 19f9655d88505e3bc1d68c4f86a742fbd9d08e65. Desktop has existing dirty/untracked backup/bootstrap work: preserved, not staged or committed here. Desktop has no configured origin. Website and Mobile started clean.
+
+Desktop: live SQLite integrity ok, FK violations 0, Alembic 20261008_0034. No WAL/SHM files present at inventory. Native DataSafetyService created HBM-Integration-Phase0-2026-11-15-125714.hbmbackup in the existing private DB/02 Backups directory. Verification Valid, warnings 0. Native restore_to_root succeeded in a NEW private Integration-Rehearsal-20261115-125729/isolated-restore directory. Restored integrity ok and FK 0. Source SQLite-family SHA-256 fingerprints unchanged before/after. Restored copy never opened in Desktop or connected to sync. Backup is legacy plaintext V1; keep it private. Focused Desktop synthetic backup tests: 8 passed.
+
+Owner-provided Mobile backup filename timestamp: 2026-11-15 12:58:59 UTC (filename is not cryptographic evidence of freshness). HBM_MOBILE_BACKUP schema 6, checksum valid; all tables loaded into in-memory current SQLite schema, integrity ok and FK 0. Contains v6 payment/completion tables. No contact details or amounts logged. No physical-phone restore or independently observed current phone snapshot. Owner delivery supersedes the earlier October-only inventory; do not claim phone restore acceptance.
+
+Website baseline npm test: 158 passed. Initial integrated suite: 174 passed. Additional edge tests are recorded in the final implementation report. All added fixtures synthetic, all Turnstile/Brevo calls mocked. No real email, form submission, D1 migration or deployment. Pricing, catalogue, Q-SITE allocator and email templates unchanged. Durable feature defaults OFF.
+
+Staging gates: approved separate D1 initialized with existing schemas and additive 0002; staging-only key ring/source/key version; no production contacts; Cloudflare runtime smoke/crash/restart verification; owner-reviewed privacy notice reflecting encrypted payload persistence; key recovery and D1 recovery rehearsal. Production remains blocked on those gates, live Supabase verification, operational recovery/reconciliation, monitoring and separate authorization.
+
+Mobile focused synthetic transfer/backup suite: 15 passed. Final website npm test: 178 passed (including 20 newly added tests across contract, storage and durable handler). No Cloudflare runtime deployment or live provider acceptance claimed.

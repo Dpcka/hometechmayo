@@ -1,3 +1,5 @@
+import {durableEnabled} from './enquiry-store.mjs';
+import {handleDurableQuote} from './durable-quote.mjs';
 import {calculate, VERSION} from '../js/pricing-catalogue.mjs';
 import {createQuoteEmails} from './quote-emails.mjs';
 import {numberingEnabled, checkNumberingSchema, assignPublicReference, publicReference} from './quote-numbering.mjs';
@@ -76,6 +78,7 @@ export async function handleQuote({request, env}, fetcher = fetch) {
   let body, validated;
   try {body = await limitedJSON(request); validated = validate(body);} catch (error) {return json({error: error instanceof SyntaxError ? 'Invalid JSON request.' : error.message}, 400);}
   if (!configured(env)) return json({error: 'Online quote requests are not configured yet. Please email info@hometechmayo.ie or call 083 349 8496.'}, 503);
+  if (durableEnabled(env)) return handleDurableQuote({request,env,body,validated,fetcher,sendMail,digest});
   let reservation;
   const useSiteNumbering=numberingEnabled(env);
   try {
