@@ -1,0 +1,13 @@
+# Durable intake: staging only, default OFF
+
+Apply 0002 only to a separate staging copy of Quote Guard D1 after 0001. No production SQL has been applied. Existing allocator and pricing are unchanged.
+
+Bindings remain server-side; no public read API. QUOTE_DURABLE_ENABLED=true opts in. Require Q-SITE numbering, INTAKE_SOURCE_ID, INTAKE_KEY_VERSION and secret INTAKE_ENCRYPTION_KEYS (JSON key-version -> base64 32-byte AES key). No keys are supplied here. Generate real keys only through approved secure secret provisioning. Keep old decryption versions until all rows, recovery copies and provider history depending on them expire. Backup keys separately from D1; losing keys loses payload recovery. Do not reuse QUOTE_HASH_SECRET as encryption key. Never expose the key ring in /quote-config or logs.
+
+Payload is AES-GCM encrypted with fresh 96-bit IV and authenticated source/request/schema/key-version. No arbitrary HTTP body, IP, cookies or Turnstile tokens are persisted. Reference metadata and delivery states are not encrypted. Query access is restricted to bound server code/account administrators. No generic public decrypt endpoint.
+
+The RECEIVED row and receipt join the reservation transaction. Q-SITE is assigned by the existing allocator. Finalization attaches its reference and uniquely creates outbox rows. Retry can finalize RECEIVED/NUMBERED states without repeating completed mail. SENDING or UNCERTAIN mail is never automatically resent; provider reconciliation is required. Dispatcher and automatic maintenance are intentionally absent in this phase. READY HBM jobs remain durable until PR04/05.
+
+Retention is deliberately not automated: never delete undelivered records. Proposed owner-reviewed policy: payload 30 days after verified HBM receipt, sanitized attempts 90 days, idempotency receipts at least 180 days. Q-SITE reference ledger must survive guard cleanup. Include Time Travel/backups and mailbox retention in privacy policy. A staging privacy review must precede activation because the existing notice describes email-only intake.
+
+Rollback: disable dispatch/online features, preserve durable capture for any accepted rows. Never drop these tables, reset Q-SITE counters, delete outbox to retry, or return enabled traffic to an email-only build. Keep a compatible capture build available. Feature OFF is for pre-activation only; after activation a rollback must keep reading durable identities to avoid duplicate email after guard expiry.
