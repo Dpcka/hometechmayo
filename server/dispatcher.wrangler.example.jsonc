@@ -1,0 +1,13 @@
+{
+  // TEMPLATE ONLY. Copy to ignored work/ and supply a verified STAGING D1 UUID.
+  "name": "hbm-enquiry-dispatcher-staging",
+  "main": "../server/enquiry-dispatcher.mjs",
+  "compatibility_date": "2026-11-15",
+  "workers_dev": false,
+  "preview_urls": false,
+  "observability": {"enabled": true, "traces": {"enabled": true}},
+  "vars": {"INTAKE_DISPATCHER_ENABLED": "false", "INTAKE_DISPATCHER_EMAIL_ENABLED": "false", "INTAKE_SOURCE_ID": "staging-only"},
+  "triggers": {"crons": []},
+  "d1_databases": [{"binding": "QUOTE_GUARD", "database_name": "REPLACE_STAGING_ONLY", "database_id": "REPLACE_STAGING_UUID"}]
+  // Provision independent staging keys and MOCK mail service; no production recipients.
+}
