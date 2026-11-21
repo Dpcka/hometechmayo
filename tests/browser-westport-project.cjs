@@ -18,7 +18,7 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
       const card = page.locator('[data-project-id="westport-furniture-assembly"]');
       await card.scrollIntoViewIfNeeded();
       await page.waitForFunction(() => document.querySelector('#project-westport-furniture-assembly .project-photo-open').hasAttribute("aria-keyshortcuts"));
-      assert.equal(await page.locator(".project-card").count(), 4);
+      assert.equal(await page.locator(".project-card").count(), 5);
       assert.equal(await card.count(), 1);
       assert.equal(await card.locator("time").innerText(), "November 2026");
       assert.match(await card.locator(".project-testimonial").innerText(), /Finbar, Westport.*Bark review/s);

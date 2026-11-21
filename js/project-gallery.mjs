@@ -2,6 +2,8 @@ import { projectById } from "./project-data.mjs";
 import { createAutoplay } from "./project-autoplay.mjs";
 const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
 const autoplayClocks = [];
+// Project detail pages live one directory deeper than the homepage cards.
+const imagePath = (path) => location.pathname.startsWith('/projects/') ? '/' + path.replace(/^\//, '') : path;
 function pauseSlides(reason) {
   for (const clock of autoplayClocks) clock.pause(reason);
 }
@@ -87,7 +89,7 @@ function renderViewer() {
   fullImage.alt = image.alt;
   fullImage.width = image.width;
   fullImage.height = image.height;
-  fullImage.src = image.full;
+  fullImage.src = imagePath(image.full);
   dialog.querySelector("h2").textContent = project.title;
   caption.textContent = `${project.images.length > 1 ? `${index + 1} / ${project.images.length} · ` : ""}${image.alt}`;
   prev.hidden = next.hidden = project.images.length < 2;
@@ -241,9 +243,9 @@ for (const [cardOrder, card] of [
       image.width = item.width;
       image.height = item.height;
       image.style.objectPosition = item.position || "center";
-      image.srcset = item.srcset;
-      image.src = item.src;
-      link.href = item.full;
+      image.srcset = item.srcset.split(', ').map(source => imagePath(source)).join(', ');
+      image.src = imagePath(item.src);
+      link.href = imagePath(item.full);
       link.setAttribute(
         "aria-label",
         `View photos: ${project.title}, photo ${index + 1} of ${project.images.length}`,

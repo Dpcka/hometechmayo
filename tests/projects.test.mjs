@@ -5,8 +5,8 @@ import { execFileSync } from "node:child_process";
 import sharp from "sharp";
 import { PROJECTS } from "../js/project-data.mjs";
 test("project catalogue uses stable unique IDs, keeps the two existing projects and console photo order", () => {
-  assert.equal(PROJECTS.length, 4);
-  assert.equal(new Set(PROJECTS.map((p) => p.id)).size, 4);
+  assert.equal(PROJECTS.length, 5);
+  assert.equal(new Set(PROJECTS.map((p) => p.id)).size, 5);
   assert.deepEqual(
     PROJECTS.map((p) => p.title),
     [
@@ -14,6 +14,7 @@ test("project catalogue uses stable unique IDs, keeps the two existing projects 
       "Furniture Assembly",
       "Wayfair Console Table Assembly",
       "Complete Furniture Assembly – Two Residential Properties in Westport",
+      "Large Ornate Mirror Installation Above Staircase",
     ],
   );
   assert.deepEqual(
@@ -83,6 +84,7 @@ test("every project uses shared actions, valid service links, and only verified 
       "/pricing#pricing-furniture",
       "/pricing#pricing-furniture",
       "/pricing#pricing-furniture",
+      "/quote?category=handyman",
     ],
   );
   for (const project of PROJECTS) {
@@ -97,7 +99,10 @@ test("every project uses shared actions, valid service links, and only verified 
       card.includes('class="project-work-details"'),
       Boolean(project.extendedDescription || project.result),
     );
-    assert.ok(pricing.includes(`id="${project.relatedService.split("#")[1]}"`));
+    if (project.relatedService.startsWith('/quote?')) {
+      assert.equal(new URL(project.relatedService,'https://hometechmayo.ie').searchParams.get('category'),'handyman');
+      assert.ok(pricing.includes('id="pricing-handyman"'));
+    } else assert.ok(pricing.includes(`id="${project.relatedService.split("#")[1]}"`));
   }
   assert.equal(PROJECTS[0].extendedDescription, undefined);
   assert.equal(PROJECTS[1].extendedDescription, undefined);

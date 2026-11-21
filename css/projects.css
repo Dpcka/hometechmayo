@@ -269,3 +269,5 @@ html.project-viewer-open {
 .project-testimonial figcaption { margin-top: 8px; font-size: 12px; line-height: 1.6; }
 .project-testimonial figcaption span { color: var(--accent-contrast); }
 .project-testimonial a { color: inherit; text-underline-offset: 3px; }
+.project-card .project-content h3 a { color:inherit; text-underline-offset:3px; text-decoration-thickness:1px; }
+.project-card[data-project-id="large-mirror-installation-staircase-castlebar"] .project-photo img { object-fit:contain; }

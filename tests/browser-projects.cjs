@@ -62,7 +62,7 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
     await consoleCard
       .locator(".project-photo-open > img:not(.project-photo-previous)")
       .evaluate((n) => n.decode());
-    assert.equal(await page.locator(".project-card").count(), 4);
+    assert.equal(await page.locator(".project-card").count(), 5);
     assert.equal(
       await single
         .locator(
@@ -338,7 +338,7 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
     const noJS = await browser.newContext({ javaScriptEnabled: false });
     const plain = await noJS.newPage();
     await plain.goto("http://127.0.0.1:8788/");
-    assert.equal(await plain.locator(".project-card").count(), 4);
+    assert.equal(await plain.locator(".project-card").count(), 5);
     assert.equal(
       await plain
         .locator(

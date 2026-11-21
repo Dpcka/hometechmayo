@@ -1,0 +1,51 @@
+{
+  "permission": "Customer permission confirmed by owner, 21 November 2026",
+  "order": [
+    2,
+    1,
+    4,
+    3
+  ],
+  "excluded": {
+    "customerPhoto": 5,
+    "reason": "Similar angle to photo 1, stronger chandelier flare"
+  },
+  "images": [
+    {
+      "customerPhoto": 2,
+      "sourceFile": "1000028195.jpg",
+      "sha256": "bef2805691cea06fba911ba861786637fcef7150ee967007d33d1e5567f91ef1",
+      "width": 960,
+      "height": 1280,
+      "role": "Cover",
+      "correction": "Gentle luminance curve; blue channel +1.2%; no crop, perspective warp or generated pixels"
+    },
+    {
+      "customerPhoto": 1,
+      "sourceFile": "1000028192.jpg",
+      "sha256": "2d73c8c4e727c925a041996b345d96f35b1f6662117b0867aa2b5a0f45bb951f",
+      "width": 960,
+      "height": 1280,
+      "role": "Gallery",
+      "correction": "Gentle luminance curve; blue channel +1.2%; no crop, perspective warp or generated pixels"
+    },
+    {
+      "customerPhoto": 4,
+      "sourceFile": "1000028183.jpg",
+      "sha256": "4fb12fb3217fc076acd0a8e64efae9b87ee765d4c1f72b67dd9dc18ec7753817",
+      "width": 960,
+      "height": 1280,
+      "role": "Gallery",
+      "correction": "Gentle luminance curve; blue channel +1.2%; no crop, perspective warp or generated pixels"
+    },
+    {
+      "customerPhoto": 3,
+      "sourceFile": "1000028180.jpg",
+      "sha256": "602bd8d7c2c04f95d105dce27b004ac7ac60fcb5499444a2cfa521afe13ba2c4",
+      "width": 960,
+      "height": 1280,
+      "role": "Gallery",
+      "correction": "Gentle luminance curve; blue channel +1.2%; no crop, perspective warp or generated pixels"
+    }
+  ]
+}

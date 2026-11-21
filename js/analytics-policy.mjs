@@ -9,6 +9,8 @@ export const CONSENT_MAX_AGE = 180 * 24 * 60 * 60 * 1000;
 export const DEBUG_KEY = 'htss_ga_debug';
 export const COOKIE_PREFIX = 'htss';
 const PAGES = {
+  '/projects/large-mirror-installation-staircase-castlebar': ['/projects/large-mirror-installation-staircase-castlebar', 'Large Mirror Installation in Castlebar'],
+  '/projects/large-mirror-installation-staircase-castlebar.html': ['/projects/large-mirror-installation-staircase-castlebar', 'Large Mirror Installation in Castlebar'],
   '/': ['/', 'Home Tech Mayo'], '/index.html': ['/', 'Home Tech Mayo'],
   '/services': ['/services', 'Services'], '/services.html': ['/services', 'Services'],
   '/services/furniture-assembly': ['/services/furniture-assembly', 'Furniture Assembly'], '/services/furniture-assembly.html': ['/services/furniture-assembly', 'Furniture Assembly'],

@@ -1,0 +1,10 @@
+.project-detail main {padding-top:160px;padding-bottom:48px;max-width:1000px}
+.project-detail h1 {font-size:clamp(28px,4vw,44px);line-height:1.25;max-width:850px;margin:20px 0}
+.project-detail main > p {margin-bottom:20px}
+.project-facts {display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px;margin:24px 0}
+.project-facts div {padding:16px;border:1px solid #ddd;border-radius:10px;background:#fafafa}
+.project-facts dt {font-size:14px;color:#555}.project-facts dd {margin:6px 0 0;font-weight:600}
+.project-detail-gallery {border:1px solid #ddd;border-radius:12px;overflow:hidden;margin:28px 0}
+.project-detail-gallery .project-photo {height:520px}.project-detail-gallery .project-photo img {object-fit:contain}
+.project-story {margin:32px 0}.project-story h2 {font-size:26px;margin-bottom:16px}.project-story p {margin:12px 0;line-height:1.75}
+@media(max-width:650px){.project-detail main{padding-top:135px}.project-detail-gallery .project-photo{height:420px}.project-detail .landing-actions{gap:12px}}

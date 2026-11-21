@@ -1,4 +1,5 @@
 // Source of truth for project cards. Run node scripts/render-projects.mjs after edits.
+import { MIRROR_PROJECT } from '../data/mirror-project.mjs';
 const existingImage = (name, alt, width, height, position = "center") => ({
   src: `assets/projects/${name}-800.webp`,
   srcset: `assets/projects/${name}-800.webp 800w, assets/projects/${name}-1600.webp 1600w`,
@@ -208,6 +209,7 @@ export const PROJECTS = [
       }
     ]
   },
+  MIRROR_PROJECT,
 ];
 export const projectById = (id) =>
   PROJECTS.find((project) => project.id === id);
