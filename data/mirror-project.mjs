@@ -15,10 +15,12 @@ export const MIRROR_PROJECT = {
   testimonial:{
     text:'Reliable, professional and excellent workmanship. Would highly recommend Home Tech Solutions & Services to anyone looking for quality work!',
     fullText:'Exceptional service from start to finish. We needed a very large, heavy mirror installed in a particularly difficult and awkward location above our landing stairs. It was far from a straightforward job, but the team handled it with professionalism, care and attention to detail.\n\nThey clearly knew what they were doing, took great care throughout the installation and ensured everything was securely fitted and perfectly positioned.\n\nAbsolutely delighted with the finished result. Reliable, professional and excellent workmanship. Would highly recommend Home Tech Solutions & Services to anyone looking for quality work!',
-    author:'Customer',
+    author:'Austin',
     location:'Castlebar',
-    source:'Customer feedback',
-    verification:'Text supplied by the owner; public Google publication has not been independently verified.',
+    source:'Google',
+    rating:5,
+    url:'https://www.google.com/search?q=Home+Tech+Solutions+%26+Services+Mayo',
+    verification:'Published Google review and five-star rating confirmed by owner-provided screenshots, 21 November 2026. Only the first name is displayed.',
   },
   images,
 };

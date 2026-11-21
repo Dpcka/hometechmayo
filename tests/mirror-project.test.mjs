@@ -14,8 +14,9 @@ test('Castlebar mirror is exactly one project with four approved photographs in 
   assert.deepEqual(p.images,JSON.parse(read('assets/projects/'+p.id+'/images.json')));
   assert.match(p.images[0].src,/staircase-finished/);
   assert.equal(p.completionDate,'2026-11-21');assert.equal(p.websiteReviewAssociation,false);
-  assert.equal(p.testimonial.rating,undefined);assert.equal(p.testimonial.url,undefined);
-  assert.equal(p.testimonial.source,'Customer feedback');
+  assert.equal(p.testimonial.rating,5);assert.match(p.testimonial.url,/^https:\/\/www.google.com\/search\?/);
+  assert.equal(p.testimonial.source,'Google');assert.equal(p.testimonial.author,'Austin');
+  assert.match(p.testimonial.verification,/owner-provided screenshots/);
   assert.ok(p.testimonial.fullText.includes(p.testimonial.text));
 });
 test('mirror project metadata and discoverability use the clean canonical URL',()=>{
@@ -36,12 +37,23 @@ test('mirror project metadata and discoverability use the clean canonical URL',(
   assert.equal(safePage(p.detailUrl).page_location,'https://hometechmayo.ie'+p.detailUrl);
   execFileSync(process.execPath,['scripts/render-mirror-project.mjs','--check']);
 });
-test('customer wording is intact, safely escaped and not falsely labelled as independently verified Google feedback',()=>{
+test('screenshot-confirmed Google feedback preserves the exact wording, five stars and first-name-only attribution',()=>{
   const html=read(p.detailUrl.slice(1)+'.html');
   for(const paragraph of p.testimonial.fullText.split('\n\n'))assert.ok(html.includes(paragraph.replaceAll('&','&amp;')));
-  assert.match(html,/Customer, Castlebar · Customer feedback/);
-  assert.doesNotMatch(html,/5 out of 5|★★★★★|Google review<|reviewRating/);
+  assert.match(html,/Austin, Castlebar/);assert.match(html,/Google review</);
+  assert.match(html,/aria-label="5 out of 5 stars"/);
+  assert.doesNotMatch(html,/Austin Lacey|reviewRating|aggregateRating/);
   assert.match(html,/href="\/services\/handyman"/);assert.match(html,/href="\/quote\?category=handyman"/);
+});
+
+test('Google Reviews carousel includes Austin once, preserves its two existing reviews and links to the full text',()=>{
+  const section=read('index.html').match(/<section id="reviews"[\s\S]*?<\/section>/)[0];
+  assert.equal((section.match(/class="review-slide"/g)||[]).length,3);
+  assert.equal((section.match(/data-google-review="castlebar-mirror-austin"/g)||[]).length,1);
+  assert.ok(section.includes(p.testimonial.text.replaceAll('&','&amp;')));
+  assert.match(section,/<h3>Austin<\/h3>/);assert.doesNotMatch(section,/Austin Lacey/);
+  assert.match(section,/Michael van der Klei/);assert.match(section,/Ann Smyth/);
+  assert.ok(section.includes('href="'+p.detailUrl+'"'));
 });
 test('responsive mirror exports have correct dimensions, no location metadata and a bounded size',async()=>{
   for(const image of p.images){

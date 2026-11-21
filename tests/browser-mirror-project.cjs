@@ -43,9 +43,22 @@ const origin=process.env.PROJECT_TEST_URL||'http://127.0.0.1:8788';
       const card=page.locator(`[data-project-id="${slug}"]`);await card.scrollIntoViewIfNeeded();
       assert.equal(await page.locator('.project-card').count(),5);
       assert.equal(await card.count(),1);assert.equal(await card.locator('time').innerText(),'21 November 2026');
-      assert.match(await card.locator('.project-testimonial').innerText(),/Customer, Castlebar.*Customer feedback/s);
+      assert.match(await card.locator('.project-testimonial').innerText(),/Austin, Castlebar.*Google review/s);
       assert.equal(await card.locator('.project-photo img').first().evaluate(el=>getComputedStyle(el).objectFit),'contain');
       await page.screenshot({path:`work/mirror-browser/card-${width}.png`});
+      const google=page.locator('#reviews');await google.scrollIntoViewIfNeeded();
+      await google.getByRole('button',{name:'Show review 1',exact:true}).waitFor();
+      assert.equal(await google.locator('.review-slide:not([aria-hidden="true"])').count(),3);
+      const austin=google.locator('.review-slide:not([aria-hidden="true"])[data-google-review="castlebar-mirror-austin"]');
+      assert.equal(await austin.count(),1);assert.equal(await austin.locator('h3').innerText(),'Austin');
+      assert.match(await austin.locator('.review-text').innerText(),/Reliable, professional and excellent workmanship/);
+      assert.equal(await austin.locator('.review-stars').getAttribute('aria-label'),'Five out of five stars');
+      for(const i of [1,2,3,1]){
+        await google.getByRole('button',{name:`Show review ${i}`,exact:true}).click();
+        assert.equal(await google.getByRole('button',{name:`Show review ${i}`,exact:true}).getAttribute('aria-current'),'true');
+      }
+      await page.screenshot({path:`work/mirror-browser/google-reviews-${width}.png`});
+      assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
       assert.deepEqual(errors,[]);assert.deepEqual(failed,[]);
       console.log(`PASS ${width}px: detail/card, four images, nested routes, keyboard, lightbox, no overflow or script errors`);
       await context.close();

@@ -20,10 +20,10 @@ blue channel +1.2% to reduce warmth. No object removal, geometry change, or crop
 EXIF/GPS is omitted from exports. Original attachments remain unchanged.
 image-selection.json records source filenames, SHA-256 hashes, order and roles.
 
-Customer feedback is reproduced verbatim as supplied by the owner. Public Google
-publication could not be independently verified in this session. Do not label it
-as a verified Google review or invent a star rating. The supplied Google URL is a
-review-request link, not a permalink to this customer's individual review.
+Customer feedback is reproduced verbatim. The owner subsequently provided two
+Google screenshots confirming the published review by Austin and its five
+stars. Website attribution uses only Austin. Screenshots are not public assets.
+The Google link opens the business profile, not an individual-review permalink.
 
-Do not include customer name, exact address, contact details, mirror weight,
+Do not include the customer's full name, exact address, contact details, mirror weight,
 project price or equipment costs. Do not boost or auto-publish this package.
